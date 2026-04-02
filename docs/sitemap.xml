@@ -1,43 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://bwalsh5.github.io/r-for-media-analytics/index.html</loc>
+    <loc>https://bwalsh5.github.io/advanced-media-analytics/index.html</loc>
     <lastmod>2023-01-13T04:15:59.741Z</lastmod>
   </url>
   <url>
-    <loc>https://bwalsh5.github.io/r-for-media-analytics/intro.html</loc>
+    <loc>https://bwalsh5.github.io/advanced-media-analytics/intro.html</loc>
     <lastmod>2026-04-02T23:14:39.947Z</lastmod>
   </url>
   <url>
-    <loc>https://bwalsh5.github.io/r-for-media-analytics/basic_statistics.html</loc>
+    <loc>https://bwalsh5.github.io/advanced-media-analytics/basic_statistics.html</loc>
     <lastmod>2026-04-02T23:45:55.906Z</lastmod>
   </url>
   <url>
-    <loc>https://bwalsh5.github.io/r-for-media-analytics/manipulating_data.html</loc>
+    <loc>https://bwalsh5.github.io/advanced-media-analytics/manipulating_data.html</loc>
     <lastmod>2026-04-02T23:14:51.674Z</lastmod>
   </url>
   <url>
-    <loc>https://bwalsh5.github.io/r-for-media-analytics/text_analysis.html</loc>
+    <loc>https://bwalsh5.github.io/advanced-media-analytics/text_analysis.html</loc>
     <lastmod>2026-04-02T23:14:42.412Z</lastmod>
   </url>
   <url>
-    <loc>https://bwalsh5.github.io/r-for-media-analytics/network_analysis.html</loc>
+    <loc>https://bwalsh5.github.io/advanced-media-analytics/network_analysis.html</loc>
     <lastmod>2023-01-04T18:31:13.460Z</lastmod>
   </url>
   <url>
-    <loc>https://bwalsh5.github.io/r-for-media-analytics/geo_spatial_analysis.html</loc>
+    <loc>https://bwalsh5.github.io/advanced-media-analytics/geo_spatial_analysis.html</loc>
     <lastmod>2026-04-02T23:14:48.699Z</lastmod>
   </url>
   <url>
-    <loc>https://bwalsh5.github.io/r-for-media-analytics/python_ai_intro.html</loc>
+    <loc>https://bwalsh5.github.io/advanced-media-analytics/python_ai_intro.html</loc>
     <lastmod>2026-04-02T23:38:24.549Z</lastmod>
   </url>
   <url>
-    <loc>https://bwalsh5.github.io/r-for-media-analytics/publishing.html</loc>
+    <loc>https://bwalsh5.github.io/advanced-media-analytics/publishing.html</loc>
     <lastmod>2026-04-02T23:14:43.924Z</lastmod>
   </url>
   <url>
-    <loc>https://bwalsh5.github.io/r-for-media-analytics/common_errors.html</loc>
+    <loc>https://bwalsh5.github.io/advanced-media-analytics/common_errors.html</loc>
     <lastmod>2026-04-02T23:15:33.999Z</lastmod>
   </url>
 </urlset>
