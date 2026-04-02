@@ -1,0 +1,1 @@
+Sitemap: https://bwalsh5.github.io/r-for-media-analytics/sitemap.xml

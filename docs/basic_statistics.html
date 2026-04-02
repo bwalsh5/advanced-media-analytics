@@ -1,0 +1,2186 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.553">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<meta name="author" content="Jenny Jiang &amp; Brian Walsh">
+<title>R for Media Analytics - 3&nbsp; Basic Statistics</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./manipulating_data.html" rel="next">
+<link href="./intro.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script><script src="site_libs/kePrint-0.0.1/kePrint.js"></script><link href="site_libs/lightable-0.0.1/lightable.css" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav"><div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./basic_statistics.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Basic Statistics</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">R for Media Analytics</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/bwalsh5/r-for-media-analytics/" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+  <a href="" class="quarto-reader-toggle quarto-navigation-tool px-1" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
+  <div class="quarto-reader-toggle-btn">
+  <i class="bi"></i>
+  </div>
+</a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Preface</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Introduction to Programming in R</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./basic_statistics.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Basic Statistics</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./manipulating_data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Manipulating Data</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./text_analysis.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">install.packages(‘gutenbergr’)</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./network_analysis.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Network Analysis</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./geo_spatial_analysis.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Geo-Spatial Analysis and Visualization</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./python_ai_intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Introduction to Python and AI</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./publishing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Publishing</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./common_errors.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Common Errors</span></span></a>
+  </div>
+</li>
+      </ul>
+</li>
+    </ul>
+</div>
+</nav><div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+<li>
+<a href="#variables-levels-of-measurement" id="toc-variables-levels-of-measurement" class="nav-link active" data-scroll-target="#variables-levels-of-measurement"><span class="header-section-number">3.1</span> Variables &amp; Levels of Measurement</a>
+  <ul class="collapse">
+<li><a href="#nominal-data" id="toc-nominal-data" class="nav-link" data-scroll-target="#nominal-data"><span class="header-section-number">3.1.1</span> Nominal Data</a></li>
+  <li><a href="#ordinal-data" id="toc-ordinal-data" class="nav-link" data-scroll-target="#ordinal-data"><span class="header-section-number">3.1.2</span> Ordinal Data</a></li>
+  <li><a href="#interval-data" id="toc-interval-data" class="nav-link" data-scroll-target="#interval-data"><span class="header-section-number">3.1.3</span> Interval Data</a></li>
+  <li><a href="#ratio-data" id="toc-ratio-data" class="nav-link" data-scroll-target="#ratio-data"><span class="header-section-number">3.1.4</span> Ratio Data</a></li>
+  </ul>
+</li>
+  <li>
+<a href="#statistical-analyses-of-a-single-variable" id="toc-statistical-analyses-of-a-single-variable" class="nav-link" data-scroll-target="#statistical-analyses-of-a-single-variable"><span class="header-section-number">3.2</span> Statistical Analyses of a Single Variable</a>
+  <ul class="collapse">
+<li><a href="#frequency-distribution" id="toc-frequency-distribution" class="nav-link" data-scroll-target="#frequency-distribution"><span class="header-section-number">3.2.1</span> Frequency Distribution</a></li>
+  <li><a href="#percentage-change" id="toc-percentage-change" class="nav-link" data-scroll-target="#percentage-change"><span class="header-section-number">3.2.2</span> Percentage Change</a></li>
+  <li><a href="#relative-frequency" id="toc-relative-frequency" class="nav-link" data-scroll-target="#relative-frequency"><span class="header-section-number">3.2.3</span> Relative Frequency</a></li>
+  <li><a href="#percentage-points" id="toc-percentage-points" class="nav-link" data-scroll-target="#percentage-points"><span class="header-section-number">3.2.4</span> Percentage Points</a></li>
+  <li><a href="#rate" id="toc-rate" class="nav-link" data-scroll-target="#rate"><span class="header-section-number">3.2.5</span> Rate</a></li>
+  <li><a href="#ratio" id="toc-ratio" class="nav-link" data-scroll-target="#ratio"><span class="header-section-number">3.2.6</span> Ratio</a></li>
+  <li><a href="#central-tendency" id="toc-central-tendency" class="nav-link" data-scroll-target="#central-tendency"><span class="header-section-number">3.2.7</span> Central Tendency</a></li>
+  <li><a href="#data-variation" id="toc-data-variation" class="nav-link" data-scroll-target="#data-variation"><span class="header-section-number">3.2.8</span> Data Variation</a></li>
+  <li><a href="#case-study" id="toc-case-study" class="nav-link" data-scroll-target="#case-study"><span class="header-section-number">3.2.9</span> Case Study</a></li>
+  </ul>
+</li>
+  </ul></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
+<h1 class="title">
+<span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Basic Statistics</span>
+</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header><p>This chapter uses data from Google Analytics’ channels report, which demonstrates how much of traffic is coming from specific paid versus unpaid channels, as well as data from social listening of #BlackLivesMatter and #StopAsianHate on Twitter to illustrate not only descriptive statistics that describe the properties of sample and population data but also inferential statistics for testing hypotheses and drawing conclusions regarding the relationships between variables.</p>
+<p>Specifically, we are going to introduce the fundamentals of statistics that cover various aspects of analyzing a single variable, two variables, and three or more variables.</p>
+<p>Let’s import the Google Analytics’ channels report into RStudio.</p>
+<div class="cell">
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#You will need to install readxl package</span></span>
+<span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://readxl.tidyverse.org">readxl</a></span><span class="op">)</span> </span>
+<span></span>
+<span><span class="va">my_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_excel</a></span><span class="op">(</span><span class="st">"google analytics sample data.xlsx"</span><span class="op">)</span> <span class="co">#Create a dataset and name it as my_data</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Table 2.1 presents parts of a public demo dataset of channels report from Google Analytics of Google Merchandise Store, which is an affiliate of the holding company, Google, and an e-commerce business site that deals with marketing and selling of Google, YouTube, and Android branded merchandise such as stationaries, bags among other products.</p>
+<div class="cell">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#You will need to install kableExtra package</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://haozhu233.github.io/kableExtra/">kableExtra</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">my_data</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">12</span><span class="op">]</span>, <span class="fl">20</span><span class="op">)</span>, digits <span class="op">=</span> <span class="fl">5</span>, booktabs <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  caption <span class="op">=</span> <span class="st">'The First 20 Rows of the Google Analytics Sample Data'</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/kable_styling.html">kable_styling</a></span><span class="op">(</span>font_size <span class="op">=</span> <span class="fl">6.5</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<table class="table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>The First 20 Rows of the Google Analytics Sample Data</caption>
+<thead><tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">Channel</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Age</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Users</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">New Users</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Sessions</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Bounce Rate</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Pages / Session</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Avg. Session Duration</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Ecommerce Conversion Rate</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Transactions</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Revenue</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Year</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Direct</td>
+<td style="text-align: left;">25-34</td>
+<td style="text-align: right;">81822</td>
+<td style="text-align: right;">76251</td>
+<td style="text-align: right;">118241</td>
+<td style="text-align: right;">0.42193</td>
+<td style="text-align: right;">5.82467</td>
+<td style="text-align: right;">227.6724</td>
+<td style="text-align: right;">0.03649</td>
+<td style="text-align: right;">4315</td>
+<td style="text-align: right;">332771.829</td>
+<td style="text-align: right;">2021</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Direct</td>
+<td style="text-align: left;">18-24</td>
+<td style="text-align: right;">65506</td>
+<td style="text-align: right;">61565</td>
+<td style="text-align: right;">88898</td>
+<td style="text-align: right;">0.47178</td>
+<td style="text-align: right;">4.98222</td>
+<td style="text-align: right;">199.7854</td>
+<td style="text-align: right;">0.02642</td>
+<td style="text-align: right;">2349</td>
+<td style="text-align: right;">198848.060</td>
+<td style="text-align: right;">2021</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Direct</td>
+<td style="text-align: left;">35-44</td>
+<td style="text-align: right;">41947</td>
+<td style="text-align: right;">38535</td>
+<td style="text-align: right;">59313</td>
+<td style="text-align: right;">0.42185</td>
+<td style="text-align: right;">5.91531</td>
+<td style="text-align: right;">229.8105</td>
+<td style="text-align: right;">0.03842</td>
+<td style="text-align: right;">2279</td>
+<td style="text-align: right;">189792.736</td>
+<td style="text-align: right;">2021</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Direct</td>
+<td style="text-align: left;">45-54</td>
+<td style="text-align: right;">26800</td>
+<td style="text-align: right;">24967</td>
+<td style="text-align: right;">37477</td>
+<td style="text-align: right;">0.44659</td>
+<td style="text-align: right;">5.47669</td>
+<td style="text-align: right;">226.9229</td>
+<td style="text-align: right;">0.03421</td>
+<td style="text-align: right;">1282</td>
+<td style="text-align: right;">109531.822</td>
+<td style="text-align: right;">2021</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Direct</td>
+<td style="text-align: left;">55-64</td>
+<td style="text-align: right;">12981</td>
+<td style="text-align: right;">12217</td>
+<td style="text-align: right;">17703</td>
+<td style="text-align: right;">0.46444</td>
+<td style="text-align: right;">5.26922</td>
+<td style="text-align: right;">213.1094</td>
+<td style="text-align: right;">0.03474</td>
+<td style="text-align: right;">615</td>
+<td style="text-align: right;">54808.702</td>
+<td style="text-align: right;">2021</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Direct</td>
+<td style="text-align: left;">65+</td>
+<td style="text-align: right;">9432</td>
+<td style="text-align: right;">8849</td>
+<td style="text-align: right;">12548</td>
+<td style="text-align: right;">0.46788</td>
+<td style="text-align: right;">5.23932</td>
+<td style="text-align: right;">210.5902</td>
+<td style="text-align: right;">0.02981</td>
+<td style="text-align: right;">374</td>
+<td style="text-align: right;">35609.855</td>
+<td style="text-align: right;">2021</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Paid Search</td>
+<td style="text-align: left;">18-24</td>
+<td style="text-align: right;">2015</td>
+<td style="text-align: right;">1766</td>
+<td style="text-align: right;">2797</td>
+<td style="text-align: right;">0.55703</td>
+<td style="text-align: right;">4.71505</td>
+<td style="text-align: right;">175.1087</td>
+<td style="text-align: right;">0.02252</td>
+<td style="text-align: right;">63</td>
+<td style="text-align: right;">8423.719</td>
+<td style="text-align: right;">2021</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Paid Search</td>
+<td style="text-align: left;">35-44</td>
+<td style="text-align: right;">1394</td>
+<td style="text-align: right;">1216</td>
+<td style="text-align: right;">1980</td>
+<td style="text-align: right;">0.47525</td>
+<td style="text-align: right;">5.20909</td>
+<td style="text-align: right;">157.2596</td>
+<td style="text-align: right;">0.03535</td>
+<td style="text-align: right;">70</td>
+<td style="text-align: right;">8175.394</td>
+<td style="text-align: right;">2021</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Paid Search</td>
+<td style="text-align: left;">25-34</td>
+<td style="text-align: right;">2175</td>
+<td style="text-align: right;">1829</td>
+<td style="text-align: right;">3198</td>
+<td style="text-align: right;">0.43809</td>
+<td style="text-align: right;">5.88149</td>
+<td style="text-align: right;">195.8474</td>
+<td style="text-align: right;">0.03502</td>
+<td style="text-align: right;">112</td>
+<td style="text-align: right;">7576.795</td>
+<td style="text-align: right;">2021</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Direct</td>
+<td style="text-align: left;">25-34</td>
+<td style="text-align: right;">30772</td>
+<td style="text-align: right;">29628</td>
+<td style="text-align: right;">40539</td>
+<td style="text-align: right;">0.37803</td>
+<td style="text-align: right;">5.78436</td>
+<td style="text-align: right;">233.6450</td>
+<td style="text-align: right;">0.00306</td>
+<td style="text-align: right;">124</td>
+<td style="text-align: right;">7240.313</td>
+<td style="text-align: right;">2020</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Direct</td>
+<td style="text-align: left;">18-24</td>
+<td style="text-align: right;">17545</td>
+<td style="text-align: right;">17024</td>
+<td style="text-align: right;">21888</td>
+<td style="text-align: right;">0.42708</td>
+<td style="text-align: right;">5.07753</td>
+<td style="text-align: right;">210.2462</td>
+<td style="text-align: right;">0.00315</td>
+<td style="text-align: right;">69</td>
+<td style="text-align: right;">5325.412</td>
+<td style="text-align: right;">2020</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Direct</td>
+<td style="text-align: left;">45-54</td>
+<td style="text-align: right;">8491</td>
+<td style="text-align: right;">8126</td>
+<td style="text-align: right;">11115</td>
+<td style="text-align: right;">0.38570</td>
+<td style="text-align: right;">5.73117</td>
+<td style="text-align: right;">230.9463</td>
+<td style="text-align: right;">0.00495</td>
+<td style="text-align: right;">55</td>
+<td style="text-align: right;">4173.602</td>
+<td style="text-align: right;">2020</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Paid Search</td>
+<td style="text-align: left;">45-54</td>
+<td style="text-align: right;">1083</td>
+<td style="text-align: right;">960</td>
+<td style="text-align: right;">1387</td>
+<td style="text-align: right;">0.56669</td>
+<td style="text-align: right;">4.39726</td>
+<td style="text-align: right;">138.6871</td>
+<td style="text-align: right;">0.02307</td>
+<td style="text-align: right;">32</td>
+<td style="text-align: right;">4086.483</td>
+<td style="text-align: right;">2021</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Direct</td>
+<td style="text-align: left;">35-44</td>
+<td style="text-align: right;">14088</td>
+<td style="text-align: right;">13560</td>
+<td style="text-align: right;">18461</td>
+<td style="text-align: right;">0.38248</td>
+<td style="text-align: right;">5.53648</td>
+<td style="text-align: right;">226.3607</td>
+<td style="text-align: right;">0.00444</td>
+<td style="text-align: right;">82</td>
+<td style="text-align: right;">3993.809</td>
+<td style="text-align: right;">2020</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Organic Search</td>
+<td style="text-align: left;">25-34</td>
+<td style="text-align: right;">35978</td>
+<td style="text-align: right;">32853</td>
+<td style="text-align: right;">47132</td>
+<td style="text-align: right;">0.51390</td>
+<td style="text-align: right;">3.97070</td>
+<td style="text-align: right;">164.3456</td>
+<td style="text-align: right;">0.00068</td>
+<td style="text-align: right;">32</td>
+<td style="text-align: right;">1738.469</td>
+<td style="text-align: right;">2020</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">(Other)</td>
+<td style="text-align: left;">35-44</td>
+<td style="text-align: right;">284</td>
+<td style="text-align: right;">174</td>
+<td style="text-align: right;">523</td>
+<td style="text-align: right;">0.24474</td>
+<td style="text-align: right;">7.62524</td>
+<td style="text-align: right;">278.2505</td>
+<td style="text-align: right;">0.03824</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">1657.444</td>
+<td style="text-align: right;">2021</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Direct</td>
+<td style="text-align: left;">55-64</td>
+<td style="text-align: right;">4466</td>
+<td style="text-align: right;">4287</td>
+<td style="text-align: right;">5862</td>
+<td style="text-align: right;">0.40242</td>
+<td style="text-align: right;">5.46571</td>
+<td style="text-align: right;">232.1102</td>
+<td style="text-align: right;">0.00409</td>
+<td style="text-align: right;">24</td>
+<td style="text-align: right;">1530.108</td>
+<td style="text-align: right;">2020</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">(Other)</td>
+<td style="text-align: left;">25-34</td>
+<td style="text-align: right;">3440</td>
+<td style="text-align: right;">2370</td>
+<td style="text-align: right;">4741</td>
+<td style="text-align: right;">0.31533</td>
+<td style="text-align: right;">5.90719</td>
+<td style="text-align: right;">232.4685</td>
+<td style="text-align: right;">0.00337</td>
+<td style="text-align: right;">16</td>
+<td style="text-align: right;">1472.471</td>
+<td style="text-align: right;">2020</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">(Other)</td>
+<td style="text-align: left;">18-24</td>
+<td style="text-align: right;">500</td>
+<td style="text-align: right;">302</td>
+<td style="text-align: right;">849</td>
+<td style="text-align: right;">0.34982</td>
+<td style="text-align: right;">5.61602</td>
+<td style="text-align: right;">244.2697</td>
+<td style="text-align: right;">0.03651</td>
+<td style="text-align: right;">31</td>
+<td style="text-align: right;">1395.053</td>
+<td style="text-align: right;">2021</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Paid Search</td>
+<td style="text-align: left;">55-64</td>
+<td style="text-align: right;">804</td>
+<td style="text-align: right;">748</td>
+<td style="text-align: right;">1009</td>
+<td style="text-align: right;">0.62537</td>
+<td style="text-align: right;">3.59068</td>
+<td style="text-align: right;">111.0684</td>
+<td style="text-align: right;">0.01388</td>
+<td style="text-align: right;">14</td>
+<td style="text-align: right;">1315.551</td>
+<td style="text-align: right;">2021</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<p>See the bibliography at the end of the chapter for referral to the complete dataset that you can access and work with.</p>
+<section id="variables-levels-of-measurement" class="level2" data-number="3.1"><h2 data-number="3.1" class="anchored" data-anchor-id="variables-levels-of-measurement">
+<span class="header-section-number">3.1</span> Variables &amp; Levels of Measurement</h2>
+<p>In a dataset, the columns identify the variables that represent certain qualities of individuals. Any quality that can vary can be considered a variable. Variables can take on different values or attributes. An attribute is a specific value on a variable. For example, gender might be a variable that we are interested in, and the attributes of gender could be male, female, transgender, and non-binary.</p>
+<p>We use levels of measurement to describe how precisely variables are recorded. There are four levels of measurement: nominal, ordinal, interval, and ratio representing the transition from analyzing qualitative to quantitative data.</p>
+<section id="nominal-data" class="level3" data-number="3.1.1"><h3 data-number="3.1.1" class="anchored" data-anchor-id="nominal-data">
+<span class="header-section-number">3.1.1</span> Nominal Data</h3>
+<p>Nominal data is used to label variables. Gender, nationality, race, and ethnicity are a few of the most common examples of nominal data. It can only be categorized based on qualitative differences and there are no orderings or directions among different categories. We only know that males and females have qualitative differences in terms of gender, but we cannot tell how much they differ, nor could we sort individuals based on their gender. We can still assign numbers to different attributes of nominal variables (e.g., we can assign 1 to females and 2 to males, or vice versa), but the numbers only serve as labels that lack numerical values.</p>
+<p>For the dataset of Google Analytics from Google Merchandise Store (Table 1), the variable <strong>Channel</strong> is measured at the nominal level, and it indicates the channel through which traffic got to Google Merchandise Store. <em>Organic Search</em> indicates visits from unpaid search results. <em>Direct</em> indicates visits where users navigated directly to the URL, or the source of the visit is unknown. <em>Referral</em> indicates traffic where users clicked a link from another site, excluding major search engines. <em>Display</em> indicates traffic from display advertising, such as Google AdWords remarketing campaigns. <em>Social</em> indicates visits from social networks (Facebook, Twitter, etc.). <em>Paid Search</em> indicates traffic from the PPC (Pay Per Click) campaigns run in search results.</p>
+<p>Since each variable should be exhaustive to include all the possibilities, for the variable of Channel, the attribute “<em>Other</em>” is assigned referring to traffic from an un-identified channel. All these different channels through which a user reaches our website are different attributes our channel variable can have.</p>
+</section><section id="ordinal-data" class="level3" data-number="3.1.2"><h3 data-number="3.1.2" class="anchored" data-anchor-id="ordinal-data">
+<span class="header-section-number">3.1.2</span> Ordinal Data</h3>
+<p>Ordinal data also can be categorized, but there are rankings or orderings or scaling between categories. The ordinal measurement has been widely used to analyze variables such as education level (e.g., “high school,” “BS,” “MS,” “Ph.D.”), income level (e.g., “less than 50K,” “50-100K,” “over 100K”), and socioeconomic status (e.g., “lower class,” “middle class,” and “upper class”).</p>
+<p>For the dataset of Google Analytics from Google Merchandise Store (Table 2.1), the variable <strong>Age</strong> is also ordinal, and it refers to the age group of the users. For such ordinal variable, we can turn it into quantitative by assigning numerical values to different categories.</p>
+<p>For example, Age can be defined as having six attributes:1 = 18-24; 2 = 25-34; 3 = 35-44; 4 = 45-54; 5 = 55-64; 6 = 65+. There is a logical ordering among the different age groups, in a way that whoever answers “6” is older than individuals who answer “5” to this question. However, we cannot precisely tell the differences between the two groups because each attribute covers a wide range, and the ranges of different attributes are of different sizes.</p>
+</section><section id="interval-data" class="level3" data-number="3.1.3"><h3 data-number="3.1.3" class="anchored" data-anchor-id="interval-data">
+<span class="header-section-number">3.1.3</span> Interval Data</h3>
+<p>Interval data refers not only to the classification and ordering of data but also specifies that the distances between every two adjacent attributes on a scale are equal. For interval data, the difference between two values is meaningful, but there is no true zero point or fixed beginning, which refers to a scale where 0 indicates the absence of something.</p>
+<p>The most popular example is the temperature in degrees Fahrenheit or Celsius. The difference between 90 degrees F and 80 degrees F is the same difference between 70 degrees F and 60 degrees F; however, when it comes to 0 degrees F, we cannot say that temperature no longer exists. For interval measures, the value 0 does not mean the absence of this variable; rather, it is just an arbitrary setting that we have agreed upon.</p>
+<p>Another example of interval data is year. For year, 0 does not represent the missing value but indicates the year when Christ was born, and the time before 0 is given the prefix BC. If you were born in the year of 2005 and I was born in the year of 2000, we know that I will be five years older than you.</p>
+<p>For the dataset of Google Analytics from Google Merchandise Store (Table 2.1), the only interval variable is <strong>Year</strong>, indicating the year of each observation.</p>
+</section><section id="ratio-data" class="level3" data-number="3.1.4"><h3 data-number="3.1.4" class="anchored" data-anchor-id="ratio-data">
+<span class="header-section-number">3.1.4</span> Ratio Data</h3>
+<p>For ratio data, the difference between two values is also meaningful, and it has a true zero, indicating the absence of such variable. Media consumption is a great example of ratio data. Media consumption can be measured in days, hours, or minutes a person exposes him/herself to media content. If a person has zero media consumption, that means this person does not consume media at all; in other words, to this person, media consumption is absent.</p>
+<p>For ratio data, zero is the starting point, and the distance between two adjacent values is the same. In addition, it makes sense to calculate the ratio of different values: If you have six hours of media consumption and I only have three hours, then we can say that you consume twice as much media as I do.</p>
+<p>Table 2.1 has six ratio variables. <strong>Sessions</strong> are the total number of sessions within the date range. A session is the period time a user is actively engaged with the website of Google Merchandise Store. <strong>Users</strong> are the number of users who have initiated at least one session during the date range, with the value of zero representing no such user exists. <strong>New Users</strong> are the number of first-time users during the selected date range. <strong>Transactions</strong> are the number of completed purchases on Google Merchandise Store. <strong>Ecommerce Conversion Rate</strong> refers to the E-commerce conversion rate that is the percentage of sessions that resulted in an e-commerce transaction. <strong>Revenue</strong> refers to the revenue of the completed purchases. If the revenue from the display channel is 0, that just means there is no income produced by the display Ads.</p>
+<p>What you can do to analyze your data may be limited due to the level of measurement of the variable. The complexity and precision of the level of measurement increase from nominal to ratio. For the ratio level of measurement, we can not only add numbers or subtract numbers but calculate the ratio of two numbers. For example, if the revenue from the organic search channel is 8k and from the paid search is 4k, then the revenue generated from organic search is twice as much as the revenue from paid search.</p>
+<p>The rows in a spreadsheet are closely associated with the unit of analysis, which is one of the most important ideas in a research project and the major entity that you are analyzing in your study. You will need to determine the unit of analysis since it determines the analysis you do for your research.</p>
+<p>For instance, if you are comparing the e-commerce performances (e.g., User, Sessions, Transactions, Revenues, ECR) of different channels, the unit of analysis is each individual channel. If you are comparing the e-commerce performance of different age groups, the unit of analysis is each age group. If you are comparing the e-commerce performance of different channels and age groups, the unit of analysis is each individual channel at each age group.</p>
+</section></section><section id="statistical-analyses-of-a-single-variable" class="level2" data-number="3.2"><h2 data-number="3.2" class="anchored" data-anchor-id="statistical-analyses-of-a-single-variable">
+<span class="header-section-number">3.2</span> Statistical Analyses of a Single Variable</h2>
+<p>After defining your research questions and the related unit(s) of analysis, and levels of measurement, we may start the data analysis journey by conducting a statistical analysis of a single variable.</p>
+<section id="frequency-distribution" class="level3" data-number="3.2.1"><h3 data-number="3.2.1" class="anchored" data-anchor-id="frequency-distribution">
+<span class="header-section-number">3.2.1</span> Frequency Distribution</h3>
+<p>The easiest thing we can do is to count the number of times an event or a value occurs for the variable(s) of our choice, and this is called Frequency analysis. We can aggregate individual observations of a variable into groups so that a frequency distribution of these groups can serve as a convenient means of summarizing or describing our data.</p>
+<p>We are going to use the <strong>dplyr</strong> package to count the aggregated transactions by channel and age groups.</p>
+<div class="cell">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#Frequency and grouped frequency analysis</span></span>
+<span><span class="co">#You will need to install dplyr package</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'dplyr'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:kableExtra':
+
+    group_rows</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:stats':
+
+    filter, lag</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:base':
+
+    intersect, setdiff, setequal, union</code></pre>
+</div>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">Transaction_Frequency_Channel</span> <span class="op">&lt;-</span> <span class="va">my_data</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">Channel</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise</a></span><span class="op">(</span>Frequency <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">Transactions</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">Transaction_Frequency_Age</span> <span class="op">&lt;-</span> <span class="va">my_data</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">Age</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise</a></span><span class="op">(</span>Frequency <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">Transactions</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Table 2.2 demonstrated the grouped frequency of transactions for each channel and age group. From the frequency analysis, we can tell that the direct channel (n = 11581) and the age group of 25 to 34 (n = 4654) had the greatest number of transactions in Google Merchandise Store.</p>
+<div class="cell">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="va">Transaction_Frequency_Channel</span>, <span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html">desc</a></span><span class="op">(</span><span class="va">Frequency</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="va">Transaction_Frequency_Age</span>, <span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html">desc</a></span><span class="op">(</span><span class="va">Frequency</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  caption <span class="op">=</span> <span class="st">'Grouped Transaction Frequency for Channel and Age'</span></span>
+<span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="kable_wrapper">
+<caption>
+Grouped Transaction Frequency for Channel and Age
+</caption>
+<tbody><tr>
+<td>
+<table class="table table-sm table-striped small">
+<thead><tr class="header">
+<th style="text-align: left;">Channel</th>
+<th style="text-align: right;">Frequency</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Direct</td>
+<td style="text-align: right;">11581</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Paid Search</td>
+<td style="text-align: right;">330</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">(Other)</td>
+<td style="text-align: right;">138</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Organic Search</td>
+<td style="text-align: right;">98</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Referral</td>
+<td style="text-align: right;">32</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Display</td>
+<td style="text-align: right;">6</td>
+</tr>
+</tbody>
+</table>
+</td>
+<td>
+<table class="table table-sm table-striped small">
+<thead><tr class="header">
+<th style="text-align: left;">Age</th>
+<th style="text-align: right;">Frequency</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">25-34</td>
+<td style="text-align: right;">4654</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">18-24</td>
+<td style="text-align: right;">2558</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">35-44</td>
+<td style="text-align: right;">2496</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">45-54</td>
+<td style="text-align: right;">1394</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">55-64</td>
+<td style="text-align: right;">673</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">65+</td>
+<td style="text-align: right;">414</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr></tbody>
+</table>
+</div>
+</div>
+</section><section id="percentage-change" class="level3" data-number="3.2.2"><h3 data-number="3.2.2" class="anchored" data-anchor-id="percentage-change">
+<span class="header-section-number">3.2.2</span> Percentage Change</h3>
+<p>Here, we can also use the grouped frequency analysis to compare the revenue from each channel between 2020 and 2021 to assess the dynamic changes of each channel.</p>
+<div class="cell">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#Creat a subset for year 2020 and year 2021</span></span>
+<span></span>
+<span><span class="va">my_data_2020</span> <span class="op">&lt;-</span> <span class="va">my_data</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">Year</span> <span class="op">==</span> <span class="fl">2020</span><span class="op">)</span></span>
+<span><span class="va">my_data_2021</span> <span class="op">&lt;-</span> <span class="va">my_data</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">Year</span> <span class="op">==</span> <span class="fl">2021</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">Revenue_Frequency_2020</span> <span class="op">&lt;-</span> <span class="va">my_data_2020</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">Channel</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise</a></span><span class="op">(</span>Revenue <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">Revenue</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">Revenue_Frequency_2021</span> <span class="op">&lt;-</span> <span class="va">my_data_2021</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">Channel</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise</a></span><span class="op">(</span>Revenue <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">Revenue</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>As illustrated in Table 2.3, the direct channel created the most revenues in both 2020 and 2021. When you have such data for two points in time, you can calculate how much change there has been over this period. The result is expressed as a percentage in absolute numbers and is called the percentage change or the rate of change. Here is the formula: <strong>Percentage Change = [(Number at later time / Number at earlier time) - 1] × 100%</strong>.</p>
+<div class="cell">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="va">Revenue_Frequency_2020</span>, <span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html">desc</a></span><span class="op">(</span><span class="va">Revenue</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="va">Revenue_Frequency_2021</span>, <span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html">desc</a></span><span class="op">(</span><span class="va">Revenue</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  caption <span class="op">=</span> <span class="st">'Grouped Revenue in 2020 and 2021'</span></span>
+<span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="kable_wrapper">
+<caption>
+Grouped Revenue in 2020 and 2021
+</caption>
+<tbody><tr>
+<td>
+<table class="table table-sm table-striped small">
+<thead><tr class="header">
+<th style="text-align: left;">Channel</th>
+<th style="text-align: right;">Revenue</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Direct</td>
+<td style="text-align: right;">23565.6812</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Organic Search</td>
+<td style="text-align: right;">4628.4410</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">(Other)</td>
+<td style="text-align: right;">3154.8063</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Paid Search</td>
+<td style="text-align: right;">1975.9309</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Referral</td>
+<td style="text-align: right;">864.7263</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Social</td>
+<td style="text-align: right;">164.8144</td>
+</tr>
+</tbody>
+</table>
+</td>
+<td>
+<table class="table table-sm table-striped small">
+<thead><tr class="header">
+<th style="text-align: left;">Channel</th>
+<th style="text-align: right;">Revenue</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Direct</td>
+<td style="text-align: right;">921363.0041</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Paid Search</td>
+<td style="text-align: right;">29908.1791</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">(Other)</td>
+<td style="text-align: right;">5193.1180</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Referral</td>
+<td style="text-align: right;">852.0686</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Display</td>
+<td style="text-align: right;">354.3391</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Organic Search</td>
+<td style="text-align: right;">188.6451</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr></tbody>
+</table>
+</div>
+</div>
+<p>For example, from Table 2.3, in 2020, the revenue generated from the paid search channel was $1975.93. And in 2020, the revenue generated from the paid search channel was 29908.18. The percentage change of revenue from the paid search channel from 2020 to 2021 is then calculated as follows: <strong>[(29908.18/ 1975.93)-1] x 100%= 1413.62%</strong>, meaning that from the year of 2020 to the year of 2021, the revenue generated from the paid search channel increased by 1413.62%.</p>
+</section><section id="relative-frequency" class="level3" data-number="3.2.3"><h3 data-number="3.2.3" class="anchored" data-anchor-id="relative-frequency">
+<span class="header-section-number">3.2.3</span> Relative Frequency</h3>
+<p>For the frequency analysis, we also can count how often something happens divided by all outcomes, which is called the relative frequency analysis. For example, from Table 3, the revenue from the organic search channel in 2020 is $4,628.44, and the total revenue in 2020 is the sum of revenue from all channels, which is $34422.26.The relative revenue from the organic search channel is 4,628.44/34422.26 = 13.44%, indicating 13.44% of the revenue in 2020 was from the organic search channel. We can use the codes below to get the relative revenue for each channel in 2020 and 2021 (Table 2.4).</p>
+<div class="cell">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">Revenue_Relative_Frequency_2020</span> <span class="op">&lt;-</span> <span class="va">my_data_2020</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">Channel</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise</a></span><span class="op">(</span><span class="st">'Revenue_Percentage'</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">Revenue</span><span class="op">)</span><span class="op">/</span><span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">my_data_2020</span><span class="op">$</span><span class="va">Revenue</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">Revenue_Relative_Frequency_2021</span> <span class="op">&lt;-</span> <span class="va">my_data_2021</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">Channel</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise</a></span><span class="op">(</span><span class="st">'Revenue_Percentage'</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">Revenue</span><span class="op">)</span><span class="op">/</span><span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">my_data_2021</span><span class="op">$</span><span class="va">Revenue</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="va">Revenue_Relative_Frequency_2020</span>, <span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html">desc</a></span><span class="op">(</span><span class="va">Revenue_Percentage</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="va">Revenue_Relative_Frequency_2021</span>, <span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html">desc</a></span><span class="op">(</span><span class="va">Revenue_Percentage</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  caption <span class="op">=</span> <span class="st">'Grouped Revenue in 2020 and 2021'</span></span>
+<span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="kable_wrapper">
+<caption>
+Grouped Revenue in 2020 and 2021
+</caption>
+<tbody><tr>
+<td>
+<table class="table table-sm table-striped small">
+<thead><tr class="header">
+<th style="text-align: left;">Channel</th>
+<th style="text-align: right;">Revenue_Percentage</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Direct</td>
+<td style="text-align: right;">0.6846058</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Organic Search</td>
+<td style="text-align: right;">0.1344607</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">(Other)</td>
+<td style="text-align: right;">0.0916502</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Paid Search</td>
+<td style="text-align: right;">0.0574027</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Referral</td>
+<td style="text-align: right;">0.0251211</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Social</td>
+<td style="text-align: right;">0.0047880</td>
+</tr>
+</tbody>
+</table>
+</td>
+<td>
+<table class="table table-sm table-striped small">
+<thead><tr class="header">
+<th style="text-align: left;">Channel</th>
+<th style="text-align: right;">Revenue_Percentage</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Direct</td>
+<td style="text-align: right;">0.9618529</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Paid Search</td>
+<td style="text-align: right;">0.0312225</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">(Other)</td>
+<td style="text-align: right;">0.0054213</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Referral</td>
+<td style="text-align: right;">0.0008895</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Display</td>
+<td style="text-align: right;">0.0003699</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Organic Search</td>
+<td style="text-align: right;">0.0001969</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr></tbody>
+</table>
+</div>
+</div>
+</section><section id="percentage-points" class="level3" data-number="3.2.4"><h3 data-number="3.2.4" class="anchored" data-anchor-id="percentage-points">
+<span class="header-section-number">3.2.4</span> Percentage Points</h3>
+<p>We can use the term “percentage points” to compare two different percentages at two points in time. The best way to explain this is through an example: from Table 2.4, in 2020, the share of revenue from the Paid Search channel was 5.74%. In 2021, the share of revenue from the Paid Search channel was 3.12%. The difference of these two percentages is calculated in percentage points: 3.12 % - 5.74 % = -2.62%. This means that the share of revenue from Paid Search channel in 2021 was almost three percentage points lower than the share of revenue from the Paid Search channel in 2020.</p>
+</section><section id="rate" class="level3" data-number="3.2.5"><h3 data-number="3.2.5" class="anchored" data-anchor-id="rate">
+<span class="header-section-number">3.2.5</span> Rate</h3>
+<p>In data analysis, some variables, such as the ECR (e-commerce conversion rate from Table 2.1), are too small to visualize. Under such circumstances, we can represent the percentage as rate by converting the small proportions to a whole number with one, two, or three digits on a base of some multiple of 1,000, 10,000, 100,000, or 1 million.</p>
+<p>For example, from Table 2.1, in 2020, the Ecommerce Conversion Rate of the organic search channel for users of 25 to 34 is 0.00068 or 0.068%. Instead of reporting the percentage, we can move the decimal place farther to the right, sufficient to make a number greater than 1, which allows us to better visualize the data. In the case of Ecommerce Conversion Rate, moving the decimal point four places to the right is the same as multiplying the value by 10,000. Consequently, the Ecommerce Conversion Rate of the organic search channel was 6.8 per 10,000 sessions.</p>
+<p>We can use the r code below to add a column representing the Ecommerce Conversion Rate per 10,000 sessions for my_data.</p>
+<div class="cell">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">my_data</span><span class="op">$</span><span class="va">ECR</span> <span class="op">&lt;-</span> <span class="va">my_data</span><span class="op">$</span><span class="va">`Ecommerce Conversion Rate`</span><span class="op">*</span><span class="fl">10000</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now, the new column has been added to my_data as illustrated in Table 2.5.</p>
+<div class="cell">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">my_data</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">13</span><span class="op">]</span>, <span class="fl">20</span><span class="op">)</span>, digits <span class="op">=</span> <span class="fl">5</span>, booktabs <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  caption <span class="op">=</span> <span class="st">'The First 20 Rows of the Google Analytics Sample Data'</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/kable_styling.html">kable_styling</a></span><span class="op">(</span>font_size <span class="op">=</span> <span class="fl">6.5</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<table class="table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>The First 20 Rows of the Google Analytics Sample Data</caption>
+<thead><tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">Channel</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Age</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Users</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">New Users</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Sessions</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Bounce Rate</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Pages / Session</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Avg. Session Duration</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Ecommerce Conversion Rate</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Transactions</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Revenue</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Year</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">ECR</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Direct</td>
+<td style="text-align: left;">25-34</td>
+<td style="text-align: right;">81822</td>
+<td style="text-align: right;">76251</td>
+<td style="text-align: right;">118241</td>
+<td style="text-align: right;">0.42193</td>
+<td style="text-align: right;">5.82467</td>
+<td style="text-align: right;">227.6724</td>
+<td style="text-align: right;">0.03649</td>
+<td style="text-align: right;">4315</td>
+<td style="text-align: right;">332771.829</td>
+<td style="text-align: right;">2021</td>
+<td style="text-align: right;">364.93264</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Direct</td>
+<td style="text-align: left;">18-24</td>
+<td style="text-align: right;">65506</td>
+<td style="text-align: right;">61565</td>
+<td style="text-align: right;">88898</td>
+<td style="text-align: right;">0.47178</td>
+<td style="text-align: right;">4.98222</td>
+<td style="text-align: right;">199.7854</td>
+<td style="text-align: right;">0.02642</td>
+<td style="text-align: right;">2349</td>
+<td style="text-align: right;">198848.060</td>
+<td style="text-align: right;">2021</td>
+<td style="text-align: right;">264.23542</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Direct</td>
+<td style="text-align: left;">35-44</td>
+<td style="text-align: right;">41947</td>
+<td style="text-align: right;">38535</td>
+<td style="text-align: right;">59313</td>
+<td style="text-align: right;">0.42185</td>
+<td style="text-align: right;">5.91531</td>
+<td style="text-align: right;">229.8105</td>
+<td style="text-align: right;">0.03842</td>
+<td style="text-align: right;">2279</td>
+<td style="text-align: right;">189792.736</td>
+<td style="text-align: right;">2021</td>
+<td style="text-align: right;">384.23280</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Direct</td>
+<td style="text-align: left;">45-54</td>
+<td style="text-align: right;">26800</td>
+<td style="text-align: right;">24967</td>
+<td style="text-align: right;">37477</td>
+<td style="text-align: right;">0.44659</td>
+<td style="text-align: right;">5.47669</td>
+<td style="text-align: right;">226.9229</td>
+<td style="text-align: right;">0.03421</td>
+<td style="text-align: right;">1282</td>
+<td style="text-align: right;">109531.822</td>
+<td style="text-align: right;">2021</td>
+<td style="text-align: right;">342.07647</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Direct</td>
+<td style="text-align: left;">55-64</td>
+<td style="text-align: right;">12981</td>
+<td style="text-align: right;">12217</td>
+<td style="text-align: right;">17703</td>
+<td style="text-align: right;">0.46444</td>
+<td style="text-align: right;">5.26922</td>
+<td style="text-align: right;">213.1094</td>
+<td style="text-align: right;">0.03474</td>
+<td style="text-align: right;">615</td>
+<td style="text-align: right;">54808.702</td>
+<td style="text-align: right;">2021</td>
+<td style="text-align: right;">347.39875</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Direct</td>
+<td style="text-align: left;">65+</td>
+<td style="text-align: right;">9432</td>
+<td style="text-align: right;">8849</td>
+<td style="text-align: right;">12548</td>
+<td style="text-align: right;">0.46788</td>
+<td style="text-align: right;">5.23932</td>
+<td style="text-align: right;">210.5902</td>
+<td style="text-align: right;">0.02981</td>
+<td style="text-align: right;">374</td>
+<td style="text-align: right;">35609.855</td>
+<td style="text-align: right;">2021</td>
+<td style="text-align: right;">298.05547</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Paid Search</td>
+<td style="text-align: left;">18-24</td>
+<td style="text-align: right;">2015</td>
+<td style="text-align: right;">1766</td>
+<td style="text-align: right;">2797</td>
+<td style="text-align: right;">0.55703</td>
+<td style="text-align: right;">4.71505</td>
+<td style="text-align: right;">175.1087</td>
+<td style="text-align: right;">0.02252</td>
+<td style="text-align: right;">63</td>
+<td style="text-align: right;">8423.719</td>
+<td style="text-align: right;">2021</td>
+<td style="text-align: right;">225.24133</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Paid Search</td>
+<td style="text-align: left;">35-44</td>
+<td style="text-align: right;">1394</td>
+<td style="text-align: right;">1216</td>
+<td style="text-align: right;">1980</td>
+<td style="text-align: right;">0.47525</td>
+<td style="text-align: right;">5.20909</td>
+<td style="text-align: right;">157.2596</td>
+<td style="text-align: right;">0.03535</td>
+<td style="text-align: right;">70</td>
+<td style="text-align: right;">8175.394</td>
+<td style="text-align: right;">2021</td>
+<td style="text-align: right;">353.53535</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Paid Search</td>
+<td style="text-align: left;">25-34</td>
+<td style="text-align: right;">2175</td>
+<td style="text-align: right;">1829</td>
+<td style="text-align: right;">3198</td>
+<td style="text-align: right;">0.43809</td>
+<td style="text-align: right;">5.88149</td>
+<td style="text-align: right;">195.8474</td>
+<td style="text-align: right;">0.03502</td>
+<td style="text-align: right;">112</td>
+<td style="text-align: right;">7576.795</td>
+<td style="text-align: right;">2021</td>
+<td style="text-align: right;">350.21889</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Direct</td>
+<td style="text-align: left;">25-34</td>
+<td style="text-align: right;">30772</td>
+<td style="text-align: right;">29628</td>
+<td style="text-align: right;">40539</td>
+<td style="text-align: right;">0.37803</td>
+<td style="text-align: right;">5.78436</td>
+<td style="text-align: right;">233.6450</td>
+<td style="text-align: right;">0.00306</td>
+<td style="text-align: right;">124</td>
+<td style="text-align: right;">7240.313</td>
+<td style="text-align: right;">2020</td>
+<td style="text-align: right;">30.58783</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Direct</td>
+<td style="text-align: left;">18-24</td>
+<td style="text-align: right;">17545</td>
+<td style="text-align: right;">17024</td>
+<td style="text-align: right;">21888</td>
+<td style="text-align: right;">0.42708</td>
+<td style="text-align: right;">5.07753</td>
+<td style="text-align: right;">210.2462</td>
+<td style="text-align: right;">0.00315</td>
+<td style="text-align: right;">69</td>
+<td style="text-align: right;">5325.412</td>
+<td style="text-align: right;">2020</td>
+<td style="text-align: right;">31.52412</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Direct</td>
+<td style="text-align: left;">45-54</td>
+<td style="text-align: right;">8491</td>
+<td style="text-align: right;">8126</td>
+<td style="text-align: right;">11115</td>
+<td style="text-align: right;">0.38570</td>
+<td style="text-align: right;">5.73117</td>
+<td style="text-align: right;">230.9463</td>
+<td style="text-align: right;">0.00495</td>
+<td style="text-align: right;">55</td>
+<td style="text-align: right;">4173.602</td>
+<td style="text-align: right;">2020</td>
+<td style="text-align: right;">49.48268</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Paid Search</td>
+<td style="text-align: left;">45-54</td>
+<td style="text-align: right;">1083</td>
+<td style="text-align: right;">960</td>
+<td style="text-align: right;">1387</td>
+<td style="text-align: right;">0.56669</td>
+<td style="text-align: right;">4.39726</td>
+<td style="text-align: right;">138.6871</td>
+<td style="text-align: right;">0.02307</td>
+<td style="text-align: right;">32</td>
+<td style="text-align: right;">4086.483</td>
+<td style="text-align: right;">2021</td>
+<td style="text-align: right;">230.71377</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Direct</td>
+<td style="text-align: left;">35-44</td>
+<td style="text-align: right;">14088</td>
+<td style="text-align: right;">13560</td>
+<td style="text-align: right;">18461</td>
+<td style="text-align: right;">0.38248</td>
+<td style="text-align: right;">5.53648</td>
+<td style="text-align: right;">226.3607</td>
+<td style="text-align: right;">0.00444</td>
+<td style="text-align: right;">82</td>
+<td style="text-align: right;">3993.809</td>
+<td style="text-align: right;">2020</td>
+<td style="text-align: right;">44.41796</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Organic Search</td>
+<td style="text-align: left;">25-34</td>
+<td style="text-align: right;">35978</td>
+<td style="text-align: right;">32853</td>
+<td style="text-align: right;">47132</td>
+<td style="text-align: right;">0.51390</td>
+<td style="text-align: right;">3.97070</td>
+<td style="text-align: right;">164.3456</td>
+<td style="text-align: right;">0.00068</td>
+<td style="text-align: right;">32</td>
+<td style="text-align: right;">1738.469</td>
+<td style="text-align: right;">2020</td>
+<td style="text-align: right;">6.78944</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">(Other)</td>
+<td style="text-align: left;">35-44</td>
+<td style="text-align: right;">284</td>
+<td style="text-align: right;">174</td>
+<td style="text-align: right;">523</td>
+<td style="text-align: right;">0.24474</td>
+<td style="text-align: right;">7.62524</td>
+<td style="text-align: right;">278.2505</td>
+<td style="text-align: right;">0.03824</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">1657.444</td>
+<td style="text-align: right;">2021</td>
+<td style="text-align: right;">382.40918</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Direct</td>
+<td style="text-align: left;">55-64</td>
+<td style="text-align: right;">4466</td>
+<td style="text-align: right;">4287</td>
+<td style="text-align: right;">5862</td>
+<td style="text-align: right;">0.40242</td>
+<td style="text-align: right;">5.46571</td>
+<td style="text-align: right;">232.1102</td>
+<td style="text-align: right;">0.00409</td>
+<td style="text-align: right;">24</td>
+<td style="text-align: right;">1530.108</td>
+<td style="text-align: right;">2020</td>
+<td style="text-align: right;">40.94166</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">(Other)</td>
+<td style="text-align: left;">25-34</td>
+<td style="text-align: right;">3440</td>
+<td style="text-align: right;">2370</td>
+<td style="text-align: right;">4741</td>
+<td style="text-align: right;">0.31533</td>
+<td style="text-align: right;">5.90719</td>
+<td style="text-align: right;">232.4685</td>
+<td style="text-align: right;">0.00337</td>
+<td style="text-align: right;">16</td>
+<td style="text-align: right;">1472.471</td>
+<td style="text-align: right;">2020</td>
+<td style="text-align: right;">33.74815</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">(Other)</td>
+<td style="text-align: left;">18-24</td>
+<td style="text-align: right;">500</td>
+<td style="text-align: right;">302</td>
+<td style="text-align: right;">849</td>
+<td style="text-align: right;">0.34982</td>
+<td style="text-align: right;">5.61602</td>
+<td style="text-align: right;">244.2697</td>
+<td style="text-align: right;">0.03651</td>
+<td style="text-align: right;">31</td>
+<td style="text-align: right;">1395.053</td>
+<td style="text-align: right;">2021</td>
+<td style="text-align: right;">365.13545</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Paid Search</td>
+<td style="text-align: left;">55-64</td>
+<td style="text-align: right;">804</td>
+<td style="text-align: right;">748</td>
+<td style="text-align: right;">1009</td>
+<td style="text-align: right;">0.62537</td>
+<td style="text-align: right;">3.59068</td>
+<td style="text-align: right;">111.0684</td>
+<td style="text-align: right;">0.01388</td>
+<td style="text-align: right;">14</td>
+<td style="text-align: right;">1315.551</td>
+<td style="text-align: right;">2021</td>
+<td style="text-align: right;">138.75124</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section><section id="ratio" class="level3" data-number="3.2.6"><h3 data-number="3.2.6" class="anchored" data-anchor-id="ratio">
+<span class="header-section-number">3.2.6</span> Ratio</h3>
+<p>Ratio compares the size of two numbers indicating how many times one number contains another. For example, let’s calculate the ratio of returning users and new users using the formula: <strong>Number of Old Users / Number of New Users</strong>. We first use the r code below to create a new column <strong>old user (users - new users)</strong>, then we use the <strong>group_by</strong> function to calculate the ratio fo returning users and new users for each channel.</p>
+<div class="cell">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#creating a new colunme of old users</span></span>
+<span><span class="va">my_data</span><span class="op">$</span><span class="va">OldUsers</span> <span class="op">&lt;-</span> <span class="va">my_data</span><span class="op">$</span><span class="va">Users</span><span class="op">-</span><span class="va">my_data</span><span class="op">$</span><span class="st">'New Users'</span></span>
+<span></span>
+<span><span class="va">userratio</span> <span class="op">&lt;-</span> <span class="va">my_data</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">Channel</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise</a></span><span class="op">(</span>OldUsers <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">OldUsers</span><span class="op">)</span>, NewUsers <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">`New Users`</span><span class="op">)</span>,Ratio <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">OldUsers</span><span class="op">)</span><span class="op">/</span><span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">`New Users`</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>From Table 2.6, we can find that besides the un-defined channel, the referral channel has a relatively higher ratio of returning (old) users to new users, indicating a better retention rate.</p>
+<div class="cell">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="va">userratio</span>, <span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html">desc</a></span><span class="op">(</span><span class="va">Ratio</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>, </span>
+<span>  booktabs <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  caption <span class="op">=</span> <span class="st">'The Ratio of Old Users and New Users for Each Channel'</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/kable_styling.html">kable_styling</a></span><span class="op">(</span>font_size <span class="op">=</span> <span class="fl">14</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<table class="table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>The Ratio of Old Users and New Users for Each Channel</caption>
+<thead><tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">Channel</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">OldUsers</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">NewUsers</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Ratio</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">(Other)</td>
+<td style="text-align: right;">3383</td>
+<td style="text-align: right;">7268</td>
+<td style="text-align: right;">0.4654651</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Referral</td>
+<td style="text-align: right;">8101</td>
+<td style="text-align: right;">23027</td>
+<td style="text-align: right;">0.3518044</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Paid Search</td>
+<td style="text-align: right;">2116</td>
+<td style="text-align: right;">11593</td>
+<td style="text-align: right;">0.1825239</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Affiliates</td>
+<td style="text-align: right;">1002</td>
+<td style="text-align: right;">8071</td>
+<td style="text-align: right;">0.1241482</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Organic Search</td>
+<td style="text-align: right;">8428</td>
+<td style="text-align: right;">81809</td>
+<td style="text-align: right;">0.1030205</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Display</td>
+<td style="text-align: right;">524</td>
+<td style="text-align: right;">7624</td>
+<td style="text-align: right;">0.0687303</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section><section id="central-tendency" class="level3" data-number="3.2.7"><h3 data-number="3.2.7" class="anchored" data-anchor-id="central-tendency">
+<span class="header-section-number">3.2.7</span> Central Tendency</h3>
+<p>Besides using frequency analysis to summarize the distribution of a variable, we also can use the central tendency analysis to understand which attribute of a variable is most typical or representative of the variable distribution. Specifically, the central tendency analysis describes what the center of the data for a variable is. What do we mean by the center of the data? For many, the mean, median, and mode. Mean is the sum of all data points divided by the total number of observations. Median is the midpoint in data with an equal number of data points above and below. If the number of data points is even, then Median is the mean of the two midpoints. Mode is the data point that is most prevalent in the data set. It represents the most likely outcome in a data set.</p>
+<p>Let’s first create a small dataset of test scores from 20 students.</p>
+<div class="cell">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">StudentID</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">20</span><span class="op">)</span></span>
+<span><span class="va">Score</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">40</span>,<span class="fl">50</span>,<span class="fl">50</span>,<span class="fl">60</span>,<span class="fl">60</span>,<span class="fl">60</span>,<span class="fl">60</span>,<span class="fl">60</span>,<span class="fl">70</span>,<span class="fl">70</span>,<span class="fl">70</span>,<span class="fl">80</span>,<span class="fl">80</span>,<span class="fl">80</span>,<span class="fl">80</span>,<span class="fl">90</span>,<span class="fl">90</span>,<span class="fl">90</span>,<span class="fl">90</span>,<span class="fl">100</span><span class="op">)</span></span>
+<span><span class="va">TestData</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span><span class="va">StudentID</span>, <span class="va">Score</span><span class="op">)</span></span>
+<span><span class="va">ScoreFrequency</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="va">TestData</span><span class="op">$</span><span class="va">Score</span><span class="op">)</span><span class="op">)</span> <span class="co"># Calculate the frequency of each score</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">ScoreFrequency</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Score"</span>,<span class="st">"Frequency"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Table 2.7 demonstrates the frequency of each score.</p>
+<div class="cell">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="va">ScoreFrequency</span><span class="op">)</span><span class="op">)</span>, </span>
+<span>  booktabs <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  caption <span class="op">=</span> <span class="st">'Frequency of Test Scores from 20 Students'</span>, align <span class="op">=</span> <span class="st">"l"</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/kable_styling.html">kable_styling</a></span><span class="op">(</span>font_size <span class="op">=</span> <span class="fl">16</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<table class="table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>Frequency of Test Scores from 20 Students</caption>
+<thead><tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">Score</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Frequency</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">40</td>
+<td style="text-align: left;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">50</td>
+<td style="text-align: left;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">60</td>
+<td style="text-align: left;">5</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">70</td>
+<td style="text-align: left;">3</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">80</td>
+<td style="text-align: left;">4</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">90</td>
+<td style="text-align: left;">4</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<p>The mean score is the sum of all scores divided by 20. The related formula is: <strong>(40x1 + 50x2 + 60x5 + 70x3 + 80x4 +90x4 + 100x1)/20 = 71.5</strong>, meaning that the average score among these 20 students is 71.5.</p>
+<p>When it comes to identifying the median value, we want to sort all individuals from the lowest value to the highest value, and whoever in the middle gives us the median value. But the problem is, we have 20 students in this sample, which is an even number, meaning that there will be two individuals in the middle (Table 2.8: student number 10 and number 11). For situations like this, we take the mean of these two individuals’ values to compute the <strong>median: (70+70)/2 = 70</strong> (Table 2.8).</p>
+<div class="cell">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">TestData</span>, <span class="fl">20</span><span class="op">)</span>, booktabs <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  caption <span class="op">=</span> <span class="st">'A Small Dataset of Test Scores from 20 Students'</span>, align <span class="op">=</span> <span class="st">"l"</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/kable_styling.html">kable_styling</a></span><span class="op">(</span>font_size <span class="op">=</span> <span class="fl">16</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<table class="table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>A Small Dataset of Test Scores from 20 Students</caption>
+<thead><tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">StudentID</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Score</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">40</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2</td>
+<td style="text-align: left;">50</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">50</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">4</td>
+<td style="text-align: left;">60</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">5</td>
+<td style="text-align: left;">60</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6</td>
+<td style="text-align: left;">60</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">7</td>
+<td style="text-align: left;">60</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">8</td>
+<td style="text-align: left;">60</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">9</td>
+<td style="text-align: left;">70</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">10</td>
+<td style="text-align: left;">70</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">11</td>
+<td style="text-align: left;">70</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">12</td>
+<td style="text-align: left;">80</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">13</td>
+<td style="text-align: left;">80</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">14</td>
+<td style="text-align: left;">80</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">15</td>
+<td style="text-align: left;">80</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">16</td>
+<td style="text-align: left;">90</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">17</td>
+<td style="text-align: left;">90</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">18</td>
+<td style="text-align: left;">90</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">19</td>
+<td style="text-align: left;">90</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">20</td>
+<td style="text-align: left;">100</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<p>We can easily identify the most frequent test score by looking into the score distribution visualization.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># You will need install ggplot2 package</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Barplot</span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">ScoreFrequency</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">Score</span>, y<span class="op">=</span><span class="va">Frequency</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_bar</a></span><span class="op">(</span>stat <span class="op">=</span> <span class="st">"identity"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="basic_statistics_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption>Distribution of Test Scores from 20 Students</figcaption></figure>
+</div>
+</div>
+</div>
+<p>Since 60 is the most frequent data point, it is the mode of the dataset. When we do the central tendency analysis, we also need to consider the data types. While interval and ratio data have a median, mode, and mean, the nominal data has only a mode. Furthermore, when the data distribution is symmetrical, such as your data is normally distributed, the mean is the best measure of central tendency. But, when the dataset has a strongly skewed distribution, the best indicator of central tendency is the median or mode, with the median usually preferred.</p>
+<p>Now we can use the code below to get the mean, median, and mode for the number of Users and New Users, number of Sessions, E-commerce Conversion Rates, Transactions, and Revenues for the Google analytics data of the Google Merchandise Store.</p>
+<div class="cell">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#Calculate mean for each col</span></span>
+<span><span class="va">mean_report</span> <span class="op">&lt;-</span> <span class="va">my_data</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise_all.html">summarise_if</a></span><span class="op">(</span><span class="va">is.numeric</span>, <span class="va">mean</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">#Calculate median for each col</span></span>
+<span><span class="va">median_report</span> <span class="op">&lt;-</span> <span class="va">my_data</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise_all.html">summarise_if</a></span><span class="op">(</span><span class="va">is.numeric</span>, <span class="va">median</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">#Create the mode function</span></span>
+<span><span class="va">getmode</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">v</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">uniqv</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="va">v</span><span class="op">)</span></span>
+<span>  <span class="va">uniqv</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/which.min.html">which.max</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tabulate.html">tabulate</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/match.html">match</a></span><span class="op">(</span><span class="va">v</span>, <span class="va">uniqv</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">]</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="co">#Calculate mode for each col</span></span>
+<span><span class="va">mode_report</span> <span class="op">&lt;-</span> <span class="va">my_data</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise_all.html">summarise_if</a></span><span class="op">(</span><span class="va">is.numeric</span>, <span class="va">getmode</span><span class="op">)</span></span>
+<span></span>
+<span></span>
+<span><span class="co">#combine the reports</span></span>
+<span><span class="va">centerreport</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span><span class="op">(</span><span class="va">mean_report</span>, <span class="va">median_report</span>, <span class="va">mode_report</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span><span class="op">(</span><span class="va">centerreport</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Mean"</span>,<span class="st">"Median"</span>,<span class="st">"Mode"</span><span class="op">)</span></span>
+<span><span class="va">centerreport</span> <span class="op">&lt;-</span> <span class="va">centerreport</span><span class="op">[</span>, <span class="op">-</span><span class="fl">10</span><span class="op">]</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="va">centerreport</span><span class="op">)</span><span class="op">)</span>, </span>
+<span>  booktabs <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  caption <span class="op">=</span> <span class="st">'Descriptive Statistics-mean,median,mode'</span>, align <span class="op">=</span> <span class="st">"l"</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/kable_styling.html">kable_styling</a></span><span class="op">(</span>font_size <span class="op">=</span> <span class="fl">14</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<table class="table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>Descriptive Statistics-mean,median,mode</caption>
+<thead><tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th"></th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Users</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">New Users</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Sessions</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Bounce Rate</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Pages / Session</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Avg. Session Duration</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Ecommerce Conversion Rate</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Transactions</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Revenue</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">ECR</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">OldUsers</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Mean</td>
+<td style="text-align: left;">5661.279</td>
+<td style="text-align: left;">5162.767</td>
+<td style="text-align: left;">7707.93</td>
+<td style="text-align: left;">0.4893791</td>
+<td style="text-align: left;">4.868766</td>
+<td style="text-align: left;">188.0428</td>
+<td style="text-align: left;">0.0113537</td>
+<td style="text-align: left;">141.7326</td>
+<td style="text-align: left;">11538.6812</td>
+<td style="text-align: left;">113.53744</td>
+<td style="text-align: left;">498.5116</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Median</td>
+<td style="text-align: left;">940.500</td>
+<td style="text-align: left;">768.500</td>
+<td style="text-align: left;">1162.00</td>
+<td style="text-align: left;">0.4757293</td>
+<td style="text-align: left;">5.019697</td>
+<td style="text-align: left;">193.5811</td>
+<td style="text-align: left;">0.0022378</td>
+<td style="text-align: left;">3.0000</td>
+<td style="text-align: left;">131.0928</td>
+<td style="text-align: left;">22.37833</td>
+<td style="text-align: left;">116.5000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Mode</td>
+<td style="text-align: left;">22.000</td>
+<td style="text-align: left;">0.000</td>
+<td style="text-align: left;">118241.00</td>
+<td style="text-align: left;">0.4219349</td>
+<td style="text-align: left;">5.824672</td>
+<td style="text-align: left;">227.6724</td>
+<td style="text-align: left;">0.0000000</td>
+<td style="text-align: left;">0.0000</td>
+<td style="text-align: left;">0.0000</td>
+<td style="text-align: left;">0.00000</td>
+<td style="text-align: left;">3412.0000</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<p>It is interesting to find the huge discrepancies between different central tendency measurements. This also indicates reporting results of different central tendency analyses can provide a more comprehensive understanding of the data distribution. For example, the mean value of Users (5661) is much higher than the median (940) and mode (22), indicating a skewed data distribution due to the existence of some large-value outliers.</p>
+<p><strong>Weighted Mean</strong> is a special mean where some data points contribute more than others. To calculate the weighted mean, we need to consider the weight for each data point. For example, we can calculate the weighted mean of the E-commerce Conversion Rate by taking the number of users as weight. The more users each data point has, the larger weight for its E-commerce Conversion Rate (ECR). In R, we can use the function of <strong>weighted.mean</strong> as below to get the weighted mean of the ECR of the Google Store:</p>
+<div class="cell">
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#Calculated the weighted mean for ECR</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/stats/weighted.mean.html">weighted.mean</a></span><span class="op">(</span><span class="va">my_data</span><span class="op">$</span><span class="va">`Ecommerce Conversion Rate`</span>, <span class="va">my_data</span><span class="op">$</span><span class="va">Users</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.01783514</code></pre>
+</div>
+</div>
+<p>When taking the number of users into consideration, the weighted mean of the E-commerce Conversation Rate is almost 18 per 10,000 sessions, which is a bit higher than the normal mean, 11 per 10,000 sessions (Table above). This also indicates that the data points with high E-commerce Conversion Rates had more users than those with low rates.</p>
+</section><section id="data-variation" class="level3" data-number="3.2.8"><h3 data-number="3.2.8" class="anchored" data-anchor-id="data-variation">
+<span class="header-section-number">3.2.8</span> Data Variation</h3>
+<p>If two data sets have the same center points, does that mean they have the same data distribution? Let’s look at two small datasets:</p>
+<div class="cell">
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">Score1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">110</span>, <span class="fl">90</span>,<span class="fl">70</span>,<span class="fl">50</span>,<span class="fl">30</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">Score2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">75</span>, <span class="fl">70</span>,<span class="fl">70</span>,<span class="fl">70</span>,<span class="fl">65</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">Score1</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Score1"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">Score2</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Score2"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="va">Score1</span>, <span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html">desc</a></span><span class="op">(</span><span class="va">Score1</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="va">Score2</span>, <span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html">desc</a></span><span class="op">(</span><span class="va">Score2</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  caption <span class="op">=</span> <span class="st">'Two Small Data Sets with the Same Mean and Median'</span></span>
+<span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="kable_wrapper">
+<caption>
+Two Small Data Sets with the Same Mean and Median
+</caption>
+<tbody><tr>
+<td>
+<table class="table table-sm table-striped small">
+<thead><tr class="header">
+<th style="text-align: right;">Score1</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">110</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">90</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">70</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">50</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">30</td>
+</tr>
+</tbody>
+</table>
+</td>
+<td>
+<table class="table table-sm table-striped small">
+<thead><tr class="header">
+<th style="text-align: right;">Score2</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">75</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">70</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">70</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">70</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">65</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr></tbody>
+</table>
+</div>
+</div>
+<p>Although they have the same mean (70) and median (70), the detailed data distributions vary significantly in a way that indicates the data in data set 1 were more spread out. This indicates that the mere central tendency measures cannot 100% accurately represent distribution. While the central tendency is the key to data description and prediction, variation is used to evaluate the quality of central tendency measures, and it plays an essential role in explaining statistical contribution.</p>
+<p><strong>Variation Ratio</strong> reflects the proportion of cases that are not in the mode category. For example, from Table 8, the mode for Session is 3787. But this mode contains only two cases. Since the number of observations is 96, The variation ratio for Session is: (96-2)/96 = .98 or 98%, indicating the mode of 3787 is not a very representative indicator of sessions. To the contrary, for the variable of Transaction, the mode was 0 with 53 data points taking this value. The variation ratio of transaction is: (96-53)/96 = .45 or 45%, indicating “0” demonstrated relatively strong representativeness of transaction. This variation ratio also reflects the need for improvements of conversions for a variety of channels for the Google Merchandise Store.</p>
+<p><strong>Range</strong> The worth of the median as a measure of central tendency is dependent on how narrowly scores are dispersed in the distribution. The <strong>range</strong> is the difference between the highest and lowest scores of a distribution. In our dataset, the range in class sizes is 237-17=220. As you can see, any ex treme score in a distribution, commonly referred to as an outlier, will greatly af fect the range. That much sensitivity is not desirable.</p>
+<p><strong>Inter-ranges</strong> A more stable set of measures, called inter-ranges, drop off a specified highest and lowest percentage of the cases. The most popular are the <em>inter-decile range</em>, <em>inter-quintile range</em>, and <em>inter-quartile range</em>. Deciles are tenths, quintiles are fifths, and quartiles are fourths. These inter-ranges drop off the highest and lowest 10%, 20% and 25% of the cases, respectively, and then calculate the range of the remaining cases.</p>
+<p>For example, the <em>inter-quartile</em> range for class size in our small dataset would drop off the highest one-fourth and lowest one-fourth of the 23 cases. Since onefourth of 23 is not an even number (23/4=5.75), we’ll round up and drop off the top six (237, 133, 124, 103, 97, 90) and bottom six cases (17, 19, 19, 22, 23, 25). Of the remaining scores, the range is 56 (83-27). It is proper to say, then, that the range of the middle 50% of the cases is 56. The median score, 40 in this case, remains, of course, at the center of these mid dle 50% of the cases.</p>
+<p><strong>sd</strong></p>
+</section><section id="case-study" class="level3" data-number="3.2.9"><h3 data-number="3.2.9" class="anchored" data-anchor-id="case-study">
+<span class="header-section-number">3.2.9</span> Case Study</h3>
+
+
+</section></section></main><!-- /main --><style>
+   #mtcars-btn {
+     font-size: xx-small;
+     padding: 0.2rem 0.3rem !important;
+   }
+   
+   #down-btn {
+     margin-right: 2px;
+     margin-left: 2px;
+   }
+   
+   a:has(#mtcars-btn) {
+     text-decoration: none !important;
+   }
+   
+</style>
+<script>
+  function add_button() {
+    /* get the R generated button by its id */
+    let mtcars_btn = document.querySelector("a:has(#mtcars-btn)");
+    
+    /* get the placeholder where you want to put this button */
+    let down_btn = document.querySelector("span#down-btn");
+    
+    /* append the R generated button to the placeholder*/
+    down_btn.appendChild(mtcars_btn)
+  }
+  
+  window.onload = add_button();
+</script><script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/bwalsh5\.github\.io\/r-for-media-analytics\/");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+          // target, if specified
+          link.setAttribute("target", "_blank");
+          if (link.getAttribute("rel") === null) {
+            link.setAttribute("rel", "noopener");
+          }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script><nav class="page-navigation"><div class="nav-page nav-page-previous">
+      <a href="./intro.html" class="pagination-link" aria-label="Introduction to Programming in R">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Introduction to Programming in R</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./manipulating_data.html" class="pagination-link" aria-label="Manipulating Data">
+        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Manipulating Data</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer"><div class="nav-footer">
+    <div class="nav-footer-left">
+<p>R for Media Analytics was written by Jenny Jiang &amp; Brian Walsh.</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+<p>This book was built with <a href="https://quarto.org/">Quarto</a>.</p>
+</div>
+  </div>
+</footer>
+
+
+</body></html>

@@ -1,0 +1,25 @@
+# Common Errors
+
+*Let's talk about the most frequent erors in R.*
+
+See what I mean? It starts with just typos, but you'll get past that. Then you'll mostly be focused on the punctuation. After a while, your punctuation concerns will focus on the lowly parenthesis, or the innocent comma; remember, you wrote this stuff, you brought these commas and such into existence, so be nice.
+
+### The Most Common Error
+
+> `Error: unexpected '|' in "|>"`
+
+Or a related syntax error involving the pipe. That's our *pipe operator* (`|>`), which chains lines of code together into a methodology.
+
+> As of R 4.1, `|>` is built into base R — no package needed. If you see this error, make sure you are running R 4.1 or newer: check with `R.version` in the console.
+
+If you're seeing an error about `%>%` from older code or tutorials, that's the *magrittr* pipe, which requires loading the tidyverse:
+
+> `library(tidyverse)`
+
+### Loading data , path errors
+
+When you download a data set, how do you 'tell' R where to find it?
+
+There are many ways, but the easiest by far is to create a folder on your computer, and copy all of the data you're going to use on a project there. Then in R Studio, create a new *Project*, and specify the folder you just made as its location. You can create a new project for every unique thing you use R for.
+
+videos. Remind them they need to read my code and change it to fit their data and their computers path

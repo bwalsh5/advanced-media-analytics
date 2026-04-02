@@ -1,0 +1,495 @@
+# Manipulating Data
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(babynames)
+library(tidyverse)
+
+```
+
+## Creating Subsetted Data
+
+I encourage you to play around with *babynames* and get more comfortable deliberately modifying data before continuing. Or, if you're getting sick of babies, you can use these tidyverse functions on any dataset. Let's try using one of R's built-in ones, **mtcars:**
+
+```{r, mtcars1, echo = FALSE, include = FALSE}
+data(mtcars)
+#View(mtcars)
+```
+
+The data is lots of older car performance statistics. Let's try comparing weight to mpg:
+
+```{r, mtcars2}
+mtcars |> 
+  ggplot(aes(wt, mpg)) + geom_point()
+
+```
+
+geom_point() creates a *scatterplot*, but we can also see hints of an overall trend, or correlation here - so let's add that to the ggplot():
+
+```{r, mtcars3}
+mtcars |> 
+  ggplot(aes(wt, mpg)) + geom_point() + geom_smooth()
+```
+
+Let's try adding color based on a variable:
+
+```{r, mtcars4}
+mtcars |> 
+  ggplot(aes(wt, mpg, color = cyl)) + geom_point() + geom_smooth()
+```
+
+Great. On to mutate().
+
+### Mutate
+
+While *babynames* has five columns, or variables, to play with, some observations require creating a *calculated field* of content - essentially generating a sixth column, in the case of babynames, to show something already in the data but not made clear.
+
+*Babynames* does not have *rankings* of popular names for each year. Could we create that column? Sure! When we rearrange our data in descending order of prop, we have essentially created rankings based on row number- we just need to 'mutate' the data frame to show it.
+
+```{r, babynames_mutate1}
+babynames |> 
+  filter(year == 2017) |> 
+  arrange(desc(prop)) |> 
+  mutate(rank = row_number()) 
+```
+
+That looks good! We can now save this new, mutated dataset:
+
+```{r, babynames_subsetting}
+babynames |> 
+  filter(year == 2017) |> 
+  arrange(desc(prop)) |> 
+  mutate(rank = row_number()) -> babynames_2017_ranked
+
+```
+
+So mutate() creates a new column, and the values of that column are determined by some sort of calculation. Thus our code for mutate() declares the new column's *name* ('rank,' in this case), and the calculation ('row_number,' in this case).
+
+Let's try a practical use of mutate() by focusing on finding the most popular names of a particular *generation.*
+
+According to [Wikipedia]('https://www.wikipedia.cohttps://en.wikipedia.org/wiki/Silent_Generation'){target="_blank"}, the 'Silent Generation' were born between the years of 1928 and 1944:
+
+```{r, silent_gen1}
+silent_gen <- babynames |> 
+  filter(year > 1927) |> 
+  filter(year < 1945) 
+```
+
+Ok, we have sub-setted our data to only include the years of this generation. Let's further simplify things by only looking at female names of the Silent Generation - and also add a 'rank' column:
+
+```{r, silent_gen2}
+silent_gen |> 
+  filter(sex =="F") |> 
+  mutate(rank = row_number()) -> silent_gen_f
+
+```
+
+Ok, let's see some results - what are the most popular female names of the Silent Generation? Let's enhance the plot by adding a geom_text() object that fills in each name's rank in its corresponding bar:
+
+```{r, silent_gen3}
+silent_gen_f |> 
+  head(10) |> 
+  ggplot(aes(reorder(name, prop), prop, fill = "red")) + geom_col() +
+  coord_flip() +
+  geom_text(aes(label = rank, hjust = 3))
+
+```
+
+It appears that Mary is the most popular name during this period. But wasn't Mary popular back in 1890? Let's look at these 10 names over time:
+
+```{r, silent_gen4}
+babynames |> 
+  filter(name %in% c("Mary", "Barbara", "Betty", "Doris", "Dorothy", "Helen", "Margaret", "Ruth", "Shirley", "Virginia")) |> 
+  filter(sex =="F") |> 
+  ggplot(aes(year, prop, color = name)) + geom_line()
+```
+
+It appears that Mary is the most popular name for a very long time, gradually waning as more and more unique names get added to the database every year (therefore decreasing its proportion). Unlike the other 9 names, it definitely doesn't peak during this generation - so let's remove it.
+
+```{r, silent_gen5}
+babynames |> 
+  filter(name %in% c("Barbara", "Betty", "Doris", "Dorothy", "Helen", "Margaret", "Ruth", "Shirley", "Virginia")) |> 
+  filter(sex =="F") |> 
+  ggplot(aes(year, prop, color = name)) + geom_line()
+```
+
+That looks much better! What is that one name that is peaking like crazy right in the middle?
+
+```{r, silent_gen6}
+babynames |> 
+  filter(name %in% "Shirley") |> 
+  filter(sex =="F") |> 
+  ggplot(aes(year, prop, color = name)) + geom_line()
+```
+
+Wow! What could we possibly blame this on? The popularity of Shirley Temple? There's no way to quantitatively measure that, even if we think it to be true.
+
+### Group_by , Summarize()
+
+Similar to creating a pivot table, the summarize() command reshapes your data by creating an *entirely new dataset* based on the parameters you specify. It is often used with the function *group_by()*. How is this useful, and how is it different from *mutate?*
+
+An example will help. If we look at most popular names of the Silent Generation, we see a lot of names repeated:
+
+```{r, silent_gen7}
+silent_gen_f |> 
+  arrange(desc(prop)) |> 
+  head(10)
+```
+
+If we want to count the *total number of instances* of each name over time, we'd have to use group_by() and summarise(), as well as *n_distinct()*, which counts the *number of unique instances* of a variable.
+
+In other words, if we want to see *how many instances of each name there were per year*, and plot it, we need to use *summarize():*
+
+```{r, summ1}
+babynames |> 
+  group_by(year) |> 
+  summarise(name_count = n_distinct(name)) -> distinct
+
+#View(distinct)
+
+ggplot(distinct, aes(year, name_count)) + geom_line() 
+  
+```
+
+Note that, unlike mutate(), summarize() removes *all* of our dataframe's columns except the ones we specify we want to look at in both summarize() and group_by(). So if we want to 'keep' a variable in order to later visualize it, we have to add it to the group_by() function:
+
+```{r, summ2}
+babynames |> 
+  group_by(year, sex) |> 
+  summarise(name_count = n_distinct(name)) -> distinct
+
+ggplot(distinct, aes(year, name_count)) + geom_line() +
+facet_wrap(~sex)
+  
+```
+
+Summarize() is the most challenging of the basic *dplyr* functions, so don't be discouraged if you struggle with it! Again, if already familiar with the concept of a *Pivot Table*, summarize() is basically the same, but in programmatic form: select the columns you wish to compare, strip away the rest of the data, and give me a simplified dataframe that can be visualized.
+
+When do you know to use summarize() instead of mutate()? Well, think of mutate as making a *calculated field*, adding a column to your dataframe - and summarize() as making a pivot table, stripping away most of your data to look at only a handful of columns in a new way. In the case of *babynames*, it's clearly an appropriate time to use summarize() when you see the same name repeated over and over again in your results. We will revisit both techniques.
+
+<hr />
+
+Playing with the *babynames* dataset allows us to learn basic data manipulation and visualization, while avoiding other important topics, such as loading data files into R or doing basic statistical calculations - which we will get into shortly. In the meantime, play around with *babynames* and try to answer specific questions, such as:
+
+<ul>
+
+<li>What generation saw the most births in the 20th Century?</li>
+
+<li>How have 'virtue names,' like 'Charity,' 'Temperance,' or 'Faith' fared in babynames: are they more or less popular now than in the past?</li>
+
+<li>What are the *total number of names* per year, and is this total increasing or decreasing?</li>
+
+</ul>
+
+## Working with Strings
+
+```{r}
+library(babynames)
+library(tidyverse)
+library(tidytext)
+library(textdata)
+```
+
+Stringr is a package in the *tidyverse* that deals with, well, strings. What are strings? Anything in your data frame that is text- or character-based. So, in the case of *babynames*, that'd be *Name* and *Sex -* Year, Prop and N are not strings.
+
+Stringr allows for string manipulation across your entire dataset. If, for instance, we had a column of character data that repeatedly mis-spelled a name: *Bryan* instead of *Brian*, say - stringr could change every instance of *Bryan* into *Brian* in one line of code.
+
+Let's start playing around with stringr by creating a *variable* that is equal to a string:
+
+```{r, stringr1}
+library(stringr)
+
+sentence <- c("hello", "this is a long sentence", NA)
+```
+
+Here are some functions from the stringr package that we can use to manipulate this sentence.
+
+<ul>
+
+<li>How many characters are there in the string?</li>
+
+```{r, stringr1b}
+str_length(sentence)
+```
+
+<li>Let's replace every instance of 'l' with 'x'</li>
+
+```{r}
+str_replace(sentence, "l", "X")
+```
+
+Okay, now let's create a new string that is a *list* of character strings:
+
+```{r, stringr 1c}
+
+list <- c("Apple", "Banana", "Pear")
+
+```
+
+Let's use str_sub to 'pull out' the first character of the string:
+
+```{r, stringr 1d}
+str_sub(list, 1,1)
+```
+
+What just happened? We told R to only grab the first character. Can we grab the first three characters?
+
+```{r, stringr 1e}
+str_sub(list, 1,3)
+```
+
+Let's adjust the string's content so each fruit is written entirely in lower case:
+
+```{r, stringr 1f}
+str_to_lower(str_sub(list))
+```
+
+We can also use stringr to detect specific words or phrases:
+
+```{r, stringr 1g}
+str_detect(list, "Pear")
+```
+
+R returns the position of "Pear" in the list.
+
+### Practical Applications of Stringr
+
+Let's apply more Stringr concepts to a body of text. Where could we find text? How would we get text into R?
+
+One way would be a 'web scrape' - programmatically grabbing all the relevant text off of a page, or a series of pages - think Amazon product reviews.
+
+Another would be to import a body of text, like a .txt file, into R, and then break it up into individual words - more on this in the next chapter.
+
+A third way would be to use data included in an R package. More commonly, packages give you *access* to online datasets too large to download (Spotify, The New York Times, etc.). This technique, of selectively downloading relevant data from a much larger, online database, is the basis for the concept of an 'API.' [*Application Programming Interface*, if you're wondering.] Many websites also use APIs, with downloadable files for analysis.
+
+So as to avoid any complication, let's continue to use the *babynames* dataset for now; then we can move on to analyzing lyrics, political speeches, and great works of literature.
+
+A snippet of *Base R* here, rather than the *tidyverse*: if we want to specify a *column* in our dataset, we write the name of the dataset or variable, then the dollar sign, then the name of the column:
+
+```{r, class.output="scroll-300"}
+babynames$name
+
+```
+
+Let's use str_detect() to find all of the names that include a 'sh' sound:
+
+```{r, include = FALSE}
+str_detect(babynames$name, "Sh")
+```
+
+As you see, str_detect() runs as a *boolean operator*, in that it ascribes a *TRUE* or *FALSE* value for each entry in the column, based on our conditional statement: is there a 'sh' in the character string?
+
+Let's combine our previous experience with ggplot to write a long, complicated set of code that will visualize the *most popular names starting in 'Sh' for women born in 1938:*
+
+```{r}
+babynames |> 
+  filter(str_detect(name, "Sh") & sex=="F" & year == 1938) |> 
+  arrange(desc(prop)) |> 
+  head(20) |> 
+  ggplot(aes(reorder(name,prop),prop,  fill = name)) + 
+  geom_col() +
+  coord_flip()
+```
+
+Let's fancy that up a bit, by calculating a 'percentage' of use of that name per year / per gender:
+
+```{r}
+babynames |> 
+  filter(str_detect(name, "Sh") & sex=="F" & year == 1938) |> 
+  arrange(desc(prop)) |> 
+  head(20) |> 
+  mutate(percent = (prop * 100)) |> 
+  ggplot(aes(reorder(name,percent),percent,  fill = name)) + 
+  geom_col() +
+  coord_flip()
+```
+
+how many 'z' names since 2000?
+
+```{r}
+babynames |> 
+  filter(year > 2000 & str_detect(name, "Z")) |> 
+  arrange(desc(prop))
+```
+
+Why did R only pull out the names starting with Z? Because we capitalized it. How do we get both?
+
+```{r}
+    babynames |> 
+      mutate(Z = str_count(babynames$name, "[zZ]")) |> 
+      arrange(desc(prop))
+```
+
+Instead of arranging our data by name popularity, let's look at the names with the *most* z's in them:
+
+```{r}
+    babynames |> 
+      mutate(Z = str_count(babynames$name, "[zZ]")) |> 
+      arrange(desc(Z))
+```
+
+What if, instead of specifying a particular letter, we just wanted to count the most frequent first letters in names?
+
+```{r}
+    babynames |> 
+      mutate(first_letter = substr(name, 1,1)) -> baby_letters
+```
+
+Let's plot that:
+
+```{r}
+    baby_letters |> 
+      count(first_letter, sort = TRUE) |> 
+      ggplot(aes(reorder(first_letter, n),n)) + 
+      geom_col() +
+      coord_flip()
+```
+
+We can also use stringr to calculate the length of all of our strings. What is the frequency of the shortest and longest names?
+
+```{r}
+    babynames |> 
+      mutate(length = str_length(name)) -> babynames_length
+```
+
+### Average name length over time
+
+Now, if we want to see the average length of a names over time, the code gets a little mroe advanced - note the *mean* function we haven't used like this before:
+
+```{r}
+    babynames_length |> 
+      group_by(year) |> 
+      summarise_at(vars(length), funs(mean(.))) |> 
+      ggplot(aes(year, length)) + geom_line()
+```
+
+The results are impressive. Let's split them up by Sex:
+
+```{r}
+    babynames_length |> 
+      group_by(year, sex) |> 
+      summarise_at(vars(length), funs(mean(.))) |> 
+      ggplot(aes(year, length, color = sex)) + geom_line()
+```
+
+### Revisiting summarize()
+
+As mentioned in the last Chapter, summarize() is confusing. In the case of babynames, you'll know to use it when you keep getting the same results over and over, and you want to group those names together. Let's take a look at this issue by calculating the most common 3-letter names:
+
+```{r}
+    babynames_length |> 
+      filter(length == 3) |> 
+      arrange(desc(prop))
+```
+
+We get a lot of repeated names. Time to summarize!
+
+```{r}
+    babynames_length |> 
+      filter(length == 3) |> 
+      group_by(name) |> 
+      summarise(total = sum(n) ) |> 
+      arrange(desc(total))
+```
+
+Let's try that again, with 2-letter names:
+
+```{r}
+
+    babynames_length |> 
+      filter(length == 2) |> 
+      group_by(name) |> 
+      summarize(total = sum(n)) |> 
+      arrange(desc(total)) 
+```
+
+What is the longest name?
+
+```{r}
+    babynames_length |> 
+      arrange(desc(length))
+```
+
+How many 15 letter names are there?
+
+```{r}
+    babynames_length |> 
+      filter(length == 15) |> 
+      count(name, sort = TRUE)
+```
+
+Let's plot those names:
+
+```{r}
+    babynames |> 
+      filter(name %in% c("Christopherjohn","Johnchristopher","Christopherjame","Franciscojavier", "Christophermich", "Ryanchristopher","Christianjoseph", "Christopherjose", "Jonathanmichael", "Mariadelosangel"  
+      )) |> 
+      ggplot(aes(year, prop, color = name)) + geom_line() 
+```
+
+By the look of these names, it's clear that most of them are actually *longer* than 15 characters - but 15 characters is the cut-off point for the column. Thus, we cannot accurately estimate the most common 15-letter names.
+
+Along similar lines, an analysis of the methodology behind *babynames* shows that only names that have *at least 5 instances in a given year* are recorded. So it'd be similarly futile for us to attempt to measure the *rarest* names, as they are excluded in the database. (It also helps clarify why some rarer names seem to 'disappear' in certain years.)
+
+### Additional Functions
+
+OK, what else can stringr do?
+
+How about the average number of vowels per name?
+
+```{r}
+ str_count(babynames$name, "[aeiou]")
+```
+
+That's a lot of numbers. Let's calculate a mean value instead:
+
+```{r}
+ mean(str_count(babynames$name, "[aeiou]"))
+```
+
+How about consonants?
+
+```{r}
+     mean(str_count(babynames$name, "[bcdfghjklmnpqrstvwxyz]"))
+```
+
+Example ideas for further exploration:
+
+How many names contain 'liz' in them?
+
+```{r}
+    babynames |> 
+      filter(str_detect(babynames$name, "liz") )  |> 
+      count(name, sort = TRUE) |> 
+      head(20) |> 
+      ggplot(aes(reorder(name, n),n)) + geom_col() + 
+      coord_flip()
+```
+
+### Case Study: Born Without A (Proper) Name
+
+There are a number of names in the database that are totally anonymous. When, and why?
+
+```{r}
+babynames |> 
+  filter(name %in% c("Unknown", "Unnamed", "Infant", "Infantof", "Notnamed", "Baby")) |> 
+  ggplot(aes(year, prop, color = name)) + geom_line() + facet_wrap(~sex)
+```
+
+Let's compare this to the number of unique names per year:
+
+```{r}
+babynames |> 
+  group_by(year) |> 
+  summarize(annual = n_distinct(name)) |> 
+  ggplot(aes(year, annual )) + geom_line()
+```
+
+*Babynames* also includes a data set called births, that simply lists out the total number of births per year:
+
+```{r}
+data(births)
+ggplot(births, aes(year, births)) + geom_line()
+```
+
+Why are these last two graphs different? Because the first is counting names, the second is counting births. And most babies have names that are shared with other babies, especially in the same year.

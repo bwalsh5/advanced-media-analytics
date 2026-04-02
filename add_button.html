@@ -1,0 +1,32 @@
+<style>
+   #mtcars-btn {
+     font-size: xx-small;
+     padding: 0.2rem 0.3rem !important;
+   }
+   
+   #down-btn {
+     margin-right: 2px;
+     margin-left: 2px;
+   }
+   
+   a:has(#mtcars-btn) {
+     text-decoration: none !important;
+   }
+   
+</style>
+
+
+<script>
+  function add_button() {
+    /* get the R generated button by its id */
+    let mtcars_btn = document.querySelector("a:has(#mtcars-btn)");
+    
+    /* get the placeholder where you want to put this button */
+    let down_btn = document.querySelector("span#down-btn");
+    
+    /* append the R generated button to the placeholder*/
+    down_btn.appendChild(mtcars_btn)
+  }
+  
+  window.onload = add_button();
+</script>

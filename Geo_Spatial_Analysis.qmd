@@ -1,0 +1,425 @@
+# Geo-Spatial Analysis and Visualization
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(sf)
+library(leaflet)
+```
+
+Geo-spatial data is the easiest to make a methodological mistake with - we'll be layering data points on top of a map, indicating location, and we need to make sure our visualizations successfully show the right data. It's quite easy to make a mistake.
+
+It's also common to see errors in the data itself. When I map crimes in Philadelphia, I often get a cluster of data points concentrated in one area of *Florida.* Why? Someone made a mistake when entering the latitude and longitude points, and repeated the mistake multiple times.The most common errors with latitude and longitude are reversing the values and forgetting to make them positive/negative.
+
+### Working With Geo-Spatial Data
+
+Most data software has the ability to recognize cities, states, and countries by name. In R, you can simply type:
+
+```{r, states}
+state.name
+```
+
+R will print them all out for you. It also has state abbreviations built in,with 'state.abb.'
+
+With just the names of the states and a data point for each one, we could create what's called a *choropleth map*, one made up of colored regions that indicate the data level. Whereas an election map will show each state as either red or blue, a choropleth map usually instead uses a range of one color to indicate a *level*: the more 'red' a state is, the more homicides per capita happened there, for instance. Which leads us to the *most* common geo-spatial error: not accounting for population. If I told you there were more gun deaths in California in 2020 than in Mississippi, I could show data like this:
+
+```{r, table1, echo=FALSE}
+State <- c("California", "Mississippi")
+Firearm_Deaths <- c("3,449", "818")
+
+df <- data.frame(State, Firearm_Deaths)
+library(knitr)
+knitr::kable(df)
+```
+
+(Data from the [CDC](https://www.cdc.gov/nchs/pressroom/sosmap/firearm_mortality/firearm.htm))
+
+Does California have a bigger gun problem than Mississippi? That would be the incorrect conclusion. When comparing states, they each have a different population - so we have to calculate a *rate*. That is, to compare states with different populations, we have to calculate a 'rate per x' for our data - in this case, the rate of firearm deaths *per capita*:
+
+> population / firearm_deaths = rate
+
+The same would go for countries, cities, or any other data related to a particular location.
+
+So where can we get population data? It's usually quite easy to find. We could, in theory, *merge* this state data with our firearm_deaths data frame - the only requirement for merging is that each data frame has a shared column (in this case, it would probably be 'State'). Once merged, we could use the *mutate* function to calculate the rate. (deaths / population)
+
+In the case of this data, though, the CDC has already calculated a rate based on population. Looking at their [table](https://www.cdc.gov/nchs/pressroom/sosmap/firearm_mortality/firearm.htm) shows that California ranks 44th in firearm death rate, and Mississippi is 1st:
+
+```{r, table2, echo=FALSE}
+State <- c("California", "Mississippi")
+Death_Rate <- c("8.5", "818")
+
+df <- data.frame(State, Death_Rate)
+library(knitr)
+knitr::kable(df)
+```
+
+The point being, the most common error in geo-spatial analysis is not taking population into account.
+
+### Geo-Spatial Data Types
+
+Geo-spatial data can come in a number of formats, the most common being:
+
+<ul>
+
+<li>geoJSON, or JSON (JavaScript Object Notation) with a 'geometry' column.</li>
+
+<li>A CSV, where columns indicate 'geometry,' 'latitude,' 'longitude,' or location equivalencies that can be recognized by R</li>
+
+<li>A Shapefile, which 'draws' boundaries by connecting lat/long points</li>
+
+</ul>
+
+Geo-spatial plotting also require a base layer - the map itself - along with data that is superimposed on top of the map. This data is either built in to the dataset you're using, or must be merged together with your data.
+
+### Geo-Spatial R Packages
+
+There are loads of different approaches to visualize geo-spatial data in R. For consistency and ease, we'll use [Leaflet](https://rstudio.github.io/leaflet/), which allows us to chain together steps using the `|>` pipe operator, just like the tidyverse. Let's also load a package called 'sf,' or 'simple features,' which makes it very easy to import geoJSON files as dataframes, another called 'sp' that makes loading Shapefiles a breeze, and the 'maps' package that helps with our map 'projection,' or how our map deals with the curvature of the Earth.
+
+`{{r, geopackages}} install.packages('leaflet') install.packages('sf') install.packages('sp') install.packages('maps')`
+
+```{r}
+library(leaflet)
+library(sf)
+library(sp)
+library(maps)
+```
+
+Here's the example code from the Leaflet [Leaflet for R](https://rstudio.github.io/leaflet/ "Leaflet for R"):
+
+```{r, leaflet1 }
+m <- leaflet() |>
+  addTiles() |>  # Add default OpenStreetMap map tiles
+  addMarkers(lng=174.768, lat=-36.852, popup="The birthplace of R")
+
+m  # Print the map
+
+```
+
+What does that say? Well, first of all, we're creating a variable, and the map visualization will be equal to the variable - so to see it, we just need to type the name of the variable. We tell R to use leaflet(), then add a background image - this one is supplied by [Open Street Map](https://www.openstreetmap.org/ "Open Street Map") - then add a marker to the map at a specified location, and finally add a popup to the marker that indicates it's the location where R was created.
+
+Great! If that works, let's change the values and make our own map. I'll center mine around the Golden Gate Bridge, and add a marker for it as well.
+
+What's the latitude/longitude pair for this location? I like to use Google Maps to get that info. If I go to Google Maps and enter 'Golden Gate Bridge,' I get this: [https://www.google.com/maps/place/Golden+Gate+Bridge/\@37.8199286,-122.4804438,17z/](https://www.google.com/maps/place/Golden+Gate+Bridge/@37.8199286,-122.4804438,17z/data=!3m1!4b1!4m5!3m4!1s0x808586deffffffc3:0xcded139783705509!8m2!3d37.8199286!4d-122.4782551)
+
+...and a lot of other gibberish - but the latitude and longitude are literally *inside that URL*, although it can be hard to see them among all the other junk (they are just after the '\@' symbol). Another way to get the latitude and longitude values pair is by clicking on the map itself to create a marker; a popup at the bottom of the screen should show the latitude / longitude pair.
+
+Let's try re-using the above Leaflet code, but changing the location and popup content:
+
+```{R, leaflet2}
+m <- leaflet() |> 
+  addTiles() |> 
+  addMarkers(lng=-122.478534, lat=37.819988, popup="Golden Gate Bridge")
+
+m
+```
+
+Okay, we are able to reproduce the demo code with a new location. Now let's get into plotting *data* on maps.
+
+## Part II: Adding External Data
+
+Now that we have the (very) basics of leaflet down, let's try to load some geoJSON and plot it. geoJSON is the easiest geo-spatial format to work with, as it acts essentially as both a data frame and a geo-spatial one, to oversimplify a bit. So we can use *dplyr*'s data-cleaning tools on it - filter, summarize, mutate, and so on. We can merge it with other data sets, be they spatial or non-spatial.
+
+Let's get geoJSON that defines the county boundaries of California:
+
+<https://gis.data.ca.gov/datasets/CALFIRE-Forestry::california-county-boundaries/explore>
+
+Click on the 'download' icon (a cloud with an arrow) and choose to download the GeoJSON file.
+
+To load the file into R, we'll use the read_sf() function of the sf package. Please note that the code here does not include the *path* to the file; if, for instance, the downloaded file is in your 'Downloads' folder on a Mac, the path would be:
+
+"\~/Downloads/California_County_Boundaries.geojson"
+
+The tilde ( \~ ) translates as 'starting in the User's home folder.' You could replace 'Downloads' with 'Desktop' or anything else as needed. If having issues, check the chapter on Errors.
+
+```{r, cal1}
+ca <- read_sf("California_County_Boundaries.geojson")
+```
+
+Define a color palette
+
+```{r, ca2}
+pal <- colorNumeric("viridis", ca$OBJECTID,  58)
+```
+
+(have to describe much more about picking a palette here. also link to documentation)
+
+Let's plot it!
+
+```{r, ca3}
+leaflet(ca) |>
+  addTiles() |>
+  addPolygons(stroke = FALSE, 
+              smoothFactor = 0.9, 
+              fillOpacity = 0.7,
+              fillColor = ~pal(ca$OBJECTID),
+              label = ~paste0(ca$COUNTY_NAME)
+)
+
+```
+
+Okay! Not every website provides geoJSON, of course. Let's take things further, and try to map data from a .csv file that includes latitude and longitude pairs. I love to play with restaurant inspection data from San Francisco:
+
+<https://data.sfgov.org/Health-and-Social-Services/Restaurant-Scores-LIVES-Standard/pyih-qa8i>
+
+If we click the 'export' button on this website, we have the option of downloading the data in multiple formats, including all of the ones mentioned above (geoJSON, CSV, Shapefile). Let's try the CSV. Mine downloaded to my 'Downloads' folder, which can be accessed on a Mac with the address '\~/Downloads/' - again, the '\~' means *start in your home folder*.
+
+```{r, leaflet3}
+library(tidyverse)
+
+san_fran <- read_csv("Restaurant_Scores_-_LIVES_Standard.csv", show_col_types = FALSE)
+```
+
+We get some error messages, as we don't tell R how to interpret every column, but it should still work fine. That said, leaflet does *not* like NAs, or messy data in general.
+
+That sensitivity, combined with the frequent messiness of data available on city and state open data portals, means you'll need to be able to clean data and solve problems.
+
+Let's be safe and clear out any NAs on the latitude and longitude columns. We will overwrite 'san_fran' with itself, minus the NAs:
+
+```{r}
+san_fran |> 
+  drop_na('business_latitude') |> 
+  drop_na('business_longitude')  -> san_fran
+```
+
+This time, let's use a few different Leaflet features: setView() centers our map, 'zoom' controls the zoom, and 'addCircleMarkers' changes the marker from the default 'teardrop' appearance. I've gone ahead and grabbed a latitude and longitude point from Google Maps to act as our center point for the map.
+
+```{r, leaflet4, error=TRUE}
+map1 <- leaflet() |>
+  addTiles() |>  # Add default OpenStreetMap map tiles
+  setView(lng=-122.443334, lat=37.749882 , zoom = 12) |> 
+  addCircleMarkers(
+    data = san_fran)
+```
+
+That didn't work! Why not? If we look at the dataframe 'san_fran,' we'll be reminded that the latitude and longitude columns are named 'business_latitude' and 'business_longitude.' Computers are both smart and dumb: any human could figure this out, but we need to explicitly tell Leaflet that these are the columns where our lat/long data resides. And that, in a nutshell, is computer programming.
+
+```{r, leaflet5}
+map1 <- leaflet() |>
+  addTiles() |>  # Add default OpenStreetMap map tiles
+  setView(lng=-122.443334, lat=37.749882 , zoom = 12) |> 
+  addCircleMarkers(
+    data = san_fran,
+    lat = san_fran$business_latitude,
+    lng = san_fran$business_longitude
+    )
+
+map1
+
+```
+
+Ok, well there are good and bad things! Let's adjust some of the aesthetics of our data layer, and also tell leaflet to load the content of the 'business_name' column for each popup:
+
+```{r, leaflet6}
+map1 <- leaflet() |>
+  addTiles() |>  
+  setView(lng=-122.443334, lat=37.749882 , zoom = 12) |> 
+  addCircleMarkers(
+    data = san_fran,
+    lat = san_fran$business_latitude,
+    lng = san_fran$business_longitude,
+    radius =3,
+    stroke = FALSE,
+    popup = paste0(san_fran$business_name))
+
+map1
+```
+
+Better. The 'paste0' command we used for the popup means "paste the values from the 'business name' column into the popup for each marker."
+
+We want to see the inspection score, as well as descriptions for all of the popup data to provide some context of what we're looking at. This will require adding some HTML formatting to the popup, as well as some labels.
+
+Anything entered into R that is not an R command or variable name, like manually entered text or HTML code, needs to be written in quotes.We'll string together the contents of the popup with commas:
+
+```{r, leaflet7}
+map1 <- leaflet() |>
+  addTiles() |>   setView(lng=-122.443334, lat=37.749882 , zoom = 12) |> 
+  addCircleMarkers(
+    data = san_fran,
+    lat = san_fran$business_latitude,
+    lng = san_fran$business_longitude,
+    radius =3,
+    stroke = FALSE,
+    popup = paste0("Name:", san_fran$business_name,
+                   "<br/>", 
+                   "Inspection Date:",     
+                   san_fran$inspection_date, 
+                   "<br/>",
+                   "Inspection Score:",
+                   san_fran$inspection_score,
+                   "<br/>",
+                   "Violation:",                  san_fran$violation_description))
+
+map1
+
+```
+
+Let's filter the data so it only includes scores below 75.
+
+```{r, leaflet8}
+san_fran |> 
+  filter(inspection_score < 75) -> san_fran_low
+```
+
+Then, a new map - but let's make a new map variable, as well as using our new data frame variable (san_fran_low), since our last map was perfectly viable.
+
+Other than that, the code is the same - but be careful using cut and paste when it comes to code. Remember that the \*punctuation\* is key to the syntax, and an errant parenthesis can throw a confusing error.
+
+```{r, leaflet9}
+map2 <- leaflet() |>
+  addTiles() |>  # Add default OpenStreetMap map tiles
+  setView(lng=-122.443334, lat=37.749882 , zoom = 12) |> 
+  addCircleMarkers(
+    data = san_fran_low,
+    lat = san_fran_low$business_latitude,
+    lng = san_fran_low$business_longitude,
+    radius =3,
+    stroke = FALSE,
+    popup = paste0("Name:", san_fran_low$business_name,
+                   "<br/>", 
+                   "Inspection Date:",     san_fran_low$inspection_date, 
+                   "<br/>",
+                   "Inspection Score:",
+                   san_fran_low$inspection_score,"<br/>",
+                   "Violation:", san_fran_low$violation_description))
+map2
+```
+
+That's much easier to read and interact with. The only issue now is that the colors of the markers do not indicate anything related to the inspection score - could we make them do so?
+
+Yes. First, we define a palette - in this case, we'll use an existing palette, "Reds,' and we'll tell leaflet to use 5 different shades of reds, based on the inspection score value. We can do this because a) our Inspection Score column is \*numeric\*, b) that numeric column, Inspection Score, is also a \*continuous variable\*, and c) we can use the 'colorBin' function to 'bin' our 5 colors into the ranges of values for 'Inspection Score.' If R threw an error, we should look back and make sure all 3 conditions are true with our data.
+
+By the way, 'pretty = TRUE' makes it look nicer - for instance, if you made a choropleth map of filled-in states, the fill area would accurately match the state boundary. With 'pretty=false' as your setting, your maps will render faster - a good idea while you're still testing out code.
+
+```{r}
+
+binpal <- colorBin("Reds", san_fran_low$inspection_score, 3, pretty = TRUE)
+
+map2 <- leaflet() |>
+  addTiles() |> setView(lng=-122.443334, lat=37.749882 , zoom = 12) |> 
+  addCircleMarkers(
+    data = san_fran_low,
+    lat = san_fran_low$business_latitude,
+    lng = san_fran_low$business_longitude,
+   # label = ~htmlEscape(san_fran_low$inspection_score),
+    #  labelOptions = labelOptions(noHide = T, textsize = 9, opacity = .3),
+    radius =3,
+    stroke = "purple",
+     fillOpacity = 0.7,
+    color = ~binpal(san_fran_low$inspection_score),
+    popup = paste0("Name:", san_fran_low$business_name,
+                   "<br/>", 
+                   "Inspection Date:",     san_fran_low$inspection_date, 
+                   "<br/>",
+                   "Inspection Score:",
+                   san_fran_low$inspection_score,"<br/>",
+                   "Violation:", san_fran_low$violation_description)
+    )
+map2
+```
+
+Wow, that became a lot of code! Imagine mapping as creating two plots: the map underneath and the data on top (and there may be multiple columns of data to overlay on the map, as with our example). Thus we have to write twice as much code to make a map show up the way we want it to.
+
+## Creating a Choropleth Map
+
+Now that we've gotten familiar with how to control leaflet, let's go back to that CDC data on firearm fatalities: could we plot it?
+
+Start by going back to their website:
+
+<https://www.cdc.gov/nchs/pressroom/sosmap/firearm_mortality/firearm.htm>
+
+...and downloading the CSV. Since it includes data for multiple years, let's filter it to only use data from 2020.
+
+(Note: how can you visualize \*time\* on a map? There are two ways: animation and side-by-side comparisons. While animation sounds more exciting, it often doesn't woerk as well as you want, especially with digitally rendered maps. But showing two maps side-by-side, identical other than the year being analyzed, would effectively illustrate a change over time.)
+
+```{r}
+usa <- read_csv("undefined.csv")
+
+usa |> 
+  filter(YEAR == 2020) -> usa
+```
+
+Remember, we are creating two 'layers' of content for our visualization: a map that shows the boundaries of the states, and firearms data. So let's also start assembling the 'boundaries' of our map.
+
+I Googled 'geographic center of the US' to get coordinates to center our map. Let's try to get the US to show up, then try to add our data.
+
+```{r, firarms1}
+map3 <- leaflet() |> 
+  addTiles() |>  
+  setView(lat=39.5, lng=-98.35 , zoom = 4) 
+  
+map3
+```
+
+So far, so good - but we can't see the individual states or their borders. To see those, we can't use 'tiles,' we have to use \*polygons\*. Tiles are supplied by map services like Open Street or MapBox (or Google Maps); polygons are shapes overlayed on top of maps that show borders - like state borders.
+
+So let's start over.
+
+Rather than background tiles, we need to get the 'polygons' that define state boundaries. We can get these from census.gov, or from the Tigris package, but to keep things simple while exposing you to another data type, let's instead practice working with a *Shapefile*:
+
+<https://www2.census.gov/geo/tiger/GENZ2018/shp/cb_2018_us_state_20m.zip>
+
+Let's download the most recent file, and use st_read() to load it:
+
+```{r, firearms4, message = FALSE}
+
+library(sf)
+states <- st_read('cb_2018_us_state_20m/cb_2018_us_state_20m.shp')
+```
+
+The function st_read() is used to import shapefiles. Note that when you download an .shp file, it arrives in a folder with a bunch of other files. Even though our code is only loading the .shp file, it won't work if you delete those other files!
+
+We're also going to have to clean up 'states,' by setting the projection to be WGS84 (the projection refers to how a 'flat' map renders onto a sphere like the Earth). This is techie stuff, but it'll make it so our two previously incompatible data frames can merge.
+
+```{r}
+states |> 
+  sf::st_transform('+proj=longlat +datum=WGS84') -> states
+```
+
+Now that our two data sources use the same projection, we can match a) the number of total rows and b) the column names - and then finally merge them without error.
+
+```{r}
+# Let's start by removing two rows that are not in our other data set:
+states |> 
+  filter(!NAME %in% c("Puerto Rico", "District of Columbia")) -> states
+# now we need to rename the column that has the state's abbreviation - but first let's figure out which column it is:
+colnames(states)
+#looks like column five. Let's rename that column 'STATE,' to match our other data set:
+colnames(states)[5] <- "STATE"
+#And now merge:
+states |> 
+  merge(usa) -> merged
+```
+
+We have now merged a Shapefile with a csv, so we have firearms and polygon information in one data frame - so we can visualize it now.
+
+Let's define a color palette based on the values of the rate of firearm use. It's confusing, so I'll break it down for you. The code:
+
+```{r, palette}
+# define color palette
+pal <- colorBin("Reds", domain = merged$RATE, 6, pretty=TRUE)
+```
+
+We're creating a variable, *pal* - short for 'palette' - and defining it as a bin of colors (we could alternately create a palette as for a continuous or discrete values using 'colorNumber' or 'colorQuantile'). Instead of starting from scratch, we're basing our new color palette on one called 'Reds,' which is just a range of red colors. Lastly, we're defining the 'domain' as the data column to grab numeric values from. The '3' means we're creating 3 'levels' of color. Feel free to change "Reds" to "Blues" or "Vidiris," or adjust the "3" to use more colors, but note that it takes R a while to render the map out - this is the most processor-intensive work we'll be doing in R.
+
+Here's our final output - it's long, but not as long as the San Francisco one! I've added a handful of aesthetic improvements that you may edit as you wish if you feel comfortable doing so.
+
+```{r}
+#make a map!
+ leaflet() |>
+  addTiles() |> 
+  setView(-98.5795, 39.8282, zoom=4) |>  # center[ish] of U.S.A. 
+  addPolygons(
+    data = merged,
+    label = paste0(merged$NAME,  
+            ": ",
+            merged$RATE),
+    fillColor = ~pal(merged$RATE),
+    fillOpacity = 0.7,
+    stroke = TRUE,
+    weight = 1,
+   color = "black",
+    highlightOptions = highlightOptions(
+     weight = 2, 
+      bringToFront = T)
+      ) 
+```

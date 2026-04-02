@@ -1,0 +1,42 @@
+project:
+  type: book
+  output-dir: docs
+
+book:
+  title: "R for Media Analytics"
+  reader-mode: true
+
+  page-footer:
+    left: |
+      R for Media Analytics was written by Jenny Jiang & Brian Walsh.
+    right: |
+      This book was built with <a href="https://quarto.org/">Quarto</a>.
+          
+  site-url: https://bwalsh5.github.io/r-for-media-analytics/
+  repo-url: https://github.com/bwalsh5/r-for-media-analytics/
+                
+  chapters:
+    - index.qmd
+    - intro.qmd
+    - basic_statistics.qmd
+    - manipulating_data.qmd
+    - text_analysis.qmd
+    - network_analysis.qmd
+    - geo_spatial_analysis.qmd
+    - python_ai_intro.qmd
+    - publishing.qmd
+    - part: Appendices
+      chapters: 
+       - common_errors.qmd
+      
+format:
+  html:
+    link-external-newwindow: true
+    toc: true
+    theme:
+      - cosmo
+    code-link: true
+    css: style.css
+    author-meta: "Jenny Jiang & Brian Walsh"
+    include-after-body: add_button.html
+ 

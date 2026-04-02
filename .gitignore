@@ -1,0 +1,12 @@
+.Rhistory
+.RData
+.Rproj.user
+*.Rproj
+
+/.quarto/
+
+# Old output dir — docs/ is the published output now
+_book/
+
+# Jupyter notebooks contain hardcoded API keys — keep local only
+py_ai_intro/*.ipynb

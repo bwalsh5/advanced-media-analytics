@@ -1,0 +1,251 @@
+# Accessing Twitter's API in R
+
+```{r setup, include=FALSE, message = FALSE, warning = FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Twitter is a unique source for data, for many reasons: along with text, it includes date and time information, and data on the type of device anr/or software used to post the tweet. What we often do *not* have reliable Twitter data on is location. There are two ways for Twitter to record your location: one is created during your Twitter account setup, where you (optionally) fill in where you are located. Many users fill in joke locations (The Milky Way, 3rd Rock From the Sun). To do something with location data, it'd have to be somewhat standardized, i.e. text inputs for Town and State.Without these prompts, values vary wildly, from 'North Dakota' to 'Brooklyn' to '27510,' so it's really not very useful data.
+
+The other way Twitter will record your location is by geolocating your exact position. This has to be turned on or off, by choosing if Twitter can use your location on your device. Many users - most, in fact - have location services turned off. That means if you use geolocation data, you're only observing data from *users who have opted in to location services for twitter.* That's a subset of Twitter users that will drastically skew our results, so I also discourage its use.
+
+One other caveat with Twitter, which can be frustrating to new users: you can't go back in time and look at every Tweet ever posted. (Access to this is referred to as Twitter's 'Firehose.') Just searching Twitter for a term will only return results from the last seven days. How can we get around this limitation?
+
+One way is to analyze an individual account, or Twitter handle - this will allow us to download thousands of Tweets, assuming we're looking at a prolific user.
+
+The other way, which is beyond the scope of this Chapter, is to set up a loop in R that grabs Tweets every minute, or hour, or day, and records them, over time, to a database. This (obviously) requires pre-planning, so you can't just do a lengthy report on the history and progression of the #MeToo movement on Twitter: you can only record the present and future. (Note that some interesting historical Twitter activity has been downloaded and shared online, such as the accounts of everyone in the Trump White House during his Presidency.)
+
+Why is all of this so complicated? Well, Twitter's valuation is based almost entirely on this huge collection of data it's made (the Firehose), and granting access to historical Twitter data is one way Twitter actually makes money.
+
+Like many proprietary online sources of data, Twitter gives data analysts this limited access to their real-time data via what's called an *API*, or Application Programming Interface. That means instead of downloading every tweet ever made onto your laptop, you can use this 'interface' to access the database of information online and only grab the relevant data. Another example may help clarify: How could we analyze the headlines of the New York Times over the last 50 years? We cannot download all of that text onto our computer, of course, but the Times provides limited historical access via their API as well. Again, the limitations are somewhat severe, as they are protecting their intellectual property: The NY Times API only allows you to get *ten results every minute.* In other words, you query the API, get 10 results, wait a minute, and then you can get the next 10 results.
+
+Note: A student of mine made a package that automates this process \[here\] ('https://github.com/toldham2/nytall').
+
+OK, so how do we gain access to an API? We'll use Twitter as our example, as it's overly complicated. But generally speaking, you need to have an account with the service. Twitter is free, and you need a Twitter account to access the API. (The New York Times is behind a paywall, but you can still create an account on their website and access the aPI for free without a subscription.)
+
+So, first and foremost, create a Twitter account if you don't have one (don't worry, you never have to Tweet.)
+
+Then, go to [dev.twitter.com](https://dev.twitter.com) while signed in. You have to do a few somewhat confusing things:
+
+-   Apply to be a developer. You'll basically be asked why you want to do this, if there's any money or government entities involved, and if you'll be creating a 'bot' that can Tweet itself. I encourage folks to emphasize that they are in a learning environment and just practicing.
+
+-   Eventually, you should either be approved - some people got emails, others said they logged in and saw that they were developers now, without notice. Occasionally, Twitter will email you requesting additional information about your project. I'd just be honest.
+
+-   Once approved as a developer, you'll want to create a new *Project.* This requires its own set of confusing information to be entered, like the 'use case' and 'description.'
+
+Once a project has been created, you can access the project and create an App. Each project can contain up to three Apps, but we only need one.
+
+The App is what we'll use to access the API; all Apps must reside inside a Project. To quote Twitter's Help: "To create a Project, click on"New Project" in your dashboard or the Projects & Apps page within the developer portal. You'll only be able to see this option if you haven't already created a Project. You will be prompted to create a Project name, description, and use case. You will also be asked to create a new App or connect an existing standalone App."
+
+Why all the steps? Twitter wants to make sure you do not use their API to maliciously set up a Bot account that posts Tweets.
+
+And what is our aim here? We need to have Twitter give us *secret codes*, basically, that we can use to log in via R and access the API. The secret codes are unique to each App. Here's how to get them:
+
+## Using You Twitter App in R
+
+Start by installing the 'rtweet' package from CRAN:
+
+```{r, eval = FALSE}
+install.packages('rtweet')
+```
+
+Once we've set up an App in the Twitter Developer Console, we need to connect our credentials to our R session.
+
+First, we have to 'tell' Twitter who we are and what App we're using, buy entering in our API Key and Secret. Let's start by loading a package that will allow for authentication via a Web Browser:
+
+```{r, twitter_setup1, include=FALSE, message = FALSE, warning = FALSE }
+#install.packages("httpuv")
+
+library(httpuv)
+## if you get a prompt in your R Console to install a binary version, type 'no'
+
+## load rtweet
+library(rtweet)
+```
+
+Once our app is set up in dev.twitter.com, we should be able to generate *four secret codes*:
+
+-   API Key (also known as *consumer key)*
+
+-   API Secret (also known as *consumer secret)*
+
+-   Access Token
+
+-   Access Secret
+
+    All of these values can be generated from the 'Keys and Tokens' tab of your App's page on dev.twitter.com.
+
+    And now, if we are lucky, we can authenticate our App (my authentication indicates that the *create_token()* function is outdated, but ever since Twitter changed the authentication to require *four* keys, the new method doesn't work anymore).
+
+    Run this in R - be sure to replace "YOUR_APP_NAME" and "XXXXX" with the name of your App in the Twitter Developer Portal:
+
+```{r, eval = FALSE}
+
+create_token(
+app = "YOUR_APP_NAME_HERE",
+consumer_key = "XXXXXXXXXXXXXXXXXXX",
+consumer_secret = "XXXXXXXXXXXXXXXXXXX",
+access_token = "XXXXXXXXXXXXXXXXXXX",
+access_secret = "XXXXXXXXXXXXXXXXXXX",
+set_renv = TRUE
+) -> twitter_token
+```
+
+If you are lucky, you'll get a popup in your web browser completing the authentication process. But it's rarely that simple. If you are less lucky, you may have to authenticate via a different method.
+
+For those enjoying the success of authentication, test it out by grabbing the last 3,000+ tweets from the Pope:
+
+```{r, twitter1, echo = FALSE}
+create_token(
+  app = "MEA3290Spring22",
+  consumer_key = "pLdhSrbUa91znDgsd4W9WzEyf",
+  consumer_secret = "467ELD9Ryt7FneSLihHIFhXMnHLRfMW2eHiYe37arZCWLszh3P",
+  access_token = "56397538-QG3sn1SBsOm0PndznZaBRzwwPDVLyAW1pJJHzb3WE",
+  access_secret = "s7ITuXz0pJYFKFEmDa295sEbDdwqRk7VgqujH9FyalYbc",
+  set_renv = TRUE
+) -> twitter_token
+
+```
+
+```{r}
+pope <- get_timeline("pontifex", n = 18000, retryonratelimit = TRUE, token = twitter_token)
+```
+
+If you don't have any luck, you can download the version of the Pope's tweets that I'm using in my analysis here:
+
+```{r}
+#| echo: false
+
+library(downloadthis)
+
+pope %>%
+  download_this(
+    output_name = "pope_tweets",
+    output_extension = ".csv",
+    button_label = "Download data",
+    button_type = "default",
+    self_contained = TRUE,
+    has_icon = TRUE,
+    icon = "fa fa-save",
+    id = "pope-btn"
+  )
+```
+
+(You'll also need to import it - if you copy it into your Project's folder, you can simply run the command `pope <- read_csv('pope_tweets.csv')` )
+
+\## Analyzing Twitter Data
+
+OK, now we can use content from Twitter and analyze aspects such as:
+
+-   Time, day and date of tweet frequency
+
+-   Device(s) and App(s) used to Tweet
+
+-   Lots of other metadata, like if each tweet was a retweet, or was flagged in certain counties, etc.
+
+And of course we can collect *all of the text* from tweets and analyze them as we would a book.
+
+Let's start with time.
+
+    ## Lubridate & Working with Time
+
+Lubridate is a really useful R package. You can ask it to break any collection of dates into days, weeks, months or years. And if it doesn't recognize the format of your date column, you can 'tell' it how to read correctly. Let's try using it on Twitter data.
+
+```{r, eval = FALSE}
+install.packages('lubridate')
+```
+
+The 'created_at' column of our Twitter data contains our date information. Let's try some things out:
+
+```{r, message = FALSE}
+library(tidyverse)
+
+# pope <- get_timeline("pontifex", n = 18000, retryonratelimit = TRUE)
+
+ggplot(pope, aes(x = created_at)) + geom_histogram(aes(fill = ..count..))
+```
+
+OK, we see the frequency over the past few years that the Pope has tweeted - but it's pretty hard to understand. Let's tweak it with a lubridate command to show the days of the week:
+
+```{r}
+library(lubridate)
+ggplot(pope, aes(x=wday(created_at, label = TRUE))) +
+  geom_bar(aes(fill = ..count..))
+```
+
+OK, that's much clearer and makes a lot of sense! In lieu of 'wkdy,' we could have done 'hour,' 'week,' 'month' or 'year.'
+
+## Tweet Source
+
+Did the user tweet from their phone? From a computer? Did they use a social media app that help them maintain consistency across platforms? *Did an aide post it?*
+
+These are the questions we can answer by analyzing the *source* column of Twitter data:
+
+```{r}
+ggplot(pope, aes(source)) + geom_bar(aes(fill = ..count..)) + coord_flip()
+```
+
+Wow, that's boring. Let's check if the President has a more varied source for tweets:
+
+```{r}
+prez <- get_timeline('potus', n=18000, retryonratelimit = TRUE)
+
+ggplot(prez, aes(source)) + geom_bar(aes(fill = ..count..)) + coord_flip()
+
+```
+
+That still looks weird... We need to clean out all of the HTML between the '\<' and '\>' brackets of the strings of the sources for it to make sense. Here's a wacky bit of code to do that:
+
+```{r}
+
+gsub("<[^>]+>", "",prez$source) -> prez$source
+```
+
+Now let's re-plot:
+
+```{r}
+ggplot(prez, aes(source)) + geom_bar(aes(fill = ..count..)) + coord_flip()
+```
+
+A few notes about our plots:
+
+-   We are using geom_bar() instead of geom_col() - they look the same, but geom_col() often requires extra parameters like 'bin width.'
+
+-   We earlier used geom_histogram. A *histogram* is like a line chart that 'bins' values into groups; think of plotting age: you wouldn't have 90 or 100 lines to represent every age in your survey, you'd *bin* them: 0-10 years, 11-20 years, etc. Histograms visualize binned, continuous data.
+
+-   The syntax of our ggplot's is just *weird*. What's up with '`..count..`?' Why do we have two sets of aesthetics? Well, `..count..` is a *special variables* that can be used in ggplot - another is `..density..` . As for the separate aesthetics, the first set creates the bar chart based on the data values, and the second set colors the bars. We can control the aesthetics of those two calculations separately.
+
+    ## Text Analysis in Twitter
+
+    We can again use the *tidytext* package to create and analyze tokens:
+
+    ```{r}
+       library(tidytext)
+     pope %>% 
+      unnest_tokens(word, text) %>% 
+      anti_join(stop_words) %>% 
+      count(word, sort = TRUE) 
+    ```
+
+That certainly looks correct, although there are a few words that don't seem to make sense: *t.co* and *https* . *t.co* is short for twitter.com, and the https is part of a link, of course. You may also see *amp*, which is short for *ampersand.*
+
+Let's filter out these needless words:
+
+```{r}
+pope %>% 
+  unnest_tokens(word, text) %>% 
+  anti_join(stop_words) %>% 
+  filter(!word %in% c("https", "t.co")) %>% 
+  count(word, sort = TRUE) 
+```
+
+Cool. How about a word cloud?
+
+```{r}
+library(wordcloud2)
+pope %>% 
+  unnest_tokens(word, text) %>% 
+  anti_join(stop_words) %>% 
+  filter(!word %in% c("https", "t.co")) %>% 
+  count(word, sort = TRUE) %>% 
+  wordcloud2()
+```

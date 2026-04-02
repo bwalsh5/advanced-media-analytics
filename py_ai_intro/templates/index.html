@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>False Outrage</title>
+    <style>
+.spinner {
+  margin: 10px auto;
+  border: 6px solid #f3f3f3;
+  border-top: 6px solid #333;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+html, body {
+    margin: 0;
+    height: 100%;
+
+}
+body {
+    font-family: "Verdana", sans-serif;"
+    font-size: 1.2em;
+    margin: 0 auto;
+    text-align: center;
+}
+img {
+    max-width: 100%;
+}
+</style>
+
+</head>
+<body>
+    <h1>Ask Me Anything</h1>
+<form action="/chat" method="post" id="chat-form">
+
+  <textarea name="user_input" placeholder="Ask Me Anything..." rows="4" cols="50" required></textarea>
+  <br><br>
+
+  <button type="submit" id="submit-btn">Send</button>
+</form>
+
+
+    <div id="loading-spinner" style="display: none;">
+  <p>Loading...</p>
+  <div class="spinner"></div>
+</div>
+    <div>
+        <h2>Response :</h2>
+        <p>{{ assistant_reply | safe }}</p>
+    </div>
+</body>
+<script>
+  const submitBtn = document.getElementById('submit-btn');
+
+  // Also show spinner on submit (if you already have this)
+  const form = document.getElementById('chat-form');
+  const spinner = document.getElementById('loading-spinner');
+  if (form && spinner) {
+    form.addEventListener('submit', () => {
+      spinner.style.display = 'block';
+   //   submitBtn.disabled = true;
+    });
+  }
+</script>
+</html>
