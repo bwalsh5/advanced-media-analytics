@@ -3,14 +3,14 @@ project:
   output-dir: docs
 
 book:
-  title: "R for Media Analytics"
+  title: "Advanced Media Analytics"
   reader-mode: true
 
   page-footer:
     left: |
-      R for Media Analytics was written by Jenny Jiang & Brian Walsh.
+      Advanced Media Analytics was written by Jenny Jiang & Brian Walsh.
     right: |
-      This book was built with <a href="https://quarto.org/">Quarto</a>.
+      This book was built with <a href="https://quarto.org/">Quarto</a> with revision help from Claude Code.
           
   site-url: https://bwalsh5.github.io/advanced-media-analytics/
   repo-url: https://github.com/bwalsh5/advanced-media-analytics/
@@ -40,6 +40,6 @@ format:
       - cosmo
     code-link: true
     css: style.css
-    author-meta: "Jenny Jiang & Brian Walsh"
+    author-meta: "Jenny Jiang & Brian Walsh & Claude Code"
     include-after-body: add_button.html
  
