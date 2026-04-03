@@ -19,6 +19,9 @@ book:
     - index.qmd
     - intro.qmd
     - basic_statistics.qmd
+    - statistical_analysis_single.qmd
+    - statistical_analysis_two.qmd
+    - statistical_analysis_multi.qmd
     - manipulating_data.qmd
     - text_analysis.qmd
     - network_analysis.qmd
@@ -26,7 +29,7 @@ book:
     - python_ai_intro.qmd
     - publishing.qmd
     - part: Appendices
-      chapters: 
+      chapters:
        - common_errors.qmd
       
 format:

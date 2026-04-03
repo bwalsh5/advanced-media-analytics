@@ -1,14 +1,11 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
-
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
 <meta name="generator" content="quarto-1.4.553">
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-
 <meta name="author" content="Jenny Jiang &amp; Brian Walsh">
-
-<title>R for Media Analytics - 6&nbsp; Network Analysis</title>
+<title>R for Media Analytics - 9&nbsp; Social Network Analysis</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -21,8 +18,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
-
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="site_libs/quarto-nav/headroom.min.js"></script>
@@ -41,8 +71,7 @@ ul.task-list li input[type="checkbox"] {
 <link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
-<script id="quarto-search-options" type="application/json">{
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
   "collapse-after": 3,
@@ -68,35 +97,25 @@ ul.task-list li input[type="checkbox"] {
     "search-submit-button-title": "Submit",
     "search-label": "Search"
   }
-}</script>
-
-
-<link rel="stylesheet" href="style.css">
+}</script><link rel="stylesheet" href="style.css">
 </head>
-
 <body class="nav-sidebar floating">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top">
-  <nav class="quarto-secondary-nav">
-    <div class="container-fluid d-flex">
+  <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav"><div class="container-fluid d-flex">
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./network_analysis.html"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Network Analysis</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./network_analysis.html"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Social Network Analysis</span></a></li></ol></nav>
         <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
       </button>
     </div>
-  </nav>
-</header>
-<!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+  </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
-    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="./">R for Media Analytics</a> 
         <div class="sidebar-tools-main">
@@ -116,7 +135,7 @@ ul.task-list li input[type="checkbox"] {
         </div>
     <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
-        <li class="sidebar-item">
+<li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Preface</span></span></a>
@@ -136,38 +155,56 @@ ul.task-list li input[type="checkbox"] {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./statistical_analysis_single.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Statistical Analyses of a Single Variable</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./statistical_analysis_two.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Statistical Analyses of Two Variables</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./statistical_analysis_multi.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Statistical Analyses of Three or More Variables &amp; Modelling</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./manipulating_data.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Manipulating Data</span></span></a>
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Manipulating Data</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./text_analysis.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">install.packages(‘gutenbergr’)</span></span></a>
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">install.packages(‘gutenbergr’)</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./network_analysis.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Network Analysis</span></span></a>
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Social Network Analysis</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./geo_spatial_analysis.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Geo-Spatial Analysis and Visualization</span></span></a>
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Geo-Spatial Analysis and Visualization</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./python_ai_intro.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Introduction to Python and AI</span></span></a>
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Introduction to Python and AI</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./publishing.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Publishing</span></span></a>
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Publishing</span></span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
@@ -178,29 +215,50 @@ ul.task-list li input[type="checkbox"] {
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./common_errors.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Common Errors</span></span></a>
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Common Errors</span></span></a>
   </div>
 </li>
       </ul>
-  </li>
+</li>
     </ul>
-    </div>
-</nav>
-<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+</div>
+</nav><div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+<li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="header-section-number">9.1</span> Introduction</a></li>
+  <li><a href="#centrality-measures" id="toc-centrality-measures" class="nav-link" data-scroll-target="#centrality-measures"><span class="header-section-number">9.2</span> Centrality Measures</a></li>
+  <li><a href="#density-reciprocity-modularity" id="toc-density-reciprocity-modularity" class="nav-link" data-scroll-target="#density-reciprocity-modularity"><span class="header-section-number">9.3</span> Density, Reciprocity &amp; Modularity</a></li>
+  <li>
+<a href="#a-case-study-of-social-networks-from-twitter-conversations" id="toc-a-case-study-of-social-networks-from-twitter-conversations" class="nav-link" data-scroll-target="#a-case-study-of-social-networks-from-twitter-conversations"><span class="header-section-number">9.4</span> A Case Study of Social Networks from Twitter Conversations</a>
+  <ul class="collapse">
+<li><a href="#mention-network" id="toc-mention-network" class="nav-link" data-scroll-target="#mention-network"><span class="header-section-number">9.4.1</span> Mention Network</a></li>
+  <li><a href="#message-network" id="toc-message-network" class="nav-link" data-scroll-target="#message-network"><span class="header-section-number">9.4.2</span> Message Network</a></li>
+  <li><a href="#user-source-network" id="toc-user-source-network" class="nav-link" data-scroll-target="#user-source-network"><span class="header-section-number">9.4.3</span> User-Source Network</a></li>
+  </ul>
+</li>
+  <li>
+<a href="#a-case-study-of-social-semantic-networks-of-twitter-conversations" id="toc-a-case-study-of-social-semantic-networks-of-twitter-conversations" class="nav-link" data-scroll-target="#a-case-study-of-social-semantic-networks-of-twitter-conversations"><span class="header-section-number">9.5</span> A Case Study of Social-Semantic Networks of Twitter Conversations</a>
+  <ul class="collapse">
+<li><a href="#co-hashtag-network" id="toc-co-hashtag-network" class="nav-link" data-scroll-target="#co-hashtag-network"><span class="header-section-number">9.5.1</span> Co-hashtag Network</a></li>
+  <li><a href="#hashtag-user-network" id="toc-hashtag-user-network" class="nav-link" data-scroll-target="#hashtag-user-network"><span class="header-section-number">9.5.2</span> Hashtag-User Network</a></li>
+  <li><a href="#hashtag-mention-network" id="toc-hashtag-mention-network" class="nav-link" data-scroll-target="#hashtag-mention-network"><span class="header-section-number">9.5.3</span> Hashtag-Mention Network</a></li>
+  </ul>
+</li>
+  <li><a href="#assignment" id="toc-assignment" class="nav-link" data-scroll-target="#assignment"><span class="header-section-number">9.6</span> Assignment</a></li>
+  </ul></nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
-
-<header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
-<h1 class="title"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Network Analysis</span></h1>
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
+<h1 class="title">
+<span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Social Network Analysis</span>
+</h1>
 </div>
 
 
@@ -214,14 +272,555 @@ ul.task-list li input[type="checkbox"] {
   
 
 
-</header>
+</header><section id="introduction" class="level2" data-number="9.1"><h2 data-number="9.1" class="anchored" data-anchor-id="introduction">
+<span class="header-section-number">9.1</span> Introduction</h2>
+<p>Social Network Analysis (SNA) is a method of analyzing social structures by examining the relationships between social actors, such as individuals, organizations, or countries. In SNA, actors are represented as <strong>nodes</strong> or <strong>vertices</strong>, and relationships between them are represented as <strong>links</strong> or <strong>edges</strong>. The type of relationship can be <strong>undirected</strong> (e.g., friendship) or directed (e.g., <strong>communication flow</strong>), and it can also be <strong>weighted</strong> (e.g., strength of ties).</p>
+<p>Here’s an example R code to create a simple network graph:</p>
+<div class="cell">
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://r.igraph.org/">igraph</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Create a sample graph with 4 nodes and 3 edges</span></span>
+<span><span class="va">g</span> <span class="op">&lt;-</span> <span class="fu">graph</span><span class="op">(</span>edges<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">2</span>,<span class="fl">3</span>,<span class="fl">3</span>,<span class="fl">4</span><span class="op">)</span>, n<span class="op">=</span><span class="fl">4</span>, directed<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Plot the graph</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">g</span>, layout<span class="op">=</span><span class="va">layout.circle</span>, vertex.label<span class="op">=</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The graph() function from the igraph package is used to create the graph. The edges argument is used to specify the edges of the graph by passing a vector of node pairs. In this case, the graph is specified by passing the vector c(1,2,2,3,3,4), which means that there are three edges: (1,2), (2,3), and (3,4). The n argument is used to specify the number of nodes in the graph.</p>
+<p>After creating the graph object g, the plot() function is used to visualize it. The layout.circle argument specifies that the graph should be displayed in a circular layout. The vertex.label argument specifies the labels for each node, in this case simply 1, 2, 3, and 4.</p>
+<p>Social Network Analysis (SNA) involves several steps that researchers follow to understand the relationships and flows between social actors. The steps include:</p>
+<p><strong>Designing the study</strong>: The researcher selects appropriate research questions that will guide the study. For example, imagine you’re a social butterfly who loves attending parties and making new friends. You’re always curious about how people communicate and build relationships within a social circle. To explore this further, you decide to conduct a study on the patterns of communication within a social network. You want to understand how people interact, what topics they discuss, and how information spreads through the network.</p>
+<p><strong>Identifying relevant data sources</strong>: The researcher identifies data sources that will provide the necessary information to answer the research questions. For example, social media platforms like Twitter, Facebook, or LinkedIn can provide valuable data for a social network analysis.</p>
+<p><strong>Collecting data</strong>: Once the data sources are identified, the researcher collects the relevant data. Data can be collected through surveys, interviews, web scraping, or APIs.</p>
+<p><strong>Analyzing data</strong>: After collecting the data, the researcher analyzes it to identify patterns and structures in the network. There are several techniques and methods available for analyzing social network data, such as centrality measures, community detection, and network visualization.</p>
+<p><strong>Reviewing data</strong>: The researcher reviews the data to ensure that it is accurate and complete. This step involves checking for missing data, outliers, and errors.</p>
+<p><strong>Preparing evaluation</strong>: Once the data is reviewed, the researcher prepares an evaluation of the results. This step involves summarizing the findings and drawing conclusions based on the analysis.</p>
+<p><strong>Moving into action</strong>: Finally, the researcher moves into action by using the insights gained from the analysis to inform decision-making, policy development, or interventions. For example, a company may use the findings from a social network analysis to identify key influencers in their target market and develop targeted marketing campaigns.</p>
+</section><section id="centrality-measures" class="level2" data-number="9.2"><h2 data-number="9.2" class="anchored" data-anchor-id="centrality-measures">
+<span class="header-section-number">9.2</span> Centrality Measures</h2>
+<p>Centrality measures are important metrics in SNA that help to identify the most important nodes or actors in the network. <strong>Degree centrality</strong> measures the number of links that a node has to other nodes. <strong>Closeness centrality</strong> measures how close a node is to all other nodes in the network. <strong>Betweenness centrality</strong> measures the extent to which a node lies on the shortest paths between other nodes. <strong>Eigenvector centrality</strong> measures a node’s importance based on the importance of its neighbors.</p>
+<p>Here’s an example R code to compute the centrality measures for a sample network graph:</p>
+<div class="cell">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Let's create a sample graph with 5 nodes and 6 edges</span></span>
+<span><span class="va">g</span> <span class="op">&lt;-</span> <span class="fu">graph</span><span class="op">(</span>edges<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">1</span>,<span class="fl">3</span>,<span class="fl">2</span>,<span class="fl">3</span>,<span class="fl">2</span>,<span class="fl">4</span>,<span class="fl">3</span>,<span class="fl">5</span>,<span class="fl">4</span>,<span class="fl">5</span><span class="op">)</span>, n<span class="op">=</span><span class="fl">5</span>, directed<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Compute degree centrality</span></span>
+<span><span class="va">degree_centrality</span> <span class="op">&lt;-</span> <span class="fu">degree</span><span class="op">(</span><span class="va">g</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Compute closeness centrality</span></span>
+<span><span class="va">closeness_centrality</span> <span class="op">&lt;-</span> <span class="fu">closeness</span><span class="op">(</span><span class="va">g</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Compute betweenness centrality</span></span>
+<span><span class="va">betweenness_centrality</span> <span class="op">&lt;-</span> <span class="fu">betweenness</span><span class="op">(</span><span class="va">g</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Compute eigenvector centrality</span></span>
+<span><span class="va">eigenvector_centrality</span> <span class="op">&lt;-</span> <span class="fu">eigen_centrality</span><span class="op">(</span><span class="va">g</span><span class="op">)</span><span class="op">$</span><span class="va">vector</span></span>
+<span></span>
+<span><span class="co"># Plot the graph</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">g</span>, layout<span class="op">=</span><span class="va">layout.circle</span>, vertex.label<span class="op">=</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Print the centrality measures for each node</span></span>
+<span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu">vcount</span><span class="op">(</span><span class="va">g</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="st">"Node"</span>, <span class="va">i</span>, <span class="st">": Degree="</span>, <span class="va">degree_centrality</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>,</span>
+<span>            <span class="st">"Closeness="</span>, <span class="va">closeness_centrality</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>,</span>
+<span>            <span class="st">"Betweenness="</span>, <span class="va">betweenness_centrality</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>,</span>
+<span>            <span class="st">"Eigenvector="</span>, <span class="va">eigenvector_centrality</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>, <span class="st">"\n"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>In this example, we create a sample network graph with 5 nodes and 6 edges. We then compute the four centrality measures (degree, closeness, betweenness, and eigenvector) for each node using the appropriate functions provided by the igraph package. Finally, we print out the centrality measures for each node.</p>
+<p>The code above is using a for loop to iterate over each node in the graph, with the variable “i” representing the node index. Within the loop, the “cat” function is used to print a message that includes the centrality measures for that particular node. The “paste” function is used to concatenate the various pieces of information into a single string.</p>
+<p>Note that the output will show the centrality measures for each node in the network. You can use these measures to identify the most important nodes or actors in the network based on the particular centrality measure of interest.</p>
+<p>When the “cat” function is used to print a message, including the “” sequence in the message string will cause the output to be separated into multiple lines, with each new line starting after the “” character.</p>
+<p>So in the code provided, including the “” sequence at the end of the message string ensures that each line of output corresponds to a single node in the graph, making it easier to read and interpret the output.</p>
+</section><section id="density-reciprocity-modularity" class="level2" data-number="9.3"><h2 data-number="9.3" class="anchored" data-anchor-id="density-reciprocity-modularity">
+<span class="header-section-number">9.3</span> Density, Reciprocity &amp; Modularity</h2>
+<p>Other important network metrics include <strong>density</strong>, which measures the proportion of possible connections that are present in the network, and <strong>reciprocity</strong>, which measures the extent to which relationships are mutual. <strong>Modularity</strong> measures the extent to which a network is divided into subgroups or modules.</p>
+<p>Here are some R code examples to compute these network metrics:</p>
+<div class="cell">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Let's create a sample graph with 6 nodes and 8 edges</span></span>
+<span><span class="va">g</span> <span class="op">&lt;-</span> <span class="fu">graph</span><span class="op">(</span>edges<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">1</span>,<span class="fl">3</span>,<span class="fl">2</span>,<span class="fl">3</span>,<span class="fl">2</span>,<span class="fl">4</span>,<span class="fl">3</span>,<span class="fl">4</span>,<span class="fl">3</span>,<span class="fl">5</span>,<span class="fl">4</span>,<span class="fl">5</span>,<span class="fl">5</span>,<span class="fl">6</span><span class="op">)</span>, n<span class="op">=</span><span class="fl">6</span>, directed<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Compute density</span></span>
+<span><span class="va">density</span> <span class="op">&lt;-</span> <span class="fu">graph.density</span><span class="op">(</span><span class="va">g</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Print the density</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="st">"The density of the network is"</span>, <span class="va">density</span>, <span class="st">"\n"</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>In this example, we create a sample network graph with 6 nodes and 8 edges. We then compute the density of the graph using the graph.density function provided by the igraph package. The output shows the density of the network. We can tell that approximately 53.33% of all possible edges are present in the above network.</p>
+<p>A high network density can indicate a highly interconnected network, while a low density can indicate a more sparse or disconnected network. The specific interpretation of a density value depends on the context of the network being analyzed and the goals of the analysis.</p>
+<div class="cell">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Let's create another sample graph with 5 nodes and 7 edges</span></span>
+<span><span class="va">g</span> <span class="op">&lt;-</span> <span class="fu">graph</span><span class="op">(</span>edges<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">1</span>,<span class="fl">3</span>,<span class="fl">2</span>,<span class="fl">3</span>,<span class="fl">3</span>,<span class="fl">4</span>,<span class="fl">4</span>,<span class="fl">3</span>,<span class="fl">4</span>,<span class="fl">5</span>,<span class="fl">5</span>,<span class="fl">4</span><span class="op">)</span>, n<span class="op">=</span><span class="fl">5</span>, directed<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Compute reciprocity</span></span>
+<span><span class="va">reciprocity</span> <span class="op">&lt;-</span> <span class="fu">reciprocity</span><span class="op">(</span><span class="va">g</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Print the reciprocity</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="st">"The reciprocity of the network is"</span>, <span class="va">reciprocity</span>, <span class="st">"\n"</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>In the above example, we create a sample directed network graph with 5 nodes and 7 edges. We then compute the reciprocity of the graph using the reciprocity function provided by the igraph package. The output shows the reciprocity of the network is .57, indicating that each pair of nodes in the network that are connected by a directed edge, approximately 57.14% of those pairs have reciprocal edges (i.e., edges going in both directions).</p>
+<p>Reciprocity is an important measure of the symmetry of relationships in a network. A high reciprocity value indicates a high level of mutual connection or interaction between nodes, while a low reciprocity value indicates a more one-sided or unbalanced set of relationships.</p>
+<p>The interpretation of a reciprocity value also depends on the context of the network being analyzed and the specific research question or hypothesis being tested.</p>
+<div class="cell">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Let's create a more dense graph with 10 nodes and 14 edges</span></span>
+<span><span class="va">g</span> <span class="op">&lt;-</span> <span class="fu">graph</span><span class="op">(</span>edges<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">1</span>,<span class="fl">3</span>,<span class="fl">1</span>,<span class="fl">4</span>,<span class="fl">2</span>,<span class="fl">3</span>,<span class="fl">2</span>,<span class="fl">5</span>,<span class="fl">3</span>,<span class="fl">5</span>,<span class="fl">4</span>,<span class="fl">5</span>,<span class="fl">6</span>,<span class="fl">7</span>,<span class="fl">6</span>,<span class="fl">8</span>,<span class="fl">6</span>,<span class="fl">9</span>,<span class="fl">6</span>,<span class="fl">10</span>,<span class="fl">8</span>,<span class="fl">9</span>,<span class="fl">9</span>,<span class="fl">10</span><span class="op">)</span>, n<span class="op">=</span><span class="fl">10</span>, directed<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Compute modularity</span></span>
+<span><span class="va">modularity</span> <span class="op">&lt;-</span> <span class="fu">modularity</span><span class="op">(</span><span class="va">g</span>, membership<span class="op">=</span><span class="fu">clusters</span><span class="op">(</span><span class="va">g</span><span class="op">)</span><span class="op">$</span><span class="va">membership</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Print the modularity</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="st">"The modularity of the network is"</span>, <span class="va">modularity</span>, <span class="st">"\n"</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>In this example, we create a sample network graph with 10 nodes and 14 edges. We then compute the modularity of the graph using the modularity function provided by the igraph package. The membership argument is used to specify the clusters or modules in the network. The output shows modularity of the network is .49, indicating this means that the network has a relatively high degree of modularity, indicating that the above network can be partitioned into relatively distinct and densely connected groups of nodes.</p>
+<p>But the specific interpretation of a modularity value depends on the context of the network being analyzed and the research question or hypothesis being tested. It is also worth noting that different methods of calculating modularity may yield slightly different values, and modularity values can be affected by factors such as network size, density, and edge weight.</p>
+<p>In summary, SNA is a powerful method for analyzing social structures and relationships. By examining patterns of connections and interactions between social actors, SNA can help to identify key actors and structures in a network, and can inform interventions and policy decisions aimed at improving social outcomes.</p>
+</section><section id="a-case-study-of-social-networks-from-twitter-conversations" class="level2" data-number="9.4"><h2 data-number="9.4" class="anchored" data-anchor-id="a-case-study-of-social-networks-from-twitter-conversations">
+<span class="header-section-number">9.4</span> A Case Study of Social Networks from Twitter Conversations</h2>
+<p>This case study focuses on analyzing social networks from Twitter conversations. Three different types of networks were identified and analyzed: <strong>Mention Network</strong>, <strong>Message Network</strong>, <strong>User-Sources Network</strong>.</p>
+<section id="mention-network" class="level3" data-number="9.4.1"><h3 data-number="9.4.1" class="anchored" data-anchor-id="mention-network">
+<span class="header-section-number">9.4.1</span> Mention Network</h3>
+<p>A mention network is a way to understand how Twitter users interact with each other. Each Twitter user is represented as a point in the network. When one user mentions another user in a tweet, a line is drawn from the mentioning user to the mentioned user. This line represents the interaction between the two users. The more often a user mentions another user, the stronger the line will be between them. The mention network can help researchers analyze patterns of communication on Twitter, identify important users or “hubs” in the network, find groups of users who tend to interact with each other frequently or “communities,” and categorize user accounts based on their interactions with others.</p>
+<p>Here’s an example R code that uses the rtweet package to collect the most recent tweets containing the #ChatGPT hashtag, creates a mention network, performs some basic network analysis, and visualizes the network using the igraph package:</p>
+<div class="cell">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">rtweet</span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://r.igraph.org/">igraph</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># search for tweets containing #ChatGPT and retrieve up to 5000 tweets</span></span>
+<span><span class="va">tweets</span> <span class="op">&lt;-</span> <span class="fu">search_tweets</span><span class="op">(</span><span class="st">"#ChatGPT"</span>, n <span class="op">=</span> <span class="fl">5000</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># extract mentions_screen_name column and drop NAs</span></span>
+<span><span class="va">mentions</span> <span class="op">&lt;-</span> <span class="va">tweets</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">screen_name</span>, <span class="va">mentions_screen_name</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="op">!</span><span class="va">mentions_screen_name</span> <span class="op">==</span> <span class="st">"NA"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># separate multiple mentions_screen_name into separate rows</span></span>
+<span><span class="va">mentions</span> <span class="op">&lt;-</span> <span class="va">mentions</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/separate_rows.html">separate_rows</a></span><span class="op">(</span><span class="va">mentions_screen_name</span>, sep <span class="op">=</span> <span class="st">","</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="op">!</span><span class="va">mentions_screen_name</span> <span class="op">==</span> <span class="st">""</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># create mention network data frame</span></span>
+<span><span class="va">mentions_net</span> <span class="op">&lt;-</span> <span class="va">mentions</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">screen_name</span>, <span class="va">mentions_screen_name</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarize</a></span><span class="op">(</span>weight <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html">n</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">ungroup</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># rename columns to source and target</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">mentions_net</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"source"</span>, <span class="st">"target"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">#export the mention network</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/write.table.html">write.csv</a></span><span class="op">(</span><span class="va">mentions_net</span>, <span class="st">"chatgpt_mention.csv"</span>, row.names<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># create directed graph</span></span>
+<span><span class="va">mentions_graph</span> <span class="op">&lt;-</span> <span class="fu">graph_from_data_frame</span><span class="op">(</span><span class="va">mentions_net</span>, directed <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Aggregate graph information</span></span>
+<span><span class="va">graph_info_me</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span></span>
+<span>  Nodes <span class="op">=</span> <span class="fu">vcount</span><span class="op">(</span><span class="va">mentions_graph</span><span class="op">)</span>,</span>
+<span>  Edges <span class="op">=</span> <span class="fu">ecount</span><span class="op">(</span><span class="va">mentions_graph</span><span class="op">)</span>,</span>
+<span>  Avg_Link_Weight <span class="op">=</span> <span class="fu">ecount</span><span class="op">(</span><span class="va">mentions_graph</span><span class="op">)</span><span class="op">/</span><span class="fu">vcount</span><span class="op">(</span><span class="va">mentions_graph</span><span class="op">)</span>,</span>
+<span>  Density <span class="op">=</span> <span class="fu">edge_density</span><span class="op">(</span><span class="va">mentions_graph</span>, loops <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># View graph information</span></span>
+<span><span class="va">graph_info_me</span></span>
+<span></span>
+<span><span class="co">#Centrality</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>scipen <span class="op">=</span> <span class="fl">999</span><span class="op">)</span> <span class="co"># turn off scientific notation for all variables</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">4</span><span class="op">)</span> <span class="co"># define the digits</span></span>
+<span></span>
+<span><span class="co"># calculate centrality measures</span></span>
+<span><span class="va">indegree_me</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>name <span class="op">=</span> <span class="fu">V</span><span class="op">(</span><span class="va">mentions_graph</span><span class="op">)</span><span class="op">$</span><span class="va">name</span>, indegree <span class="op">=</span> <span class="fu">degree</span><span class="op">(</span><span class="va">mentions_graph</span>, mode <span class="op">=</span> <span class="st">"in"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">outdegree_me</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>name <span class="op">=</span> <span class="fu">V</span><span class="op">(</span><span class="va">mentions_graph</span><span class="op">)</span><span class="op">$</span><span class="va">name</span>, outdegree <span class="op">=</span> <span class="fu">degree</span><span class="op">(</span><span class="va">mentions_graph</span>, mode <span class="op">=</span> <span class="st">"out"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">closeness_me</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>name <span class="op">=</span> <span class="fu">V</span><span class="op">(</span><span class="va">mentions_graph</span><span class="op">)</span><span class="op">$</span><span class="va">name</span>, closeness <span class="op">=</span> <span class="fu">closeness</span><span class="op">(</span><span class="va">mentions_graph</span>, mode <span class="op">=</span> <span class="st">"total"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">betweenness_me</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>name <span class="op">=</span> <span class="fu">V</span><span class="op">(</span><span class="va">mentions_graph</span><span class="op">)</span><span class="op">$</span><span class="va">name</span>, betweenness <span class="op">=</span> <span class="fu">betweenness</span><span class="op">(</span><span class="va">mentions_graph</span>, directed <span class="op">=</span> <span class="cn">TRUE</span>, normalized <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">eigenvector_me</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>name <span class="op">=</span> <span class="fu">V</span><span class="op">(</span><span class="va">mentions_graph</span><span class="op">)</span><span class="op">$</span><span class="va">name</span>, eigenvector <span class="op">=</span> <span class="fu">eigen_centrality</span><span class="op">(</span><span class="va">mentions_graph</span>, directed <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">$</span><span class="va">vector</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># combine into a single dataframe</span></span>
+<span><span class="va">centrality_me</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/merge.html">merge</a></span><span class="op">(</span><span class="va">indegree_me</span>, <span class="va">outdegree_me</span>, by <span class="op">=</span> <span class="st">"name"</span>, all <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">centrality_me</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/merge.html">merge</a></span><span class="op">(</span><span class="va">centrality_me</span>, <span class="va">closeness_me</span>, by <span class="op">=</span> <span class="st">"name"</span>, all <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">centrality_me</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/merge.html">merge</a></span><span class="op">(</span><span class="va">centrality_me</span>, <span class="va">betweenness_me</span>, by <span class="op">=</span> <span class="st">"name"</span>, all <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">centrality_me</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/merge.html">merge</a></span><span class="op">(</span><span class="va">centrality_me</span>, <span class="va">eigenvector_me</span>, by <span class="op">=</span> <span class="st">"name"</span>, all <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We’ve got a whopping thousands of nodes in this mention network. For better-looking and more informative visualizations of large-scale networks, it’s a good idea to use fancy network analysis and visualization tools like Gephi. You can grab a copy of Gephi here: <a href="https://gephi.org/users/download/" class="uri">https://gephi.org/users/download/</a></p>
+<p>Gephi is a free and open-source network visualization and analysis tool that allows you to create complex and aesthetically pleasing network visualizations. It provides a user-friendly interface and a variety of tools for network analysis, including measures of centrality, clustering, and community detection.</p>
+<p>For larger networks, Gephi can be more efficient and powerful than using R packages such as igraph and ggplot2. However, it does require some learning curve and familiarity with network analysis concepts.</p>
+<p>This is the optimized network visualization generated by Gephi:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="images/GPT_mention_nework.png" class="img-fluid figure-img"></p>
+<figcaption>Mention Network of Twitter Conversations on ChatGPT</figcaption></figure>
+</div>
+<p>Well, look at what we have here! It’s a stunning visualization of mentions! It appears that the recent ChatGPT discussions have triggered a plethora of mini-chat groups. Behold the rainbow-colored clusters that depict the top 10 mention communities. And guess who’s hogging the limelight? Yup, you got it right, it’s our very own trio of Twitter superstars - <span class="citation" data-cites="B4l4kurwo">@B4l4kurwo</span>, <span class="citation" data-cites="CerfiaFR">@CerfiaFR</span>, and <span class="citation" data-cites="datachaz">@datachaz</span>!</p>
+<p>Now, what’s intriguing is that <span class="citation" data-cites="B4l4kurwo">@B4l4kurwo</span> is a social media influencer from Indonesia, <span class="citation" data-cites="CerfiaFR">@CerfiaFR</span> is a French research center devoted to artificial intelligence, machine learning, and cognitive science, and <span class="citation" data-cites="datachaz">@datachaz</span> is a Twitter user passionate about data science and analytics. These three are acting as the central hubs for a massive gang of chatterboxes gabbing away about #ChatGPT. It’s like they are the cool kids in school who have everyone eating out of their hands. Good for them!</p>
+</section><section id="message-network" class="level3" data-number="9.4.2"><h3 data-number="9.4.2" class="anchored" data-anchor-id="message-network">
+<span class="header-section-number">9.4.2</span> Message Network</h3>
+<p>A Twitter message network is a way to analyze how Twitter users communicate with each other using replies. Each Twitter user is represented as a point in the network. When one user sends a message to another user in reply to their tweet, a line is drawn from the sender to the receiver. This line represents the interaction between the two users. The more often a user sends a message to another user, the stronger the line will be between them. The message network can help researchers analyze patterns of communication on Twitter, identify important users or “hubs” in the network, find groups of users who tend to interact with each other frequently or “communities,” and categorize user accounts based on their interactions with others. It is called a directed network because the lines have an arrow that points from the sender to the receiver, indicating the direction of the interaction.</p>
+<div class="cell">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># extract reply_to_screen_name column and drop NAs</span></span>
+<span><span class="va">message</span> <span class="op">&lt;-</span> <span class="va">tweets</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">screen_name</span>, <span class="va">reply_to_screen_name</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="op">!</span><span class="va">reply_to_screen_name</span> <span class="op">==</span> <span class="st">"NA"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># create message network data frame</span></span>
+<span><span class="va">message_net</span> <span class="op">&lt;-</span> <span class="va">message</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">screen_name</span>, <span class="va">reply_to_screen_name</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarize</a></span><span class="op">(</span>weight <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html">n</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">ungroup</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># rename columns to source and target</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">message_net</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"source"</span>, <span class="st">"target"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">#export the message network</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/write.table.html">write.csv</a></span><span class="op">(</span><span class="va">message_net</span>, <span class="st">"chatgpt_message.csv"</span>, row.names<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># create directed graph</span></span>
+<span><span class="va">message_graph</span> <span class="op">&lt;-</span> <span class="fu">graph_from_data_frame</span><span class="op">(</span><span class="va">message_net</span>, directed <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Aggregate graph information</span></span>
+<span><span class="va">graph_info_ms</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span></span>
+<span>  Nodes <span class="op">=</span> <span class="fu">vcount</span><span class="op">(</span><span class="va">message_graph</span><span class="op">)</span>,</span>
+<span>  Edges <span class="op">=</span> <span class="fu">ecount</span><span class="op">(</span><span class="va">message_graph</span><span class="op">)</span>,</span>
+<span>  Avg_Link_Weight <span class="op">=</span> <span class="fu">ecount</span><span class="op">(</span><span class="va">message_graph</span><span class="op">)</span><span class="op">/</span><span class="fu">vcount</span><span class="op">(</span><span class="va">message_graph</span><span class="op">)</span>,</span>
+<span>  Density <span class="op">=</span> <span class="fu">edge_density</span><span class="op">(</span><span class="va">message_graph</span>, loops <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># View graph information</span></span>
+<span><span class="va">graph_info_ms</span></span>
+<span></span>
+<span><span class="co">#Centrality</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>scipen <span class="op">=</span> <span class="fl">999</span><span class="op">)</span> <span class="co"># turn off scientific notation for all variables</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">4</span><span class="op">)</span> <span class="co"># define the digits</span></span>
+<span></span>
+<span><span class="co"># calculate centrality measures</span></span>
+<span><span class="va">indegree_ms</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>name <span class="op">=</span> <span class="fu">V</span><span class="op">(</span><span class="va">message_graph</span><span class="op">)</span><span class="op">$</span><span class="va">name</span>, indegree <span class="op">=</span> <span class="fu">degree</span><span class="op">(</span><span class="va">message_graph</span>, mode <span class="op">=</span> <span class="st">"in"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">outdegree_ms</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>name <span class="op">=</span> <span class="fu">V</span><span class="op">(</span><span class="va">message_graph</span><span class="op">)</span><span class="op">$</span><span class="va">name</span>, outdegree <span class="op">=</span> <span class="fu">degree</span><span class="op">(</span><span class="va">message_graph</span>, mode <span class="op">=</span> <span class="st">"out"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">closeness_ms</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>name <span class="op">=</span> <span class="fu">V</span><span class="op">(</span><span class="va">message_graph</span><span class="op">)</span><span class="op">$</span><span class="va">name</span>, closeness <span class="op">=</span> <span class="fu">closeness</span><span class="op">(</span><span class="va">message_graph</span>, mode <span class="op">=</span> <span class="st">"total"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">betweenness_ms</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>name <span class="op">=</span> <span class="fu">V</span><span class="op">(</span><span class="va">message_graph</span><span class="op">)</span><span class="op">$</span><span class="va">name</span>, betweenness <span class="op">=</span> <span class="fu">betweenness</span><span class="op">(</span><span class="va">message_graph</span>, directed <span class="op">=</span> <span class="cn">TRUE</span>, normalized <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">eigenvector_ms</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>name <span class="op">=</span> <span class="fu">V</span><span class="op">(</span><span class="va">message_graph</span><span class="op">)</span><span class="op">$</span><span class="va">name</span>, eigenvector <span class="op">=</span> <span class="fu">eigen_centrality</span><span class="op">(</span><span class="va">message_graph</span>, directed <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">$</span><span class="va">vector</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># combine into a single dataframe</span></span>
+<span><span class="va">centrality_ms</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/merge.html">merge</a></span><span class="op">(</span><span class="va">indegree_ms</span>, <span class="va">outdegree_ms</span>, by <span class="op">=</span> <span class="st">"name"</span>, all <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">centrality_ms</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/merge.html">merge</a></span><span class="op">(</span><span class="va">centrality_ms</span>, <span class="va">closeness_ms</span>, by <span class="op">=</span> <span class="st">"name"</span>, all <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">centrality_ms</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/merge.html">merge</a></span><span class="op">(</span><span class="va">centrality_ms</span>, <span class="va">betweenness_ms</span>, by <span class="op">=</span> <span class="st">"name"</span>, all <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">centrality_ms</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/merge.html">merge</a></span><span class="op">(</span><span class="va">centrality_ms</span>, <span class="va">eigenvector_ms</span>, by <span class="op">=</span> <span class="st">"name"</span>, all <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now, let’s visualize the network using Gephi.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="images/GPT_message_nework.png" class="img-fluid figure-img"></p>
+<figcaption>Message Network of Twitter Conversations on ChatGPT</figcaption></figure>
+</div>
+<p>The mention network was bustling with activity, with numerous nodes and edges capturing the buzz of ChatGPT discussions. However, the message network told a different story, revealing the smaller and occasional conversations taking place around the topic. It was here where characters like <span class="citation" data-cites="aaditsh">@aaditsh</span> held court, acting as the central hub for these intriguing and occasional dialogues.</p>
+</section><section id="user-source-network" class="level3" data-number="9.4.3"><h3 data-number="9.4.3" class="anchored" data-anchor-id="user-source-network">
+<span class="header-section-number">9.4.3</span> User-Source Network</h3>
+<p>A user-source Twitter network is a type of undirected network that involves two types of nodes - users and sources. The links between these nodes are created based on the co-occurrence of users and the source of their tweets. For example, if a user sends a tweet from a particular source (e.g.&nbsp;Twitter Web App, Hootsuite, Tweetdeck), a link is created between the user and the source. The more often they appear together, the stronger the link between them.</p>
+<p>This type of network can be used to explore the relationships between users and the sources they use to tweet. By analyzing the network, we can find and analyze which users use which clients (or sources). This information can be useful for understanding how users interact with different sources and for categorizing user accounts.</p>
+<div class="cell">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># extract source and drop NAs</span></span>
+<span><span class="va">UserSource</span> <span class="op">&lt;-</span> <span class="va">tweets</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">screen_name</span>, <span class="va">source</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="op">!</span><span class="va">source</span> <span class="op">==</span> <span class="st">"NA"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># create user-source network data frame</span></span>
+<span><span class="va">UserSource_net</span> <span class="op">&lt;-</span> <span class="va">UserSource</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">screen_name</span>, <span class="va">source</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarize</a></span><span class="op">(</span>weight <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html">n</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">ungroup</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># rename columns to source and target</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">UserSource_net</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"source"</span>, <span class="st">"target"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">#export the user-source network</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/write.table.html">write.csv</a></span><span class="op">(</span><span class="va">UserSource_net</span>, <span class="st">"UserSource_net.csv"</span>, row.names<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># create undirected graph</span></span>
+<span><span class="va">UserSource_graph</span> <span class="op">&lt;-</span> <span class="fu">graph_from_data_frame</span><span class="op">(</span><span class="va">UserSource_net</span>, directed <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Aggregate graph information</span></span>
+<span><span class="va">graph_info_us</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span></span>
+<span>  Nodes <span class="op">=</span> <span class="fu">vcount</span><span class="op">(</span><span class="va">UserSource_graph</span><span class="op">)</span>,</span>
+<span>  Edges <span class="op">=</span> <span class="fu">ecount</span><span class="op">(</span><span class="va">UserSource_graph</span><span class="op">)</span>,</span>
+<span>  Avg_Link_Weight <span class="op">=</span> <span class="fu">ecount</span><span class="op">(</span><span class="va">UserSource_graph</span><span class="op">)</span><span class="op">/</span><span class="fu">vcount</span><span class="op">(</span><span class="va">UserSource_graph</span><span class="op">)</span>,</span>
+<span>  Density <span class="op">=</span> <span class="fu">edge_density</span><span class="op">(</span><span class="va">UserSource_graph</span>, loops <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># View graph information</span></span>
+<span><span class="va">graph_info_us</span></span>
+<span></span>
+<span><span class="co">#Centrality</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>scipen <span class="op">=</span> <span class="fl">999</span><span class="op">)</span> <span class="co"># turn off scientific notation for all variables</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">4</span><span class="op">)</span> <span class="co"># define the digits</span></span>
+<span></span>
+<span><span class="co"># calculate centrality measures</span></span>
+<span><span class="va">degree_us</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>name <span class="op">=</span> <span class="fu">V</span><span class="op">(</span><span class="va">UserSource_graph</span><span class="op">)</span><span class="op">$</span><span class="va">name</span>, degree <span class="op">=</span> <span class="fu">degree</span><span class="op">(</span><span class="va">UserSource_graph</span>, mode <span class="op">=</span> <span class="st">"total"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">closeness_us</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>name <span class="op">=</span> <span class="fu">V</span><span class="op">(</span><span class="va">UserSource_graph</span><span class="op">)</span><span class="op">$</span><span class="va">name</span>, closeness <span class="op">=</span> <span class="fu">closeness</span><span class="op">(</span><span class="va">UserSource_graph</span>, mode <span class="op">=</span> <span class="st">"total"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">betweenness_us</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>name <span class="op">=</span> <span class="fu">V</span><span class="op">(</span><span class="va">UserSource_graph</span><span class="op">)</span><span class="op">$</span><span class="va">name</span>, betweenness <span class="op">=</span> <span class="fu">betweenness</span><span class="op">(</span><span class="va">UserSource_graph</span>, directed <span class="op">=</span> <span class="cn">FALSE</span>, normalized <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">eigenvector_us</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>name <span class="op">=</span> <span class="fu">V</span><span class="op">(</span><span class="va">UserSource_graph</span><span class="op">)</span><span class="op">$</span><span class="va">name</span>, eigenvector <span class="op">=</span> <span class="fu">eigen_centrality</span><span class="op">(</span><span class="va">UserSource_graph</span>, directed <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">$</span><span class="va">vector</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># combine into a single dataframe</span></span>
+<span><span class="va">centrality_us</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/merge.html">merge</a></span><span class="op">(</span><span class="va">degree_us</span>, <span class="va">closeness_us</span>, by <span class="op">=</span> <span class="st">"name"</span>, all <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">centrality_us</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/merge.html">merge</a></span><span class="op">(</span><span class="va">centrality_us</span>, <span class="va">betweenness_us</span>, by <span class="op">=</span> <span class="st">"name"</span>, all <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">centrality_us</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/merge.html">merge</a></span><span class="op">(</span><span class="va">centrality_us</span>, <span class="va">eigenvector_us</span>, by <span class="op">=</span> <span class="st">"name"</span>, all <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now, let’s visualize the network using Gephi.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="images/GPT_user-source_nework.png" class="img-fluid figure-img"></p>
+<figcaption>User-Source Network of Twitter Conversations on ChatGPT</figcaption></figure>
+</div>
+<p>Wow, check out this sweet visualization! Despite the vast ocean of tweets out there, it seems like the three big players in the game are Twitter Web App, Twitter for Android, and Twitter for iPhone. These three musketeers have stolen the spotlight, leaving all other sources to cower in their digital shadow.</p>
+</section></section><section id="a-case-study-of-social-semantic-networks-of-twitter-conversations" class="level2" data-number="9.5"><h2 data-number="9.5" class="anchored" data-anchor-id="a-case-study-of-social-semantic-networks-of-twitter-conversations">
+<span class="header-section-number">9.5</span> A Case Study of Social-Semantic Networks of Twitter Conversations</h2>
+<p>A social-semantic network is a type of network that combines both social and semantic elements. In social networks, the focus is on the relationships between individuals, whereas in semantic networks, the focus is on the meaning or topics of the information being exchanged. Social-semantic networks, therefore, are networks that capture both the social relationships between individuals and the topics or themes of the conversations they have.</p>
+<p>The case study examines two types of social-semantic networks, namely the Hashtag-User Network and the Hashtag-Mention network. In these networks, hashtags represent the semantics of the conversations, while user and mention represent the social aspect. The aim of this study is to sniff out the popular topics being chatted up by different groups of users. But before we get into all that jazz, let’s take a gander at what the co-hashtag network looks like!</p>
+<section id="co-hashtag-network" class="level3" data-number="9.5.1"><h3 data-number="9.5.1" class="anchored" data-anchor-id="co-hashtag-network">
+<span class="header-section-number">9.5.1</span> Co-hashtag Network</h3>
+<p>A co-hashtag network is a special type of semantic network that explores the relationship between different hashtags on social media platforms like Twitter. In this network, the nodes represent hashtags and links are established between them based on co-occurrence. If two hashtags appear together in the same tweet, they are connected by a link. The more often two hashtags appear together, the stronger the link between them. This network helps to explore the relationships between hashtags, find and analyze sub-issues, and distinguish between different types of hashtags. By analyzing this network, we can identify communities of users who use similar hashtags and understand the topics and issues that they are interested in.</p>
+<div class="cell">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># extract status_id &amp; hashtag and drop NAs</span></span>
+<span><span class="va">Hash</span> <span class="op">&lt;-</span> <span class="va">tweets</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">status_id</span>, <span class="va">hashtags</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="op">!</span><span class="va">hashtags</span> <span class="op">==</span> <span class="st">"NA"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># separate multiple hashtags into separate rows</span></span>
+<span><span class="va">Hash</span> <span class="op">&lt;-</span> <span class="va">Hash</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/separate_rows.html">separate_rows</a></span><span class="op">(</span><span class="va">hashtags</span>, sep <span class="op">=</span> <span class="st">","</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="op">!</span><span class="va">hashtags</span> <span class="op">==</span> <span class="st">""</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># count words co-occuring within sections</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/juliasilge/widyr">widyr</a></span><span class="op">)</span></span>
+<span><span class="va">word_pairs_hash</span> <span class="op">&lt;-</span> <span class="va">Hash</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">pairwise_count</span><span class="op">(</span><span class="va">hashtags</span>, <span class="va">status_id</span>, sort <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">word_pairs_hash</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"Source"</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">word_pairs_hash</span><span class="op">)</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"Target"</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">word_pairs_hash</span><span class="op">)</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"Weight"</span></span>
+<span></span>
+<span><span class="co">#calculate the mean weight for the word links, then re-do the wordpair</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">word_pairs_hash</span><span class="op">$</span><span class="va">Weight</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">word_pairs_hash</span> <span class="op">&lt;-</span> <span class="va">word_pairs_hash</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">Weight</span> <span class="op">&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">word_pairs_hash</span><span class="op">$</span><span class="va">Weight</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/write.table.html">write.csv</a></span><span class="op">(</span><span class="va">word_pairs_hash</span>, <span class="st">"hash.csv"</span>, row.names<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># create undirected graph</span></span>
+<span><span class="va">hash_graph</span> <span class="op">&lt;-</span> <span class="fu">graph_from_data_frame</span><span class="op">(</span><span class="va">word_pairs_hash</span>, directed <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Aggregate graph information</span></span>
+<span><span class="va">graph_info_hash</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span></span>
+<span>  Nodes <span class="op">=</span> <span class="fu">vcount</span><span class="op">(</span><span class="va">hash_graph</span><span class="op">)</span>,</span>
+<span>  Edges <span class="op">=</span> <span class="fu">ecount</span><span class="op">(</span><span class="va">hash_graph</span><span class="op">)</span>,</span>
+<span>  Avg_Link_Weight <span class="op">=</span> <span class="fu">ecount</span><span class="op">(</span><span class="va">hash_graph</span><span class="op">)</span><span class="op">/</span><span class="fu">vcount</span><span class="op">(</span><span class="va">hash_graph</span><span class="op">)</span>,</span>
+<span>  Density <span class="op">=</span> <span class="fu">edge_density</span><span class="op">(</span><span class="va">hash_graph</span>, loops <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># View graph information</span></span>
+<span><span class="va">graph_info_hash</span></span>
+<span></span>
+<span><span class="co">#Centrality</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>scipen <span class="op">=</span> <span class="fl">999</span><span class="op">)</span> <span class="co"># turn off scientific notation for all variables</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">4</span><span class="op">)</span> <span class="co"># define the digits</span></span>
+<span></span>
+<span><span class="co"># calculate centrality measures</span></span>
+<span><span class="va">degree_hash</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>name <span class="op">=</span> <span class="fu">V</span><span class="op">(</span><span class="va">hash_graph</span><span class="op">)</span><span class="op">$</span><span class="va">name</span>, degree <span class="op">=</span> <span class="fu">degree</span><span class="op">(</span><span class="va">hash_graph</span>, mode <span class="op">=</span> <span class="st">"total"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">closeness_hash</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>name <span class="op">=</span> <span class="fu">V</span><span class="op">(</span><span class="va">hash_graph</span><span class="op">)</span><span class="op">$</span><span class="va">name</span>, closeness <span class="op">=</span> <span class="fu">closeness</span><span class="op">(</span><span class="va">hash_graph</span>, mode <span class="op">=</span> <span class="st">"total"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">betweenness_hash</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>name <span class="op">=</span> <span class="fu">V</span><span class="op">(</span><span class="va">hash_graph</span><span class="op">)</span><span class="op">$</span><span class="va">name</span>, betweenness <span class="op">=</span> <span class="fu">betweenness</span><span class="op">(</span><span class="va">hash_graph</span>, directed <span class="op">=</span> <span class="cn">FALSE</span>, normalized <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">eigenvector_hash</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>name <span class="op">=</span> <span class="fu">V</span><span class="op">(</span><span class="va">hash_graph</span><span class="op">)</span><span class="op">$</span><span class="va">name</span>, eigenvector <span class="op">=</span> <span class="fu">eigen_centrality</span><span class="op">(</span><span class="va">hash_graph</span>, directed <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">$</span><span class="va">vector</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># combine into a single dataframe</span></span>
+<span><span class="va">centrality_hash</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/merge.html">merge</a></span><span class="op">(</span><span class="va">degree_hash</span>, <span class="va">closeness_hash</span>, by <span class="op">=</span> <span class="st">"name"</span>, all <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">centrality_hash</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/merge.html">merge</a></span><span class="op">(</span><span class="va">centrality_hash</span>, <span class="va">betweenness_hash</span>, by <span class="op">=</span> <span class="st">"name"</span>, all <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">centrality_hash</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/merge.html">merge</a></span><span class="op">(</span><span class="va">centrality_hash</span>, <span class="va">eigenvector_hash</span>, by <span class="op">=</span> <span class="st">"name"</span>, all <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Let’s first take a look at the co-hashtags visualization from Gephi.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="images/GPT_hash.png" class="img-fluid figure-img"></p>
+<figcaption>Co-Hashtag Network of Twitter Conversations on ChatGPT</figcaption></figure>
+</div>
+<p>As we gaze upon the visual representation of #ChatGPT conversations, we can spot the major hashtag clusters that have emerged. But wait, there’s more! Now, let’s delve deeper into the minds of different user groups. How are they using these hashtags? Which influencers are being mentioned in relation to different topics? To answer these burning questions, let’s take a gander at the Hashtag-User network and the Hashtag-Mention network.</p>
+</section><section id="hashtag-user-network" class="level3" data-number="9.5.2"><h3 data-number="9.5.2" class="anchored" data-anchor-id="hashtag-user-network">
+<span class="header-section-number">9.5.2</span> Hashtag-User Network</h3>
+<p>A Hashtag-User network is a type of network where hashtags and Twitter users are the nodes, and the links between them represent the co-occurrence of a user and a hashtag in a tweet. For example, if a user wrote a tweet with a certain hashtag, there will be a link between that user and the hashtag in the hashtag-user network. The strength of the link is based on how often the user and the hashtag appear together in tweets.</p>
+<p>This type of network can be used to explore the relationship between users and hashtags, find out which users are interested in which topics, and analyze the patterns of communication among different user groups on Twitter.</p>
+<p>Let’s leverage the #ChatGPT tweets we’ve collected to showcase how to build a Hashtag-User network:</p>
+<div class="cell">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># extract hashtags and drop NAs</span></span>
+<span><span class="va">UserHash</span> <span class="op">&lt;-</span> <span class="va">tweets</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">screen_name</span>, <span class="va">hashtags</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="op">!</span><span class="va">hashtags</span> <span class="op">==</span> <span class="st">"NA"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># separate multiple hashtags into separate rows</span></span>
+<span><span class="va">UserHash</span> <span class="op">&lt;-</span> <span class="va">UserHash</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/separate_rows.html">separate_rows</a></span><span class="op">(</span><span class="va">hashtags</span>, sep <span class="op">=</span> <span class="st">","</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="op">!</span><span class="va">hashtags</span> <span class="op">==</span> <span class="st">""</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># create hashtag-user network data frame</span></span>
+<span><span class="va">UserHash_net</span> <span class="op">&lt;-</span> <span class="va">UserHash</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">screen_name</span>, <span class="va">hashtags</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarize</a></span><span class="op">(</span>weight <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html">n</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">ungroup</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># rename columns to source and target</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">UserHash_net</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"source"</span>, <span class="st">"target"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">#export the hashtag-user network</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/write.table.html">write.csv</a></span><span class="op">(</span><span class="va">UserHash_net</span>, <span class="st">"UserHash_net.csv"</span>, row.names<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># create undirected graph</span></span>
+<span><span class="va">UserHash_graph</span> <span class="op">&lt;-</span> <span class="fu">graph_from_data_frame</span><span class="op">(</span><span class="va">UserHash_net</span>, directed <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Aggregate graph information</span></span>
+<span><span class="va">graph_info_uh</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span></span>
+<span>  Nodes <span class="op">=</span> <span class="fu">vcount</span><span class="op">(</span><span class="va">UserHash_graph</span><span class="op">)</span>,</span>
+<span>  Edges <span class="op">=</span> <span class="fu">ecount</span><span class="op">(</span><span class="va">UserHash_graph</span><span class="op">)</span>,</span>
+<span>  Avg_Link_Weight <span class="op">=</span> <span class="fu">ecount</span><span class="op">(</span><span class="va">UserHash_graph</span><span class="op">)</span><span class="op">/</span><span class="fu">vcount</span><span class="op">(</span><span class="va">UserHash_graph</span><span class="op">)</span>,</span>
+<span>  Density <span class="op">=</span> <span class="fu">edge_density</span><span class="op">(</span><span class="va">UserHash_graph</span>, loops <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># View graph information</span></span>
+<span><span class="va">graph_info_uh</span></span>
+<span></span>
+<span><span class="co">#Centrality</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>scipen <span class="op">=</span> <span class="fl">999</span><span class="op">)</span> <span class="co"># turn off scientific notation for all variables</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">4</span><span class="op">)</span> <span class="co"># define the digits</span></span>
+<span></span>
+<span><span class="co"># calculate centrality measures</span></span>
+<span><span class="va">degree_uh</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>name <span class="op">=</span> <span class="fu">V</span><span class="op">(</span><span class="va">UserHash_graph</span><span class="op">)</span><span class="op">$</span><span class="va">name</span>, degree <span class="op">=</span> <span class="fu">degree</span><span class="op">(</span><span class="va">UserHash_graph</span>, mode <span class="op">=</span> <span class="st">"total"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">indegree_uh</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>name <span class="op">=</span> <span class="fu">V</span><span class="op">(</span><span class="va">UserHash_graph</span><span class="op">)</span><span class="op">$</span><span class="va">name</span>, indegree <span class="op">=</span> <span class="fu">degree</span><span class="op">(</span><span class="va">UserHash_graph</span>, mode <span class="op">=</span> <span class="st">"in"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">outdegree_uh</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>name <span class="op">=</span> <span class="fu">V</span><span class="op">(</span><span class="va">UserHash_graph</span><span class="op">)</span><span class="op">$</span><span class="va">name</span>, outdegree <span class="op">=</span> <span class="fu">degree</span><span class="op">(</span><span class="va">UserHash_graph</span>, mode <span class="op">=</span> <span class="st">"out"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">closeness_uh</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>name <span class="op">=</span> <span class="fu">V</span><span class="op">(</span><span class="va">UserHash_graph</span><span class="op">)</span><span class="op">$</span><span class="va">name</span>, closeness <span class="op">=</span> <span class="fu">closeness</span><span class="op">(</span><span class="va">UserHash_graph</span>, mode <span class="op">=</span> <span class="st">"total"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">betweenness_uh</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>name <span class="op">=</span> <span class="fu">V</span><span class="op">(</span><span class="va">UserHash_graph</span><span class="op">)</span><span class="op">$</span><span class="va">name</span>, betweenness <span class="op">=</span> <span class="fu">betweenness</span><span class="op">(</span><span class="va">UserHash_graph</span>, directed <span class="op">=</span> <span class="cn">FALSE</span>, normalized <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">eigenvector_uh</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>name <span class="op">=</span> <span class="fu">V</span><span class="op">(</span><span class="va">UserHash_graph</span><span class="op">)</span><span class="op">$</span><span class="va">name</span>, eigenvector <span class="op">=</span> <span class="fu">eigen_centrality</span><span class="op">(</span><span class="va">UserHash_graph</span>, directed <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">$</span><span class="va">vector</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># combine into a single dataframe</span></span>
+<span><span class="va">centrality_uh</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/merge.html">merge</a></span><span class="op">(</span><span class="va">degree_uh</span>, <span class="va">indegree_uh</span>, by <span class="op">=</span> <span class="st">"name"</span>, all <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">centrality_uh</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/merge.html">merge</a></span><span class="op">(</span><span class="va">centrality_uh</span>, <span class="va">outdegree_uh</span>, by <span class="op">=</span> <span class="st">"name"</span>, all <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">centrality_uh</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/merge.html">merge</a></span><span class="op">(</span><span class="va">centrality_uh</span>, <span class="va">closeness_uh</span>, by <span class="op">=</span> <span class="st">"name"</span>, all <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">centrality_uh</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/merge.html">merge</a></span><span class="op">(</span><span class="va">centrality_uh</span>, <span class="va">betweenness_uh</span>, by <span class="op">=</span> <span class="st">"name"</span>, all <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">centrality_uh</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/merge.html">merge</a></span><span class="op">(</span><span class="va">centrality_uh</span>, <span class="va">eigenvector_uh</span>, by <span class="op">=</span> <span class="st">"name"</span>, all <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Check out these two Gephi visualizations of the Hashtag-User Network. The first one is a wild and colorful representation of all the different topic clusters that emerged around various influencers in the ChatGPT conversation.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="images/GPT_userhash_1.png" class="img-fluid figure-img"></p>
+<figcaption>Hashtag-User Network of Twitter Conversations on ChatGPT: 1</figcaption></figure>
+</div>
+<p>But if you want to get to the juicy center of the network, the second visualization is where it’s at. We stripped away all the ChatGPT-related hashtags like #Chat and #ChatGPT to really hone in on the core of the network. No surprise, the main focus is on AI - not like we can escape it, right? But hey, check this out - turns out that our friend <span class="citation" data-cites="khulood_almani">@khulood_almani</span>, an Assistant Professor in Computer and Information from Saudi Arabia, seems to be a real chatterbox when it comes to the topic of AI.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="images/GPT_userhash_2.png" class="img-fluid figure-img"></p>
+<figcaption>Hashtag-User Network of Twitter Conversations on ChatGPT: 2</figcaption></figure>
+</div>
+</section><section id="hashtag-mention-network" class="level3" data-number="9.5.3"><h3 data-number="9.5.3" class="anchored" data-anchor-id="hashtag-mention-network">
+<span class="header-section-number">9.5.3</span> Hashtag-Mention Network</h3>
+<p>A Hashtag-Mention network is a type of undirected network that involves two types of nodes: hashtags and <span class="citation" data-cites="mentions">@mentions</span>. In this network, a link is created between a hashtag and an <span class="citation" data-cites="mention">@mention</span> if they co-occur in a tweet. The link weight is determined by the frequency of co-occurrence, meaning that the more often a hashtag and an <span class="citation" data-cites="mention">@mention</span> appear together, the stronger the link between them.</p>
+<p>The primary use of a hashtag-mention network is to explore the relational activity between mentioned users and hashtags, which allows for the identification of users who are considered experts around particular topics. By analyzing this network, one can understand which hashtags are frequently mentioned together and which users tend to be mentioned together with certain hashtags.</p>
+<div class="cell">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># extract hashtag &amp; mention and drop NAs</span></span>
+<span><span class="va">HashMe</span> <span class="op">&lt;-</span> <span class="va">tweets</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">hashtags</span>, <span class="va">mentions_screen_name</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="op">!</span><span class="va">hashtags</span> <span class="op">==</span> <span class="st">"NA"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="op">!</span><span class="va">mentions_screen_name</span> <span class="op">==</span> <span class="st">"NA"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># separate multiple hashtags into separate rows</span></span>
+<span><span class="va">HashMe</span> <span class="op">&lt;-</span> <span class="va">HashMe</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/separate_rows.html">separate_rows</a></span><span class="op">(</span><span class="va">hashtags</span>, sep <span class="op">=</span> <span class="st">","</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="op">!</span><span class="va">hashtags</span> <span class="op">==</span> <span class="st">""</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># separate multiple mentions into separate rows</span></span>
+<span><span class="va">HashMe</span> <span class="op">&lt;-</span> <span class="va">HashMe</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/separate_rows.html">separate_rows</a></span><span class="op">(</span><span class="va">mentions_screen_name</span>, sep <span class="op">=</span> <span class="st">","</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="op">!</span><span class="va">mentions_screen_name</span> <span class="op">==</span> <span class="st">""</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># create hashtag-mention network data frame</span></span>
+<span><span class="va">HashMe_net</span> <span class="op">&lt;-</span> <span class="va">HashMe</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">hashtags</span>, <span class="va">mentions_screen_name</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarize</a></span><span class="op">(</span>weight <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html">n</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">ungroup</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># rename columns to source and target</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">HashMe_net</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"source"</span>, <span class="st">"target"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">#export the hashtag-mention network</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/write.table.html">write.csv</a></span><span class="op">(</span><span class="va">HashMe_net</span>, <span class="st">"HashMe_net.csv"</span>, row.names<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># create undirected graph</span></span>
+<span><span class="va">HashMe_graph</span> <span class="op">&lt;-</span> <span class="fu">graph_from_data_frame</span><span class="op">(</span><span class="va">HashMe_net</span>, directed <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Aggregate graph information</span></span>
+<span><span class="va">graph_info_um</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span></span>
+<span>  Nodes <span class="op">=</span> <span class="fu">vcount</span><span class="op">(</span><span class="va">HashMe_graph</span><span class="op">)</span>,</span>
+<span>  Edges <span class="op">=</span> <span class="fu">ecount</span><span class="op">(</span><span class="va">HashMe_graph</span><span class="op">)</span>,</span>
+<span>  Avg_Link_Weight <span class="op">=</span> <span class="fu">ecount</span><span class="op">(</span><span class="va">HashMe_graph</span><span class="op">)</span><span class="op">/</span><span class="fu">vcount</span><span class="op">(</span><span class="va">HashMe_graph</span><span class="op">)</span>,</span>
+<span>  Density <span class="op">=</span> <span class="fu">edge_density</span><span class="op">(</span><span class="va">HashMe_graph</span>, loops <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># View graph information</span></span>
+<span><span class="va">graph_info_um</span></span>
+<span></span>
+<span><span class="co">#Centrality</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>scipen <span class="op">=</span> <span class="fl">999</span><span class="op">)</span> <span class="co"># turn off scientific notation for all variables</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">4</span><span class="op">)</span> <span class="co"># define the digits</span></span>
+<span></span>
+<span><span class="co"># calculate centrality measures</span></span>
+<span><span class="va">degree_um</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>name <span class="op">=</span> <span class="fu">V</span><span class="op">(</span><span class="va">HashMe_graph</span><span class="op">)</span><span class="op">$</span><span class="va">name</span>, degree <span class="op">=</span> <span class="fu">degree</span><span class="op">(</span><span class="va">HashMe_graph</span>, mode <span class="op">=</span> <span class="st">"total"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">indegree_um</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>name <span class="op">=</span> <span class="fu">V</span><span class="op">(</span><span class="va">HashMe_graph</span><span class="op">)</span><span class="op">$</span><span class="va">name</span>, indegree <span class="op">=</span> <span class="fu">degree</span><span class="op">(</span><span class="va">HashMe_graph</span>, mode <span class="op">=</span> <span class="st">"in"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">outdegree_um</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>name <span class="op">=</span> <span class="fu">V</span><span class="op">(</span><span class="va">HashMe_graph</span><span class="op">)</span><span class="op">$</span><span class="va">name</span>, outdegree <span class="op">=</span> <span class="fu">degree</span><span class="op">(</span><span class="va">HashMe_graph</span>, mode <span class="op">=</span> <span class="st">"out"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">closeness_um</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>name <span class="op">=</span> <span class="fu">V</span><span class="op">(</span><span class="va">HashMe_graph</span><span class="op">)</span><span class="op">$</span><span class="va">name</span>, closeness <span class="op">=</span> <span class="fu">closeness</span><span class="op">(</span><span class="va">HashMe_graph</span>, mode <span class="op">=</span> <span class="st">"total"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">betweenness_um</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>name <span class="op">=</span> <span class="fu">V</span><span class="op">(</span><span class="va">HashMe_graph</span><span class="op">)</span><span class="op">$</span><span class="va">name</span>, betweenness <span class="op">=</span> <span class="fu">betweenness</span><span class="op">(</span><span class="va">HashMe_graph</span>, directed <span class="op">=</span> <span class="cn">FALSE</span>, normalized <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">eigenvector_um</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>name <span class="op">=</span> <span class="fu">V</span><span class="op">(</span><span class="va">HashMe_graph</span><span class="op">)</span><span class="op">$</span><span class="va">name</span>, eigenvector <span class="op">=</span> <span class="fu">eigen_centrality</span><span class="op">(</span><span class="va">HashMe_graph</span>, directed <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">$</span><span class="va">vector</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># combine into a single dataframe</span></span>
+<span><span class="va">centrality_um</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/merge.html">merge</a></span><span class="op">(</span><span class="va">degree_um</span>, <span class="va">indegree_um</span>, by <span class="op">=</span> <span class="st">"name"</span>, all <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">centrality_um</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/merge.html">merge</a></span><span class="op">(</span><span class="va">centrality_um</span>, <span class="va">outdegree_um</span>, by <span class="op">=</span> <span class="st">"name"</span>, all <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">centrality_um</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/merge.html">merge</a></span><span class="op">(</span><span class="va">centrality_um</span>, <span class="va">closeness_um</span>, by <span class="op">=</span> <span class="st">"name"</span>, all <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">centrality_um</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/merge.html">merge</a></span><span class="op">(</span><span class="va">centrality_um</span>, <span class="va">betweenness_um</span>, by <span class="op">=</span> <span class="st">"name"</span>, all <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">centrality_um</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/merge.html">merge</a></span><span class="op">(</span><span class="va">centrality_um</span>, <span class="va">eigenvector_um</span>, by <span class="op">=</span> <span class="st">"name"</span>, all <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># plot the top 10 nodes for different centrality measure</span></span>
+<span><span class="va">top_degree_um</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">centrality_um</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/order.html">order</a></span><span class="op">(</span><span class="op">-</span><span class="va">centrality_um</span><span class="op">$</span><span class="va">degree</span><span class="op">)</span>,<span class="op">]</span>, <span class="fl">10</span><span class="op">)</span></span>
+<span><span class="va">top_indegree_um</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">centrality_um</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/order.html">order</a></span><span class="op">(</span><span class="op">-</span><span class="va">centrality_um</span><span class="op">$</span><span class="va">indegree</span><span class="op">)</span>,<span class="op">]</span>, <span class="fl">10</span><span class="op">)</span></span>
+<span><span class="va">top_outdegree_um</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">centrality_um</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/order.html">order</a></span><span class="op">(</span><span class="op">-</span><span class="va">centrality_um</span><span class="op">$</span><span class="va">outdegree</span><span class="op">)</span>,<span class="op">]</span>, <span class="fl">10</span><span class="op">)</span></span>
+<span><span class="va">top_closeness_um</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">centrality_um</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/order.html">order</a></span><span class="op">(</span><span class="op">-</span><span class="va">centrality_um</span><span class="op">$</span><span class="va">closeness</span><span class="op">)</span>,<span class="op">]</span>, <span class="fl">19</span><span class="op">)</span></span>
+<span><span class="va">top_betweenness_um</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">centrality_um</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/order.html">order</a></span><span class="op">(</span><span class="op">-</span><span class="va">centrality_um</span><span class="op">$</span><span class="va">betweenness</span><span class="op">)</span>,<span class="op">]</span>, <span class="fl">10</span><span class="op">)</span></span>
+<span><span class="va">top_eigenvector_um</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">centrality_um</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/order.html">order</a></span><span class="op">(</span><span class="op">-</span><span class="va">centrality_um</span><span class="op">$</span><span class="va">eigenvector</span><span class="op">)</span>,<span class="op">]</span>, <span class="fl">10</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">top_indegree_um</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/reorder.factor.html">reorder</a></span><span class="op">(</span><span class="va">name</span>, <span class="va">indegree</span><span class="op">)</span>, y <span class="op">=</span> <span class="va">indegree</span>, fill <span class="op">=</span> <span class="va">betweenness</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_bar</a></span><span class="op">(</span>stat <span class="op">=</span> <span class="st">"identity"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">"Top 10 nodes by indegree centrality"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">xlab</a></span><span class="op">(</span><span class="st">"Node"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span><span class="op">(</span><span class="st">"indegree"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>axis.text.x <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>angle <span class="op">=</span> <span class="fl">90</span>, vjust <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#top indegree refers to top mentions</span></span>
+<span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">top_outdegree_um</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/reorder.factor.html">reorder</a></span><span class="op">(</span><span class="va">name</span>, <span class="va">outdegree</span><span class="op">)</span>, y <span class="op">=</span> <span class="va">outdegree</span>, fill <span class="op">=</span> <span class="va">betweenness</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_bar</a></span><span class="op">(</span>stat <span class="op">=</span> <span class="st">"identity"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">"Top 10 nodes by outdegree centrality"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">xlab</a></span><span class="op">(</span><span class="st">"Node"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span><span class="op">(</span><span class="st">"outdegree"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>axis.text.x <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>angle <span class="op">=</span> <span class="fl">90</span>, vjust <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#top outdegree refers to top hashtags</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The <strong>axis.text.x</strong> refers to the x-axis labels, and element_text() is a function that allows you to set the text properties of an element in a plot. The angle argument rotates the labels by the specified angle (in degrees), while the vjust argument sets the vertical justification of the text to adjust the position of the labels. In this case, vjust = 0.5 centers the labels vertically.</p>
+<p>Therefore, theme(axis.text.x = element_text(angle = 90, vjust = 0.5)) is used to rotate the x-axis labels by 90 degrees and center them vertically in a ggplot2 chart. This is commonly used when the labels are long or numerous and overlap each other, making them difficult to read horizontally.</p>
+<p>Now, let’s see the network visualizations from Gephi.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="images/GPT_mentionhash.png" class="img-fluid figure-img"></p>
+<figcaption>Hashtag-Mention Network of Twitter Conversations on ChatGPT</figcaption></figure>
+</div>
+<p>Behold the grandeur of the ChatGPT network visualization, for it reveals that the vibrant topics swirling around this phenomenon were expertly guided by a diverse cast of influencers. The likes of <span class="citation" data-cites="OpenAI">@OpenAI</span>, <span class="citation" data-cites="YouTube">@YouTube</span>, <span class="citation" data-cites="Khulood_Almani">@Khulood_Almani</span>, <span class="citation" data-cites="enricomolinari">@enricomolinari</span>, <span class="citation" data-cites="FrRonconi">@FrRonconi</span>, <span class="citation" data-cites="sonu_monika">@sonu_monika</span>, <span class="citation" data-cites="Khulood_Alm">@Khulood_Alm</span>, <span class="citation" data-cites="DataChaz">@DataChaz</span>, <span class="citation" data-cites="Forbes">@Forbes</span>, and <span class="citation" data-cites="elonmusk">@elonmusk</span> loomed large as the virtuosos of the ChatGPT domain.</p>
+</section></section><section id="assignment" class="level2" data-number="9.6"><h2 data-number="9.6" class="anchored" data-anchor-id="assignment">
+<span class="header-section-number">9.6</span> Assignment</h2>
+<p>In this assignment, you will be analyzing social media conversations related to a topic of your choosing using Twitter data. Here are the steps you’ll need to follow:</p>
+<ol type="1">
+<li><p>Utilize your Twitter APIs to collect up to 5000 of the most recent tweets containing a hashtag of your choice.</p></li>
+<li><p>Use R to create a Twitter network. This could include networks such as a mention network, message network, user-source network, co-hashtag network, hashtag-user network, or hashtag-mention network.</p></li>
+<li><p>Import the Twitter network data into Gephi to create network visualizations.</p></li>
+<li><p>Create a Quarto publication that includes the code for collecting and analyzing your Twitter conversation data, as well as the network visualizations produced from Gephi. Make sure to use appropriate chunk options in your Quarto publication to hide your Twitter API keys and tokens, and to prevent messages and warnings generated by your code. Additionally, include a 100-word interpretation of your network analysis results and network visualization that you find interesting.</p></li>
+</ol>
+<p>By completing these steps, you will gain valuable experience in analyzing social media conversations and visualizing networks. Good luck!</p>
 
 
-
-
-
-</main> <!-- /main -->
-<style>
+</section></main><!-- /main --><style>
    #mtcars-btn {
      font-size: xx-small;
      padding: 0.2rem 0.3rem !important;
@@ -237,8 +836,6 @@ ul.task-list li input[type="checkbox"] {
    }
    
 </style>
-
-
 <script>
   function add_button() {
     /* get the R generated button by its id */
@@ -252,8 +849,7 @@ ul.task-list li input[type="checkbox"] {
   }
   
   window.onload = add_button();
-</script>
-<script id="quarto-html-after-body" type="application/javascript">
+</script><script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
     const mode = bsSheetEl.getAttribute("data-mode");
@@ -666,22 +1262,19 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
   }
 });
-</script>
-<nav class="page-navigation">
-  <div class="nav-page nav-page-previous">
+</script><nav class="page-navigation"><div class="nav-page nav-page-previous">
       <a href="./text_analysis.html" class="pagination-link" aria-label="install.packages('gutenbergr')">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">install.packages(‘gutenbergr’)</span></span>
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">install.packages(‘gutenbergr’)</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
       <a href="./geo_spatial_analysis.html" class="pagination-link" aria-label="Geo-Spatial Analysis and Visualization">
-        <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Geo-Spatial Analysis and Visualization</span></span> <i class="bi bi-arrow-right-short"></i>
+        <span class="nav-page-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Geo-Spatial Analysis and Visualization</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
 </div> <!-- /content -->
-<footer class="footer">
-  <div class="nav-footer">
+<footer class="footer"><div class="nav-footer">
     <div class="nav-footer-left">
 <p>R for Media Analytics was written by Jenny Jiang &amp; Brian Walsh.</p>
 </div>   
@@ -693,8 +1286,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </div>
   </div>
 </footer>
-
-
 
 
 </body></html>

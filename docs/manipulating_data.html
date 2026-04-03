@@ -5,7 +5,7 @@
 <meta name="generator" content="quarto-1.4.553">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <meta name="author" content="Jenny Jiang &amp; Brian Walsh">
-<title>R for Media Analytics - 4&nbsp; Manipulating Data</title>
+<title>R for Media Analytics - 7&nbsp; Manipulating Data</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -62,7 +62,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
 <link href="./text_analysis.html" rel="next">
-<link href="./basic_statistics.html" rel="prev">
+<link href="./statistical_analysis_multi.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -106,7 +106,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./manipulating_data.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Manipulating Data</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./manipulating_data.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Manipulating Data</span></a></li></ol></nav>
         <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
@@ -155,38 +155,56 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./statistical_analysis_single.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Statistical Analyses of a Single Variable</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./statistical_analysis_two.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Statistical Analyses of Two Variables</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./statistical_analysis_multi.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Statistical Analyses of Three or More Variables &amp; Modelling</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./manipulating_data.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Manipulating Data</span></span></a>
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Manipulating Data</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./text_analysis.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">install.packages(‘gutenbergr’)</span></span></a>
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">install.packages(‘gutenbergr’)</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./network_analysis.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Network Analysis</span></span></a>
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Social Network Analysis</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./geo_spatial_analysis.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Geo-Spatial Analysis and Visualization</span></span></a>
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Geo-Spatial Analysis and Visualization</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./python_ai_intro.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Introduction to Python and AI</span></span></a>
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Introduction to Python and AI</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./publishing.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Publishing</span></span></a>
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Publishing</span></span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
@@ -201,7 +219,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./common_errors.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Common Errors</span></span></a>
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Common Errors</span></span></a>
   </div>
 </li>
       </ul>
@@ -215,20 +233,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul>
 <li>
-<a href="#creating-subsetted-data" id="toc-creating-subsetted-data" class="nav-link active" data-scroll-target="#creating-subsetted-data"><span class="header-section-number">4.1</span> Creating Subsetted Data</a>
+<a href="#creating-subsetted-data" id="toc-creating-subsetted-data" class="nav-link active" data-scroll-target="#creating-subsetted-data"><span class="header-section-number">7.1</span> Creating Subsetted Data</a>
   <ul class="collapse">
-<li><a href="#mutate" id="toc-mutate" class="nav-link" data-scroll-target="#mutate"><span class="header-section-number">4.1.1</span> Mutate</a></li>
-  <li><a href="#group_by-summarize" id="toc-group_by-summarize" class="nav-link" data-scroll-target="#group_by-summarize"><span class="header-section-number">4.1.2</span> Group_by , Summarize()</a></li>
+<li><a href="#mutate" id="toc-mutate" class="nav-link" data-scroll-target="#mutate"><span class="header-section-number">7.1.1</span> Mutate</a></li>
+  <li><a href="#group_by-summarize" id="toc-group_by-summarize" class="nav-link" data-scroll-target="#group_by-summarize"><span class="header-section-number">7.1.2</span> Group_by , Summarize()</a></li>
   </ul>
 </li>
   <li>
-<a href="#working-with-strings" id="toc-working-with-strings" class="nav-link" data-scroll-target="#working-with-strings"><span class="header-section-number">4.2</span> Working with Strings</a>
+<a href="#working-with-strings" id="toc-working-with-strings" class="nav-link" data-scroll-target="#working-with-strings"><span class="header-section-number">7.2</span> Working with Strings</a>
   <ul class="collapse">
-<li><a href="#practical-applications-of-stringr" id="toc-practical-applications-of-stringr" class="nav-link" data-scroll-target="#practical-applications-of-stringr"><span class="header-section-number">4.2.1</span> Practical Applications of Stringr</a></li>
-  <li><a href="#average-name-length-over-time" id="toc-average-name-length-over-time" class="nav-link" data-scroll-target="#average-name-length-over-time"><span class="header-section-number">4.2.2</span> Average name length over time</a></li>
-  <li><a href="#revisiting-summarize" id="toc-revisiting-summarize" class="nav-link" data-scroll-target="#revisiting-summarize"><span class="header-section-number">4.2.3</span> Revisiting summarize()</a></li>
-  <li><a href="#additional-functions" id="toc-additional-functions" class="nav-link" data-scroll-target="#additional-functions"><span class="header-section-number">4.2.4</span> Additional Functions</a></li>
-  <li><a href="#case-study-born-without-a-proper-name" id="toc-case-study-born-without-a-proper-name" class="nav-link" data-scroll-target="#case-study-born-without-a-proper-name"><span class="header-section-number">4.2.5</span> Case Study: Born Without A (Proper) Name</a></li>
+<li><a href="#practical-applications-of-stringr" id="toc-practical-applications-of-stringr" class="nav-link" data-scroll-target="#practical-applications-of-stringr"><span class="header-section-number">7.2.1</span> Practical Applications of Stringr</a></li>
+  <li><a href="#average-name-length-over-time" id="toc-average-name-length-over-time" class="nav-link" data-scroll-target="#average-name-length-over-time"><span class="header-section-number">7.2.2</span> Average name length over time</a></li>
+  <li><a href="#revisiting-summarize" id="toc-revisiting-summarize" class="nav-link" data-scroll-target="#revisiting-summarize"><span class="header-section-number">7.2.3</span> Revisiting summarize()</a></li>
+  <li><a href="#additional-functions" id="toc-additional-functions" class="nav-link" data-scroll-target="#additional-functions"><span class="header-section-number">7.2.4</span> Additional Functions</a></li>
+  <li><a href="#case-study-born-without-a-proper-name" id="toc-case-study-born-without-a-proper-name" class="nav-link" data-scroll-target="#case-study-born-without-a-proper-name"><span class="header-section-number">7.2.5</span> Case Study: Born Without A (Proper) Name</a></li>
   </ul>
 </li>
   </ul></nav>
@@ -236,7 +254,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <!-- main -->
 <main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
 <h1 class="title">
-<span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Manipulating Data</span>
+<span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Manipulating Data</span>
 </h1>
 </div>
 
@@ -251,8 +269,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   
 
 
-</header><section id="creating-subsetted-data" class="level2" data-number="4.1"><h2 data-number="4.1" class="anchored" data-anchor-id="creating-subsetted-data">
-<span class="header-section-number">4.1</span> Creating Subsetted Data</h2>
+</header><section id="creating-subsetted-data" class="level2" data-number="7.1"><h2 data-number="7.1" class="anchored" data-anchor-id="creating-subsetted-data">
+<span class="header-section-number">7.1</span> Creating Subsetted Data</h2>
 <p>I encourage you to play around with <em>babynames</em> and get more comfortable deliberately modifying data before continuing. Or, if you’re getting sick of babies, you can use these tidyverse functions on any dataset. Let’s try using one of R’s built-in ones, <strong>mtcars:</strong></p>
 <p>The data is lots of older car performance statistics. Let’s try comparing weight to mpg:</p>
 <div class="cell">
@@ -302,8 +320,8 @@ colour.
 </div>
 </div>
 <p>Great. On to mutate().</p>
-<section id="mutate" class="level3" data-number="4.1.1"><h3 data-number="4.1.1" class="anchored" data-anchor-id="mutate">
-<span class="header-section-number">4.1.1</span> Mutate</h3>
+<section id="mutate" class="level3" data-number="7.1.1"><h3 data-number="7.1.1" class="anchored" data-anchor-id="mutate">
+<span class="header-section-number">7.1.1</span> Mutate</h3>
 <p>While <em>babynames</em> has five columns, or variables, to play with, some observations require creating a <em>calculated field</em> of content - essentially generating a sixth column, in the case of babynames, to show something already in the data but not made clear.</p>
 <p><em>Babynames</em> does not have <em>rankings</em> of popular names for each year. Could we create that column? Sure! When we rearrange our data in descending order of prop, we have essentially created rankings based on row number- we just need to ‘mutate’ the data frame to show it.</p>
 <div class="cell">
@@ -403,8 +421,8 @@ colour.
 </div>
 </div>
 <p>Wow! What could we possibly blame this on? The popularity of Shirley Temple? There’s no way to quantitatively measure that, even if we think it to be true.</p>
-</section><section id="group_by-summarize" class="level3" data-number="4.1.2"><h3 data-number="4.1.2" class="anchored" data-anchor-id="group_by-summarize">
-<span class="header-section-number">4.1.2</span> Group_by , Summarize()</h3>
+</section><section id="group_by-summarize" class="level3" data-number="7.1.2"><h3 data-number="7.1.2" class="anchored" data-anchor-id="group_by-summarize">
+<span class="header-section-number">7.1.2</span> Group_by , Summarize()</h3>
 <p>Similar to creating a pivot table, the summarize() command reshapes your data by creating an <em>entirely new dataset</em> based on the parameters you specify. It is often used with the function <em>group_by()</em>. How is this useful, and how is it different from <em>mutate?</em></p>
 <p>An example will help. If we look at most popular names of the Silent Generation, we see a lot of names repeated:</p>
 <div class="cell">
@@ -476,8 +494,8 @@ How have ‘virtue names,’ like ‘Charity,’ ‘Temperance,’ or ‘Faith�
 <li>
 What are the <em>total number of names</em> per year, and is this total increasing or decreasing?
 </li>
-</ul></section></section><section id="working-with-strings" class="level2" data-number="4.2"><h2 data-number="4.2" class="anchored" data-anchor-id="working-with-strings">
-<span class="header-section-number">4.2</span> Working with Strings</h2>
+</ul></section></section><section id="working-with-strings" class="level2" data-number="7.2"><h2 data-number="7.2" class="anchored" data-anchor-id="working-with-strings">
+<span class="header-section-number">7.2</span> Working with Strings</h2>
 <div class="cell">
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/hadley/babynames">babynames</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
@@ -546,8 +564,8 @@ Let’s replace every instance of ‘l’ with ‘x’
 </div>
 </div>
 <p>R returns the position of “Pear” in the list.</p>
-<section id="practical-applications-of-stringr" class="level3" data-number="4.2.1"><h3 data-number="4.2.1" class="anchored" data-anchor-id="practical-applications-of-stringr">
-<span class="header-section-number">4.2.1</span> Practical Applications of Stringr</h3>
+<section id="practical-applications-of-stringr" class="level3" data-number="7.2.1"><h3 data-number="7.2.1" class="anchored" data-anchor-id="practical-applications-of-stringr">
+<span class="header-section-number">7.2.1</span> Practical Applications of Stringr</h3>
 <p>Let’s apply more Stringr concepts to a body of text. Where could we find text? How would we get text into R?</p>
 <p>One way would be a ‘web scrape’ - programmatically grabbing all the relevant text off of a page, or a series of pages - think Amazon product reviews.</p>
 <p>Another would be to import a body of text, like a .txt file, into R, and then break it up into individual words - more on this in the next chapter.</p>
@@ -25685,8 +25703,8 @@ Let’s replace every instance of ‘l’ with ‘x’
 <div class="sourceCode" id="cb49"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span>    <span class="va">babynames</span> <span class="op">|&gt;</span> </span>
 <span>      <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>length <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_length.html">str_length</a></span><span class="op">(</span><span class="va">name</span><span class="op">)</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="va">babynames_length</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</section><section id="average-name-length-over-time" class="level3" data-number="4.2.2"><h3 data-number="4.2.2" class="anchored" data-anchor-id="average-name-length-over-time">
-<span class="header-section-number">4.2.2</span> Average name length over time</h3>
+</section><section id="average-name-length-over-time" class="level3" data-number="7.2.2"><h3 data-number="7.2.2" class="anchored" data-anchor-id="average-name-length-over-time">
+<span class="header-section-number">7.2.2</span> Average name length over time</h3>
 <p>Now, if we want to see the average length of a names over time, the code gets a little mroe advanced - note the <em>mean</em> function we haven’t used like this before:</p>
 <div class="cell">
 <div class="sourceCode" id="cb50"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span>    <span class="va">babynames_length</span> <span class="op">|&gt;</span> </span>
@@ -25733,8 +25751,8 @@ Let’s replace every instance of ‘l’ with ‘x’
 </div>
 </div>
 </div>
-</section><section id="revisiting-summarize" class="level3" data-number="4.2.3"><h3 data-number="4.2.3" class="anchored" data-anchor-id="revisiting-summarize">
-<span class="header-section-number">4.2.3</span> Revisiting summarize()</h3>
+</section><section id="revisiting-summarize" class="level3" data-number="7.2.3"><h3 data-number="7.2.3" class="anchored" data-anchor-id="revisiting-summarize">
+<span class="header-section-number">7.2.3</span> Revisiting summarize()</h3>
 <p>As mentioned in the last Chapter, summarize() is confusing. In the case of babynames, you’ll know to use it when you keep getting the same results over and over, and you want to group those names together. Let’s take a look at this issue by calculating the most common 3-letter names:</p>
 <div class="cell">
 <div class="sourceCode" id="cb54"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span>    <span class="va">babynames_length</span> <span class="op">|&gt;</span> </span>
@@ -25863,8 +25881,8 @@ Let’s replace every instance of ‘l’ with ‘x’
 </div>
 <p>By the look of these names, it’s clear that most of them are actually <em>longer</em> than 15 characters - but 15 characters is the cut-off point for the column. Thus, we cannot accurately estimate the most common 15-letter names.</p>
 <p>Along similar lines, an analysis of the methodology behind <em>babynames</em> shows that only names that have <em>at least 5 instances in a given year</em> are recorded. So it’d be similarly futile for us to attempt to measure the <em>rarest</em> names, as they are excluded in the database. (It also helps clarify why some rarer names seem to ‘disappear’ in certain years.)</p>
-</section><section id="additional-functions" class="level3" data-number="4.2.4"><h3 data-number="4.2.4" class="anchored" data-anchor-id="additional-functions">
-<span class="header-section-number">4.2.4</span> Additional Functions</h3>
+</section><section id="additional-functions" class="level3" data-number="7.2.4"><h3 data-number="7.2.4" class="anchored" data-anchor-id="additional-functions">
+<span class="header-section-number">7.2.4</span> Additional Functions</h3>
 <p>OK, what else can stringr do?</p>
 <p>How about the average number of vowels per name?</p>
 <div class="cell">
@@ -28681,8 +28699,8 @@ Let’s replace every instance of ‘l’ with ‘x’
 </div>
 </div>
 </div>
-</section><section id="case-study-born-without-a-proper-name" class="level3" data-number="4.2.5"><h3 data-number="4.2.5" class="anchored" data-anchor-id="case-study-born-without-a-proper-name">
-<span class="header-section-number">4.2.5</span> Case Study: Born Without A (Proper) Name</h3>
+</section><section id="case-study-born-without-a-proper-name" class="level3" data-number="7.2.5"><h3 data-number="7.2.5" class="anchored" data-anchor-id="case-study-born-without-a-proper-name">
+<span class="header-section-number">7.2.5</span> Case Study: Born Without A (Proper) Name</h3>
 <p>There are a number of names in the database that are totally anonymous. When, and why?</p>
 <div class="cell">
 <div class="sourceCode" id="cb72"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">babynames</span> <span class="op">|&gt;</span> </span>
@@ -29166,13 +29184,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
 });
 </script><nav class="page-navigation"><div class="nav-page nav-page-previous">
-      <a href="./basic_statistics.html" class="pagination-link" aria-label="Basic Statistics">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Basic Statistics</span></span>
+      <a href="./statistical_analysis_multi.html" class="pagination-link" aria-label="Statistical Analyses of Three or More Variables &amp; Modelling">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Statistical Analyses of Three or More Variables &amp; Modelling</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
       <a href="./text_analysis.html" class="pagination-link" aria-label="install.packages('gutenbergr')">
-        <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">install.packages(‘gutenbergr’)</span></span> <i class="bi bi-arrow-right-short"></i>
+        <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">install.packages(‘gutenbergr’)</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
