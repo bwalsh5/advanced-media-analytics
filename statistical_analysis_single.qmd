@@ -362,7 +362,7 @@ Table 3.11 lists the **range** and **Inter-quartile range (IQR)** for the number
 ```{r}
 #Calculate range for each col
 range_report <- my_data |>
-  summarise_if(is.numeric, range)
+  reframe(across(where(is.numeric), range))
 
 #Calculate Inter quartile range (IQR) for each col
 range_report_interquartile <- my_data |>
