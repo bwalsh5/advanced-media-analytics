@@ -271,15 +271,16 @@ The `addLayersControl()` function adds radio buttons to the map so readers can s
 
 `tidycensus` handles Census data beautifully, but often you'll want to overlay data from other sources — for example, historical boundaries from a city open data portal or academic dataset. Since `tidycensus` returns standard `sf` objects, you can layer any spatial data on the same map.
 
-Here we map the [Home Owners' Loan Corporation (HOLC) redlining boundaries](https://dsl.richmond.edu/panorama/redlining/) for Los Angeles, from the [Mapping Inequality project](https://dsl.richmond.edu/panorama/redlining/) at the University of Richmond. These 1930s-era maps graded neighborhoods A–D, with "D" (red) areas systematically denied mortgage lending — a practice with lasting effects on wealth and segregation. The data is loaded directly from their public GeoJSON endpoint:
+Here we map the Home Owners' Loan Corporation (HOLC) redlining boundaries for Los Angeles, from the [Mapping Inequality project](https://dsl.richmond.edu/panorama/redlining/) at the University of Richmond. These 1930s-era maps graded neighborhoods A–D, with "D" (red) areas systematically denied mortgage lending — a practice with lasting effects on wealth and segregation.
 
-```{r, redlining}
-me_la <- st_read(
-  paste0(
-    "https://dsl.richmond.edu/panorama/redlining/",
-    "static/downloads/geojson/CALosAngeles1939.geojson"
-  )
-)
+Download the GeoJSON for any city from their downloads page:
+
+<https://dsl.richmond.edu/panorama/redlining/#loc=5/39.1/-94.58&adview=full>
+
+Save the file locally, then load it with `st_read()`:
+
+```{r, redlining, eval=FALSE}
+me <- st_read("CALosAngeles1939.geojson")
 
 leaflet() |>
   addTiles(
@@ -293,7 +294,7 @@ leaflet() |>
     )
   ) |>
   addPolygons(
-    data = me_la,
+    data = me,
     color = ~fill,
     fillColor = ~fill,
     fillOpacity = 0.6,
