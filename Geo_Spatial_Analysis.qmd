@@ -317,7 +317,8 @@ food <- st_read(
     "https://hub.arcgis.com/api/v3/datasets/",
     "53b8a1c653a74c92b2de23a5d7bf04a0_0/downloads/data",
     "?format=geojson&spatialRefId=4326&where=1%3D1"
-  )
+  ),
+  quiet = TRUE
 )
 
 pal_restaurants <- colorNumeric(
