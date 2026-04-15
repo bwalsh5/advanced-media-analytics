@@ -362,7 +362,8 @@ england <- st_read(
     "https://raw.githubusercontent.com/martinjc/",
     "UK-GeoJSON/refs/heads/master/json/",
     "administrative/eng/lad.json"
-  )
+  ),
+  quiet = TRUE
 )
 
 england <- st_simplify(england, dTolerance = 100)
