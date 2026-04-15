@@ -2,23 +2,3 @@ p.caption {
   color: #777;
   margin-top: 10px;
 }
-p code {
-  white-space: inherit;
-}
-pre {
-  word-break: normal;
-  word-wrap: normal;
-  max-height: 320px;
-  overflow-y: auto;
-}
-pre code {
-  white-space: inherit;
-}
-pre[class] {
-  max-height: 320px;
-}
-.scroll-300 {
-  max-height: 300px;
-  overflow-y: auto;
-  background-color: inherit;
-}
