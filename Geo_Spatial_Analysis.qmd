@@ -273,14 +273,12 @@ The `addLayersControl()` function adds radio buttons to the map so readers can s
 
 Here we map the Home Owners' Loan Corporation (HOLC) redlining boundaries for Los Angeles, from the [Mapping Inequality project](https://dsl.richmond.edu/panorama/redlining/) at the University of Richmond. These 1930s-era maps graded neighborhoods A–D, with "D" (red) areas systematically denied mortgage lending — a practice with lasting effects on wealth and segregation.
 
-Download the GeoJSON for any city from their downloads page:
+The full dataset is available for download from the [Mapping Inequality project](https://dsl.richmond.edu/panorama/redlining/#loc=5/39.1/-94.58&adview=full) at the University of Richmond. Download `mappinginequality.json` and place it in your project folder. Since it contains all U.S. cities, we filter to Los Angeles after loading:
 
-<https://dsl.richmond.edu/panorama/redlining/#loc=5/39.1/-94.58&adview=full>
+```{r, redlining}
+me <- st_read("mappinginequality.json", quiet = TRUE)
 
-Save the file locally, then load it with `st_read()`:
-
-```{r, redlining, eval=FALSE}
-me <- st_read("CALosAngeles1939.geojson")
+me |> filter(city == "Los Angeles") -> me_la
 
 leaflet() |>
   addTiles(
@@ -294,7 +292,7 @@ leaflet() |>
     )
   ) |>
   addPolygons(
-    data = me,
+    data = me_la,
     color = ~fill,
     fillColor = ~fill,
     fillOpacity = 0.6,
