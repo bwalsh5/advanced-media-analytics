@@ -6,14 +6,13 @@ p code {
   white-space: inherit;
 }
 pre {
-  white-space: pre-wrap;
-  word-break: break-word;
-  word-wrap: break-word;
+  word-break: normal;
+  word-wrap: normal;
   max-height: 320px;
   overflow-y: auto;
 }
 pre code {
-  white-space: pre-wrap;
+  white-space: inherit;
 }
 pre[class] {
   max-height: 320px;

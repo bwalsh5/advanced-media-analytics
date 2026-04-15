@@ -468,8 +468,12 @@ colour.
 <span>  <span class="fu">group_by</span><span class="op">(</span><span class="va">year</span>, <span class="va">sex</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">summarise</span><span class="op">(</span>name_count <span class="op">=</span> <span class="fu">n_distinct</span><span class="op">(</span><span class="va">name</span><span class="op">)</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="va">distinct</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>`summarise()` has grouped output by 'year'. You can override using the
-`.groups` argument.</code></pre>
+<pre><code>`summarise()` has regrouped the output.
+ℹ Summaries were computed grouped by year and sex.
+ℹ Output is grouped by year.
+ℹ Use `summarise(.groups = "drop_last")` to silence this message.
+ℹ Use `summarise(.by = c(year, sex))` for per-operation grouping
+  (`?dplyr::dplyr_by`) instead.</code></pre>
 </div>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">ggplot</span><span class="op">(</span><span class="va">distinct</span>, <span class="fu">aes</span><span class="op">(</span><span class="va">year</span>, <span class="va">name_count</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu">geom_line</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span><span class="fu">facet_wrap</span><span class="op">(</span><span class="op">~</span><span class="va">sex</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
