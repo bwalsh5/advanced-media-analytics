@@ -1,7 +1,7 @@
 # Geo-Spatial Analysis and Visualization
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
 library(tidyverse)
 library(sf)
 library(leaflet)
@@ -80,11 +80,11 @@ The core function is `get_acs()`. Here's what a basic call looks like:
 
 ```{r, get_acs_example, eval=FALSE}
 location <- get_acs(
-  state = "",        # state abbreviation, e.g. "NC"
-  county = "",       # county name (optional)
-  geography = "",    # "state", "county", or "tract"
-  variables = "",    # ACS variable code
-  geometry = TRUE,   # include map geometry
+  state = "",       # state abbreviation, e.g. "NC"
+  county = "",      # county name (optional)
+  geography = "",   # "state", "county", or "tract"
+  variables = "",   # ACS variable code
+  geometry = TRUE,  # include map geometry
   year = 2022
 )
 ```
@@ -111,10 +111,10 @@ income |>
   st_transform('+proj=longlat +datum=WGS84') -> income
 ```
 
-Now define a color palette. `colorNumeric` maps a continuous variable (income) to a color gradient:
+Now define a color palette. `colorBin` groups a continuous variable (income) into a fixed number of color bins:
 
-```{r, palette}
-pal <- colorBin("Blues", domain = income$estimate, 5)
+```{r, clt_palette}
+pal_clt <- colorBin("Blues", domain = income$estimate, 5)
 ```
 
 And map it:
@@ -126,7 +126,7 @@ leaflet() |>
     data = income,
     color = "black",
     weight = 1,
-    fillColor = ~pal(income$estimate),
+    fillColor = ~pal_clt(income$estimate),
     fillOpacity = 0.7,
     label = ~paste0("$", income$estimate)
   )
@@ -149,16 +149,26 @@ snap <- get_acs(
 ) |>
   st_transform(4326)
 
-pal_snap <- colorBin("YlGnBu", domain = snap$estimate, na.color = "#cccccc")
+pal_snap <- colorBin(
+  "YlGnBu",
+  domain = snap$estimate,
+  na.color = "#cccccc"
+)
 
 leaflet(snap) |>
   addTiles() |>
   addPolygons(
     fillColor = ~pal_snap(estimate),
-    weight = 0.5, color = "#555", opacity = 1,
+    weight = 0.5,
+    color = "#555",
+    opacity = 1,
     fillOpacity = 0.8,
     label = ~paste0(NAME, ": ", estimate, "%"),
-    highlightOptions = highlightOptions(weight = 2, color = "#333", bringToFront = TRUE)
+    highlightOptions = highlightOptions(
+      weight = 2,
+      color = "#333",
+      bringToFront = TRUE
+    )
   )
 ```
 
@@ -168,110 +178,151 @@ This maps the percentage of households receiving SNAP benefits in each NC county
 
 One of the most powerful things you can do with `tidycensus` is pull multiple years at once using `map_dfr()`, which applies a function to each year and stacks the results into one data frame. Then we can use Leaflet's layer controls to let the reader switch between years.
 
-Here's an example mapping per-capita income in Philadelphia by census tract from 2019 to 2023:
+Here we map per-capita income in Philadelphia by census tract from 2019 to 2023:
 
-```{r, philly, eval=FALSE}
+```{r, philly}
 years_to_get <- 2019:2023
 
-philly <- map_dfr(years_to_get, \(year) {
+philly <- map_dfr(years_to_get, \(yr) {
   get_acs(
     geography = "tract",
     variables = c(pop = "B01003_001", pc_inc = "B19301_001"),
-    state = "PA", county = "Philadelphia",
-    survey = "acs5", geometry = TRUE,
-    year = year, output = "wide"
+    state = "PA",
+    county = "Philadelphia",
+    survey = "acs5",
+    geometry = TRUE,
+    year = yr,
+    output = "wide"
   ) |>
-    transmute(GEOID, NAME, year,
-              geometry,
-              pop = popE,
-              income_per_capita = pc_incE)
+    transmute(
+      GEOID, NAME, yr,
+      geometry,
+      pop = popE,
+      income_per_capita = pc_incE
+    )
 })
 ```
 
-Split the combined data frame into one per year:
+Split the combined data frame into one per year, and define a palette across the full range of values so colors stay consistent when toggling between years:
 
-```{r, philly_split, eval=FALSE}
-income2019 <- philly |> filter(year == 2019)
-income2020 <- philly |> filter(year == 2020)
-income2021 <- philly |> filter(year == 2021)
-income2022 <- philly |> filter(year == 2022)
-income2023 <- philly |> filter(year == 2023)
+```{r, philly_split}
+income2019 <- philly |> filter(yr == 2019)
+income2020 <- philly |> filter(yr == 2020)
+income2021 <- philly |> filter(yr == 2021)
+income2022 <- philly |> filter(yr == 2022)
+income2023 <- philly |> filter(yr == 2023)
 
-pal <- colorNumeric("Greens", domain = philly$income_per_capita)
+pal_philly <- colorNumeric(
+  "Greens",
+  domain = philly$income_per_capita
+)
 ```
 
 Then build a map with a layer control that lets the reader select a year:
 
-```{r, philly_map, eval=FALSE}
+```{r, philly_map}
 leaflet() |>
   addTiles() |>
-  addPolygons(data = income2019, group = "2019",
+  addPolygons(
+    data = income2019, group = "2019",
     weight = 1, fillOpacity = 0.8, color = "black",
-    fillColor = ~pal(income_per_capita),
-    label = ~paste0("$", income_per_capita)) |>
-  addPolygons(data = income2020, group = "2020",
+    fillColor = ~pal_philly(income_per_capita),
+    label = ~paste0("$", income_per_capita)
+  ) |>
+  addPolygons(
+    data = income2020, group = "2020",
     weight = 1, fillOpacity = 0.8, color = "black",
-    fillColor = ~pal(income_per_capita),
-    label = ~paste0("$", income_per_capita)) |>
-  addPolygons(data = income2021, group = "2021",
+    fillColor = ~pal_philly(income_per_capita),
+    label = ~paste0("$", income_per_capita)
+  ) |>
+  addPolygons(
+    data = income2021, group = "2021",
     weight = 1, fillOpacity = 0.8, color = "black",
-    fillColor = ~pal(income_per_capita),
-    label = ~paste0("$", income_per_capita)) |>
-  addPolygons(data = income2022, group = "2022",
+    fillColor = ~pal_philly(income_per_capita),
+    label = ~paste0("$", income_per_capita)
+  ) |>
+  addPolygons(
+    data = income2022, group = "2022",
     weight = 1, fillOpacity = 0.8, color = "black",
-    fillColor = ~pal(income_per_capita),
-    label = ~paste0("$", income_per_capita)) |>
-  addPolygons(data = income2023, group = "2023",
+    fillColor = ~pal_philly(income_per_capita),
+    label = ~paste0("$", income_per_capita)
+  ) |>
+  addPolygons(
+    data = income2023, group = "2023",
     weight = 1, fillOpacity = 0.8, color = "black",
-    fillColor = ~pal(income_per_capita),
-    label = ~paste0("$", income_per_capita)) |>
+    fillColor = ~pal_philly(income_per_capita),
+    label = ~paste0("$", income_per_capita)
+  ) |>
   addLayersControl(
     baseGroups = c("2019", "2020", "2021", "2022", "2023"),
     options = layersControlOptions(collapsed = FALSE)
   ) |>
-  addLegend(pal = pal, values = philly$income_per_capita,
-    title = "Income Per Capita", position = "bottomright")
+  addLegend(
+    pal = pal_philly,
+    values = philly$income_per_capita,
+    title = "Income Per Capita",
+    position = "bottomright"
+  )
 ```
 
 The `addLayersControl()` function adds radio buttons to the map so readers can switch between years and observe change over time.
 
 ## Adding External Data Layers
 
-`tidycensus` handles Census data beautifully, but often you'll want to overlay additional data that comes from other sources — a geoJSON file from a city open data portal, for instance. Since `tidycensus` returns standard `sf` objects, you can layer external spatial data on the same map.
+`tidycensus` handles Census data beautifully, but often you'll want to overlay data from other sources — for example, historical boundaries from a city open data portal or academic dataset. Since `tidycensus` returns standard `sf` objects, you can layer any spatial data on the same map.
 
-Here's an example using historical redlining boundaries for Los Angeles, available from the Mapping Inequality project:
+Here we map the [Home Owners' Loan Corporation (HOLC) redlining boundaries](https://dsl.richmond.edu/panorama/redlining/) for Los Angeles, from the [Mapping Inequality project](https://dsl.richmond.edu/panorama/redlining/) at the University of Richmond. These 1930s-era maps graded neighborhoods A–D, with "D" (red) areas systematically denied mortgage lending — a practice with lasting effects on wealth and segregation. The data is loaded directly from their public GeoJSON endpoint:
 
-```{r, redlining, eval=FALSE}
-library(sf)
-
-me <- st_read("mappinginequality.json")
-
-me |>
-  filter(city == "Los Angeles") -> me_la
+```{r, redlining}
+me_la <- st_read(
+  paste0(
+    "https://dsl.richmond.edu/panorama/redlining/",
+    "static/downloads/geojson/CALosAngeles1939.geojson"
+  )
+)
 
 leaflet() |>
   addTiles(
-    urlTemplate = "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
-    attribution = "&copy; OpenStreetMap contributors &copy; CARTO") |>
+    urlTemplate = paste0(
+      "https://{s}.basemaps.cartocdn.com/",
+      "light_all/{z}/{x}/{y}{r}.png"
+    ),
+    attribution = paste0(
+      "&copy; OpenStreetMap contributors",
+      " &copy; CARTO"
+    )
+  ) |>
   addPolygons(
     data = me_la,
-    color = ~me_la$fill,
+    color = ~fill,
+    fillColor = ~fill,
+    fillOpacity = 0.6,
+    weight = 1,
     label = ~paste("Grade:", grade)
   )
 ```
 
-The `fill` column in this dataset already contains the HOLC grade colors (green for "A", red for "D"), so we can pass it directly to `color`. This is an example of a dataset that is self-describing — it already knows how it wants to be colored.
+The `fill` column in this dataset already contains the HOLC grade colors (green for "A", red for "D"), so we pass it directly to both `color` and `fillColor`. This is an example of a self-describing dataset — the color encoding is built into the data.
 
-You can then layer `get_acs()` data on top of this to compare, say, current income or poverty rates against the historical redlining boundaries — a common and powerful technique in data journalism.
+You can then layer `get_acs()` data on top of this to compare current income or poverty rates against the historical redlining boundaries — a common and powerful technique in data journalism.
 
 ## Working With Non-Census GeoJSON
 
-Not all spatial data comes from the Census. Many city and state open data portals publish data as GeoJSON files that you can download and load with `st_read()`. For example, Philadelphia's Neighborhood Food Retail dataset includes supermarket access and poverty indicators by neighborhood:
+Many city and state open data portals publish data as GeoJSON that can be loaded directly into R via URL. For example, [Philadelphia's Neighborhood Food Retail dataset](https://opendataphilly.org/datasets/neighborhood-food-retail/) from [OpenDataPhilly](https://opendataphilly.org) includes supermarket access and restaurant counts by neighborhood:
 
-```{r, food, eval=FALSE}
-food <- st_read("NeighborhoodFoodRetail.geojson")
+```{r, food}
+food <- st_read(
+  paste0(
+    "https://hub.arcgis.com/api/v3/datasets/",
+    "53b8a1c653a74c92b2de23a5d7bf04a0_0/downloads/data",
+    "?format=geojson&spatialRefId=4326&where=1%3D1"
+  )
+)
 
-pal_restaurants <- colorNumeric("Reds", domain = as.numeric(food$TOTAL_RESTAURANTS))
+pal_restaurants <- colorNumeric(
+  "Reds",
+  domain = as.numeric(food$TOTAL_RESTAURANTS)
+)
 pal_supermarket <- colorFactor(
   palette = c("Yes" = "firebrick", "No" = "darkgreen"),
   domain = food$SUPERMARKET_ACCESS
@@ -297,33 +348,52 @@ leaflet(food) |>
   )
 ```
 
-Notice that `colorFactor` is used here instead of `colorNumeric` or `colorBin` — because supermarket access is a categorical variable ("Yes"/"No"), not a number. Choosing the right palette type matters: use `colorNumeric` for continuous data, `colorBin` to group continuous data into ranges, and `colorFactor` for categorical data.
+Notice that `colorFactor` is used here instead of `colorNumeric` or `colorBin` — because supermarket access is a categorical variable ("Yes"/"No"), not a number. Choosing the right palette function matters: use `colorNumeric` for continuous data, `colorBin` to group continuous data into ranges, and `colorFactor` for categorical data.
 
 ## Mapping Non-US Data
 
-`tidycensus` is specific to U.S. Census data, but the same Leaflet workflow applies anywhere you can get spatial data. For example, to map data across local authority districts in England, you can load GeoJSON directly from a URL:
+`tidycensus` is specific to U.S. Census data, but the same Leaflet workflow applies anywhere you can get spatial data. For example, local authority district boundaries for England are available as GeoJSON from [this GitHub repository](https://github.com/martinjc/UK-GeoJSON) and can be loaded directly from a URL:
 
-```{r, england, eval=FALSE}
-england <- st_read("https://raw.githubusercontent.com/martinjc/UK-GeoJSON/refs/heads/master/json/administrative/eng/lad.json")
+```{r, england}
+england <- st_read(
+  paste0(
+    "https://raw.githubusercontent.com/martinjc/",
+    "UK-GeoJSON/refs/heads/master/json/",
+    "administrative/eng/lad.json"
+  )
+)
 
 england <- st_simplify(england, dTolerance = 100)
 england <- st_transform(england, crs = 4326)
 
-# attach whatever data you have — here we use random values as a placeholder
+# attach whatever data you have
+# here we use random values as a placeholder
 england$data_value <- runif(nrow(england), 0, 100)
 
-pal <- colorNumeric("YlOrRd", domain = england$data_value)
+pal_england <- colorNumeric(
+  palette = "YlOrRd",
+  domain = england$data_value
+)
 
 leaflet(england) |>
   addTiles() |>
   addPolygons(
-    fillColor = ~pal(data_value),
+    fillColor = ~pal_england(data_value),
     fillOpacity = 0.7,
-    color = "white", weight = 1,
-    highlightOptions = highlightOptions(color = "black", weight = 2, bringToFront = TRUE),
+    color = "white",
+    weight = 1,
+    highlightOptions = highlightOptions(
+      color = "black",
+      weight = 2,
+      bringToFront = TRUE
+    ),
     label = ~paste0(LAD13NM, ": ", round(data_value, 1))
   ) |>
-  addLegend(pal = pal, values = ~data_value, title = "Data Value")
+  addLegend(
+    pal = pal_england,
+    values = ~data_value,
+    title = "Data Value"
+  )
 ```
 
 `st_simplify()` reduces the complexity of the polygon boundaries, which speeds up rendering significantly for large datasets. The `dTolerance` value controls how much simplification is applied — larger values are faster but less precise.
