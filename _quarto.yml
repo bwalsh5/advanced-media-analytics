@@ -23,7 +23,8 @@ book:
     - statistical_analysis_two.qmd
     - statistical_analysis_multi.qmd
     - manipulating_data.qmd
-    - text_analysis.qmd
+    - text: "Text Analysis"
+      file: text_analysis.qmd
     - network_analysis.qmd
     - geo_spatial_analysis.qmd
     - python_ai_intro.qmd
